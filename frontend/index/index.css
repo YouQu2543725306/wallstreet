@@ -153,15 +153,151 @@ body{
   margin-left: 8px;
 }
 
+/* 钱包和卡片区域 */
+.wallet-cards-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.wallet-card,
+.card-info {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+.wallet-card:hover,
+.card-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 卡片头部 */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-header h3 {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+.card-header button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.card-header button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* 钱包内容 */
+.wallet-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wallet-amount {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: -0.5px;
+}
+
+.wallet-change {
+  margin-bottom: 16px;
+}
+
+.wallet-chart {
+  height: 80px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* 卡片内容 */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-balance {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: -0.5px;
+}
+
+.card-number {
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 1px;
+  color: var(--text);
+  font-size: 16px;
+  margin: 8px 0;
+}
+
+.card-details {
+  display: flex;
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.card-holder,
+.card-expiry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-holder .label,
+.card-expiry .label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.card-holder .value,
+.card-expiry .value {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* 响应式调整 */
 @media (max-width: 768px) {
-  .top-section {
+  .top-section,
+  .wallet-cards-section {
     flex-direction: column;
     gap: 16px;
   }
   
   .balance-overview,
-  .profit-today {
+  .profit-today,
+  .wallet-card,
+  .card-info {
     width: 100%;
   }
   

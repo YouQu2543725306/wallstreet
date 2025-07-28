@@ -39,31 +39,51 @@
       </section>
     </div>
 
-    <!-- 图表区域 -->
-    <section class="chart-area">
-      <div class="chart-header">MyWallets</div>
-      <div class="chart-placeholder">
-        <canvas id="balanceChart" width="600" height="200"></canvas>
-      </div>
-    </section>
+    <!-- 钱包和卡片区域 -->
+    <div class="wallet-cards-section">
+      <!-- 钱包 -->
+      <section class="wallet-card">
+        <div class="card-header">
+          <h3>MyWallets</h3>
+          <button id="cardSwitchBtn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </div>
+        <div class="wallet-content">
+          <div class="wallet-amount">$1,234,567.89</div>
+          <div class="wallet-change">
+            <span class="change positive">
+              <i class="fas fa-caret-up"></i>
+              <span>2.5%</span>
+              <span class="label">较昨日</span>
+            </span>
+          </div>
+          <div class="wallet-chart">
+            <canvas id="balanceChart" width="100%" height="80"></canvas>
+          </div>
+        </div>
+      </section>
 
-    <!-- 钱包卡片 -->
-    <section class="wallet-card">
-      <div class="card-header">
-        <h3>MyCard</h3>
-        <button id="cardSwitchBtn"><i class="fa-solid fa-arrow-right"></i></button>
-      </div>
-      <div class="balance"></div>
-      <div class="card-number"></div>
-      <div class="card-holder"></div>
-      <div class="expiry"></div>
-      <div class="quick-transfer">
-        <h4>Quick Transfer</h4>
-        <input type="text" placeholder="To Address">
-        <input type="number" placeholder="Amount">
-        <button>Send Now</button>
-      </div>
-    </section>
+      <!-- 卡片 -->
+      <section class="card-info">
+        <div class="card-header">
+          <h3>MyCard</h3>
+          <button id="cardSwitchBtn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </div>
+        <div class="card-content">
+          <div class="card-balance">$1,234,567.89</div>
+          <div class="card-number">**** **** **** 1234</div>
+          <div class="card-details">
+            <div class="card-holder">
+              <div class="label">持卡人</div>
+              <div class="value">YOUR NAME</div>
+            </div>
+            <div class="card-expiry">
+              <div class="label">有效期</div>
+              <div class="value">12/25</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <!-- 最近交易 -->
     <section class="transactions">
