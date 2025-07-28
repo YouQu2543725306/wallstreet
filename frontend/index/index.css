@@ -80,8 +80,7 @@ body{
 .top-section {
   display: flex;
   gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: nowrap;
+  margin-bottom: 16px;
   width: 100%;
 }
 
@@ -93,9 +92,9 @@ body{
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  padding: 20px 24px;
+  padding: 16px;
   box-shadow: var(--shadow);
-  transition: all 0.3s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .balance-overview:hover,
@@ -105,60 +104,56 @@ body{
 }
 
 /* 卡片标题样式 */
-.balance-overview h1,
+.balance-overview h2,
 .profit-today h2 {
   font-size: 15px;
   color: var(--text-secondary);
-  margin: 0 0 12px 0;
+  margin: 0 0 10px 0;
   font-weight: 500;
-  display: flex;
-  align-items: center;
 }
 
 /* 金额样式 */
 .amount {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--text);
-  margin: 8px 0 4px 0;
+  margin: 6px 0;
   font-family: 'Roboto Mono', monospace;
   letter-spacing: -0.5px;
 }
 
 /* 涨跌样式 */
 .change {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  font-size: 14px;
-  margin-top: 4px;
-}
-
-.change i {
-  margin-right: 4px;
-  font-size: 12px;
-}
-
-.change.positive {
+  gap: 4px;
+  font-size: 13px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--success-bg);
   color: var(--success);
 }
 
 .change.negative {
+  background: var(--error-bg);
   color: var(--error);
 }
 
-/* 标签样式 */
-.label {
-  font-size: 12px;
+.change i {
+  font-size: 11px;
+}
+
+.change .label {
   color: var(--text-secondary);
-  margin-left: 8px;
+  font-size: 11px;
+  margin-left: 4px;
 }
 
 /* 钱包和卡片区域 */
 .wallet-cards-section {
   display: flex;
   gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: nowrap;
+  margin-bottom: 16px;
   width: 100%;
 }
 

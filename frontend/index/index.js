@@ -1,92 +1,168 @@
-// 示例静态数据，后续可用API替换
-const data = {
-  user: { name: "Mike Profits" },
-  // 资产总览数据
-  totalBalance: 1960479.98, // 总资产金额
-  balanceChange: 2.5, // 较昨日变化百分比
-  // 今日盈亏数据
-  todayProfit: 1237.45, // 今日盈亏金额
-  profitChange: 1.8, // 较昨日变化百分比
-  // 其他数据
-  coins: [
-    { name: "Bitcoin", unit: "BTC", balance: 108.61, usd: 1180577.24 },
-    { name: "Ethereum", unit: "ETH", balance: 107.45, usd: 519509.23 },
-    { name: "Tether", unit: "USDT", balance: 1568.76, usd: 1552.51 },
-    { name: "Ripple", unit: "XRP", balance: 500.0, usd: 245841.0 }
-  ],
-  profits: [
-    { symbol: "BTC", value: 1237.45, percent: 5 },
-    { symbol: "ETH", value: 3237.45, percent: 8 },
-    { symbol: "USDT", value: -12.45, percent: -1 },
-    { symbol: "Other", value: -5374.5, percent: -3 }
-  ],
-  walletCard: {
-    trend: 3.21,
-    balance: 1176356.46,
-    number: "1111 2222 3333 4444",
-    holder: "MIKE PROFITS",
-    expiry: "01/23"
+// Application data
+const appData = {
+  // Account summary data
+  account: {
+    totalBalance: 1960479.98,
+    balanceChange: 2.5,
+    todayProfit: 1237.45,
+    profitChange: 1.8,
+    lastUpdated: new Date().toISOString()
   },
+  
+  // Wallet Data
+  wallet: {
+    balance: 8560.23,
+    change: 1.2,
+    chartData: [65, 59, 80, 81, 56, 55, 40]
+  },
+  
+  // Card Data
+  card: {
+    balance: 4000.66,
+    cardNumber: '**** **** **** 4679',
+    cardHolder: 'John Doe',
+    expiryDate: '12/25',
+    cardType: 'visa'
+  },
+  
+  // Transactions Data
   transactions: [
-    { type: "Deposit", coin: "Bitcoin", amount: "+1.05401 BTC", date: "2022-09-11 20:53" },
-    { type: "Deposit", coin: "Bitcoin", amount: "+0.02642 BTC", date: "2022-09-09 15:21" },
-    { type: "Deposit", coin: "ETH", amount: "+0.0144 ETH", date: "2022-09-08 16:45" },
-    { type: "Deposit", coin: "USDT", amount: "+980.97 USDT", date: "2022-09-06 09:44" }
+    {
+      id: 1,
+      type: 'buy',
+      symbol: 'AAPL',
+      name: 'Apple Inc.',
+      shares: 5,
+      price: 175.34,
+      total: 876.70,
+      status: 'completed',
+      date: '2023-11-15 14:30:22'
+    },
+    {
+      id: 2,
+      type: 'sell',
+      symbol: 'MSFT',
+      name: 'Microsoft',
+      shares: 3,
+      price: 340.50,
+      total: 1021.50,
+      status: 'completed',
+      date: '2023-11-14 10:15:45'
+    },
+    {
+      id: 3,
+      type: 'deposit',
+      symbol: 'USD',
+      name: 'US Dollar',
+      amount: 2000.00,
+      status: 'completed',
+      date: '2023-11-13 09:20:10'
+    }
+  ],
+  
+  // Holdings Data
+  holdings: [
+    {
+      symbol: 'AAPL',
+      name: 'Apple Inc.',
+      shares: 15.25,
+      avgPrice: 165.45,
+      currentPrice: 175.34,
+      change: 5.2,
+      value: 2672.89
+    },
+    {
+      symbol: 'GOOGL',
+      name: 'Alphabet Inc.',
+      shares: 5.5,
+      avgPrice: 125.30,
+      currentPrice: 131.80,
+      change: -1.2,
+      value: 724.90
+    },
+    {
+      symbol: 'TSLA',
+      name: 'Tesla Inc.',
+      shares: 3.75,
+      avgPrice: 240.10,
+      currentPrice: 219.96,
+      change: -3.2,
+      value: 824.85
+    }
   ]
 };
 
-// 渲染资产总览
-function renderBalanceOverview() {
-  const totalBalance = document.getElementById('totalBalance');
-  const balanceChange = document.getElementById('balanceChange');
+// Format currency
+function formatCurrency(amount, decimals = 2) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  }).format(amount);
+}
+
+// Format percentage
+function formatPercent(value, decimals = 2) {
+  return `${value >= 0 ? '+' : ''}${value.toFixed(decimals)}%`;
+}
+
+// Render Account Summary
+function renderAccountSummary() {
+  const { totalBalance, balanceChange, todayProfit, profitChange } = appData.account;
+  const totalBalanceEl = document.getElementById('totalBalance');
+  const balanceChangeEl = document.getElementById('balanceChange');
+  const todayProfitEl = document.getElementById('todayProfit');
+  const profitChangeEl = document.getElementById('profitChange');
   
-  // 更新总资产
-  totalBalance.textContent = `$${data.totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  // Update total balance
+  totalBalanceEl.textContent = formatCurrency(totalBalance);
   
-  // 更新资产变化
-  const isPositive = data.balanceChange >= 0;
-  balanceChange.innerHTML = `
-    <i class="fas fa-caret-${isPositive ? 'up' : 'down'}"></i>
-    <span>${Math.abs(data.balanceChange).toFixed(2)}%</span>
-    <span class="label">较昨日</span>
+  // Update balance change
+  const isBalancePositive = balanceChange >= 0;
+  balanceChangeEl.innerHTML = `
+    <i class="fas fa-caret-${isBalancePositive ? 'up' : 'down'}"></i>
+    <span>${Math.abs(balanceChange).toFixed(2)}%</span>
+    <span class="label">vs yesterday</span>
   `;
-  balanceChange.className = `change ${isPositive ? 'positive' : 'negative'}`;
-}
-
-// 渲染今日盈亏
-function renderTodayProfit() {
-  const todayProfit = document.getElementById('todayProfit');
-  const profitChange = document.getElementById('profitChange');
+  balanceChangeEl.className = `change ${isBalancePositive ? 'positive' : 'negative'}`;
   
-  // 更新今日盈亏
-  todayProfit.textContent = `${data.todayProfit >= 0 ? '+' : '-'}$${Math.abs(data.todayProfit).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  // Update today's profit
+  const isProfitPositive = todayProfit >= 0;
+  todayProfitEl.textContent = `${isProfitPositive ? '+' : '-'}${formatCurrency(Math.abs(todayProfit))}`;
+  todayProfitEl.style.color = isProfitPositive ? 'var(--success)' : 'var(--error)';
   
-  // 更新盈亏变化
-  const isPositive = data.profitChange >= 0;
-  profitChange.innerHTML = `
-    <i class="fas fa-caret-${isPositive ? 'up' : 'down'}"></i>
-    <span>${Math.abs(data.profitChange).toFixed(2)}%</span>
-    <span class="label">较昨日</span>
+  // Update profit change
+  profitChangeEl.innerHTML = `
+    <i class="fas fa-caret-${profitChange >= 0 ? 'up' : 'down'}"></i>
+    <span>${Math.abs(profitChange).toFixed(2)}%</span>
+    <span class="label">vs yesterday</span>
   `;
-  profitChange.className = `change ${isPositive ? 'positive' : 'negative'}`;
+  profitChangeEl.className = `change ${profitChange >= 0 ? 'positive' : 'negative'}`;
+}
+
+// Render Wallet
+function renderWallet() {
+  const { balance, change } = appData.wallet;
+  const walletContent = document.getElementById('walletContent');
+  const isPositive = change >= 0;
   
-  // 设置金额颜色
-  todayProfit.style.color = isPositive ? 'var(--success)' : 'var(--error)';
-}
-
-// 渲染钱包卡片
-function renderWalletCard() {
-  const card = data.walletCard;
-  document.querySelector('.wallet-card .trend').textContent = (card.trend >= 0 ? '+' : '') + card.trend + '%';
-  document.querySelector('.wallet-card .balance').textContent = '$' + card.balance.toLocaleString();
-  document.querySelector('.wallet-card .card-number').textContent = card.number;
-  document.querySelector('.wallet-card .card-holder').textContent = card.holder;
-  document.querySelector('.wallet-card .expiry').textContent = card.expiry;
-}
-
-// 渲染用户信息
-function renderUser() {
-  document.querySelector('.user').innerHTML = `<i class="fa-solid fa-user"></i> ${data.user.name}`;
+  walletContent.innerHTML = `
+    <div class="wallet-amount">${formatCurrency(balance)}</div>
+    <div class="wallet-change">
+      <span class="change ${isPositive ? 'positive' : 'negative'}">
+        <i class="fas fa-caret-${isPositive ? 'up' : 'down'}"></i>
+        <span>${Math.abs(change).toFixed(2)}%</span>
+        <span class="label">vs yesterday</span>
+      </span>
+    </div>
+    <div class="wallet-chart">
+      <canvas id="balanceChart" width="100%" height="80"></canvas>
+    </div>
+  `;
+  
+  // Initialize chart (placeholder - would be replaced with actual chart library)
+  initializeChart();
 }
 
 // 渲染交易历史
@@ -95,37 +171,65 @@ function renderTransactions() {
   tbody.innerHTML = data.transactions.map(tx => `
     <tr>
       <td><span class="badge deposit">${tx.type}</span></td>
-      <td>${tx.coin}</td>
-      <td>${tx.amount}</td>
+      <td>${tx.symbol}</td>
+      <td>${tx.shares}</td>
       <td>${tx.date}</td>
     </tr>
   `).join('');
 }
 
-// 初始化
-function init() {
-  renderUser();
-  renderBalanceOverview();
-  renderTodayProfit();
-  renderWalletCard();
+// Render all components
+function renderAll() {
+  renderAccountSummary();
+  renderWallet();
+  renderCard();
   renderTransactions();
+  renderHoldings();
+}
+
+// Update data with simulated changes
+function updateData() {
+  // Simulate data changes
+  const { account } = appData;
   
-  // 模拟数据更新（实际项目中可以通过API轮询）
+  // Update account data with small random changes
+  account.totalBalance = Math.max(1000000, account.totalBalance * (1 + (Math.random() * 0.02 - 0.01)));
+  account.balanceChange = Math.max(-5, Math.min(5, account.balanceChange + (Math.random() * 0.4 - 0.2)));
+  account.todayProfit = account.todayProfit * (1 + (Math.random() * 0.1 - 0.05));
+  account.profitChange = Math.max(-10, Math.min(10, account.profitChange + (Math.random() * 0.5 - 0.25)));
+  account.lastUpdated = new Date().toISOString();
+  
+  // Update wallet data
+  appData.wallet.balance = account.totalBalance * 0.7; // 70% in wallet
+  appData.card.balance = account.totalBalance * 0.3; // 30% in card
+  
+  // Re-render all components
+  renderAll();
+}
+
+// Initialize the application
+function initApp() {
+  // Initial render
+  renderAll();
+  
+  // Set up filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTransactions(btn.dataset.filter);
+    });
+  });
+  
+  // Update data every 10 seconds
   setInterval(updateData, 10000);
 }
 
-// 模拟数据更新
-function updateData() {
-  // 这里可以添加API调用获取最新数据
-  // 模拟数据变化
-  data.totalBalance += (Math.random() * 1000 - 500);
-  data.balanceChange = parseFloat((data.balanceChange + (Math.random() * 0.5 - 0.25)).toFixed(2));
-  data.todayProfit += (Math.random() * 200 - 100);
-  data.profitChange = parseFloat((data.profitChange + (Math.random() * 0.5 - 0.25)).toFixed(2));
-  
-  // 重新渲染更新的部分
-  renderBalanceOverview();
-  renderTodayProfit();
+// Initial render when the script loads
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
 }
 
 document.addEventListener('DOMContentLoaded', init);

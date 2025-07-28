@@ -16,145 +16,81 @@
     </header>
 
     <div class="top-section">  
-      <!-- 资产总览 -->
-      <section class="balance-overview">
-        <h1>资产总览</h1>
-        <div class="amount" id="totalBalance">$0.00</div>
-        <div class="change" id="balanceChange">
-          <i class="fas fa-caret-up"></i>
-          <span>0.00%</span>
-          <span class="label">较昨日</span>
-        </div>
-      </section>
+      <!-- Asset Overview and Today's P&L -->
+      <div class="top-section">
+        <section class="balance-overview">
+          <h2>Total Assets</h2>
+          <div class="amount" id="totalBalance">$0.00</div>
+          <div class="change" id="balanceChange">
+            <i class="fas fa-caret-up"></i>
+            <span>0.00%</span>
+            <span class="label">vs yesterday</span>
+          </div>
+        </section>
 
-      <!-- 今日盈亏 -->
-      <section class="profit-today">
-        <h2>今日盈亏</h2>
-        <div class="amount" id="todayProfit">$0.00</div>
-        <div class="change" id="profitChange">
-          <i class="fas fa-caret-up"></i>
-          <span>0.00%</span>
-          <span class="label">较昨日</span>
-        </div>
-      </section>
-    </div>
+        <section class="profit-today">
+          <h2>Today's P&L</h2>
+          <div class="amount" id="todayProfit">$0.00</div>
+          <div class="change" id="profitChange">
+            <i class="fas fa-caret-up"></i>
+            <span>0.00%</span>
+            <span class="label">vs yesterday</span>
+          </div>
+        </section>
+      </div>
 
-    <!-- 钱包和卡片区域 -->
-    <div class="wallet-cards-section">
-      <!-- 钱包 -->
-      <section class="wallet-card">
-        <div class="card-header">
-          <h3>MyWallets</h3>
-          <button id="cardSwitchBtn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-        </div>
-        <div class="wallet-content">
-          <div class="wallet-amount">$1,234,567.89</div>
-          <div class="wallet-change">
-            <span class="change positive">
-              <i class="fas fa-caret-up"></i>
-              <span>2.5%</span>
-              <span class="label">较昨日</span>
-            </span>
+      <!-- Wallet and Card Section -->
+      <div class="wallet-cards-section">
+        <!-- Wallet -->
+        <section class="wallet-card">
+          <div class="card-header">
+            <h3>My Wallet</h3>
+            <button id="walletMenuBtn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
           </div>
-          <div class="wallet-chart">
-            <canvas id="balanceChart" width="100%" height="80"></canvas>
+          <div class="wallet-content" id="walletContent">
+            <!-- Will be populated by JavaScript -->
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- 卡片 -->
-      <section class="card-info">
-        <div class="card-header">
-          <h3>MyCard</h3>
-          <button id="cardSwitchBtn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-        </div>
-        <div class="card-content">
-          <div class="card-balance">$1,234,567.89</div>
-          <div class="card-number">**** **** **** 1234</div>
-          <div class="card-details">
-            <div class="card-holder">
-              <div class="label">持卡人</div>
-              <div class="value">YOUR NAME</div>
-            </div>
-            <div class="card-expiry">
-              <div class="label">有效期</div>
-              <div class="value">12/25</div>
-            </div>
+        <!-- Card -->
+        <section class="card-info">
+          <div class="card-header">
+            <h3>My Card</h3>
+            <button id="cardMenuBtn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
           </div>
-        </div>
-      </section>
-    </div>
+          <div class="card-content" id="cardContent">
+            <!-- Will be populated by JavaScript -->
+          </div>
+        </section>
+      </div>
 
-    <!-- 交易记录和持仓 -->
-    <div class="trading-section">
-      <!-- 交易记录 -->
-      <section class="transactions">
-        <div class="section-header">
-          <h2>交易记录</h2>
-          <div class="transaction-filters">
-            <button class="filter-btn active">全部</button>
-            <button class="filter-btn">买入</button>
-            <button class="filter-btn">卖出</button>
-            <button class="filter-btn">充币</button>
-            <button class="filter-btn">提币</button>
-          </div>
-        </div>
-        <div class="transaction-list">
-          <div class="transaction-item">
-            <div class="transaction-type">
-              <div class="type-buy">买入</div>
-            </div>
-            <div class="transaction-details">
-              <div class="stock-info">
-                <span class="stock-symbol">AAPL</span>
-                <span class="stock-name">苹果公司</span>
-              </div>
-              <div class="transaction-meta">
-                <span class="transaction-amount positive">+5 股</span>
-                <span class="transaction-price">@ $175.34</span>
-              </div>
-            </div>
-            <div class="transaction-amount-detail">
-              <div class="amount">-$876.70</div>
-              <div class="status">已完成</div>
+      <!-- Trading Section -->
+      <div class="trading-section">
+        <!-- Transactions -->
+        <section class="transactions">
+          <div class="section-header">
+            <h2>Transaction History</h2>
+            <div class="transaction-filters">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="buy">Buy</button>
+              <button class="filter-btn" data-filter="sell">Sell</button>
+              <button class="filter-btn" data-filter="deposit">Deposit</button>
+              <button class="filter-btn" data-filter="withdraw">Withdraw</button>
             </div>
           </div>
-          <!-- 更多交易项... -->
-        </div>
-        <div class="view-all">
-          <a href="#">查看全部交易记录 <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </section>
-
-      <!-- 持仓列表 -->
-      <section class="holdings">
-        <div class="section-header">
-          <h2>我的持仓</h2>
-          <button class="view-all-btn">全部</button>
-        </div>
-        <div class="holdings-list">
-          <div class="holding-item">
-            <div class="stock-info">
-              <div class="stock-symbol">AAPL</div>
-              <div class="stock-name">苹果公司</div>
-            </div>
-            <div class="holding-details">
-              <div class="holding-amount">15.25 股</div>
-              <div class="holding-value">$2,672.89</div>
-            </div>
-            <div class="holding-change positive">
-              <i class="fas fa-caret-up"></i>
-              <span>+5.2%</span>
-            </div>
+          <div class="transaction-list" id="transactionList">
+            <!-- Will be populated by JavaScript -->
           </div>
-          <!-- 更多持仓项... -->
-        </div>
-      </section>
+          <div class="view-all">
+            <a href="#">View All Transactions <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
-
-  <!-- 收益计算器（固定在右下角）
-  <aside class="calculator">
+      
+      
+  <!-- <aside class="calculator">
     <h3>Calculator</h3>
     <label>Input name: <input type="text" id="calcName"></label>
     <label>Market price: <input type="number" id="calcPrice" placeholder="USD"></label>
@@ -163,8 +99,27 @@
     <label>Expected %: <input type="number" id="calcPercent" placeholder="e.g. 10"></label>
     <button id="calcBtn">Calculate</button>
     <div id="calcResult"></div>
-  </aside> -->
+  </aside>  -->
 
   <script src="index.js"></script>
+  <script>
+    // Initialize the app when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initial render of all components
+      renderAll();
+      
+      // Set up filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderTransactions(btn.dataset.filter);
+        });
+      });
+      
+      // Update data every 10 seconds
+      setInterval(updateData, 10000);
+    });
+  </script>
 </body>
 </html>
