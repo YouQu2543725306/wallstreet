@@ -1,348 +1,231 @@
-/* ========== 重置 & 变量 ========== */
+/* ========== 主题变量 ========== */
 :root {
-  --bg: #0e1116;
-  --card-bg: rgba(22, 26, 30, 0.65);
-  --border: #23272f;
-  --primary: #1e90ff;
-  --success: #00c853;
-  --danger: #ff5252;
-  --text: #e4e6eb;
-  --text-secondary: #b0b3b8;
-  --radius: 12px;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-  --font: "Inter", system-ui, sans-serif;
+  --bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-border: #e6e6e6;
+  --primary: #1890ff;
+  --primary-light: #e6f7ff;
+  --primary-dark: #096dd9;
+  --text: #1f1f1f;
+  --text-secondary: #595959;
+  --success: #52c41a;
+  --warning: #faad14;
+  --error: #f5222d;
+  --radius: 8px;
+  --shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ========== 全局重置 ========== */
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
 }
 
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-  padding: 24px;
-  -webkit-font-smoothing: antialiased;
+/* ========== 整体布局 ========== */
+.page{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  padding:24px;
+}
+
+/* 横向排列容器 */
+.top-section {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap; 
 }
 
 /* ========== 顶部导航 ========== */
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  backdrop-filter: blur(8px);
-  margin-bottom: 24px;
+.top-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 24px;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius);
 }
 
-.top-bar .logo {
-  font-weight: 700;
-  color: var(--primary);
-}
+.logo{color:var(--primary);font-weight:700}
+.user{color:var(--text-secondary)}
 
-.top-bar nav {
-  display: flex;
-  gap: 24px;
-}
-
-.top-bar nav a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-}
-
-.top-bar nav a.active,
-.top-bar nav a:hover {
-  color: var(--primary);
-}
-
-.user {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
-/* ========== 资产总览 ========== */
-.balance-overview {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  margin-bottom: 24px;
-}
-
-.balance-overview h1 {
-  font-size: 1.2rem;
-  margin-bottom: 16px;
-}
-
-.coins {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-}
-
-.coin {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.coin-name {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-.coin-balance {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.coin-usd {
-  font-size: 0.9rem;
-  color: var(--success);
-}
-
-.add-btn {
-  align-self: center;
-  background: transparent;
-  color: var(--primary);
-  border: 1px dashed var(--primary);
-  border-radius: var(--radius);
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.add-btn:hover {
-  background: var(--primary);
-  color: #000;
-}
-
-/* ========== 今日盈亏 ========== */
-.profit-today h2 {
-  margin-bottom: 16px;
-  font-size: 1.1rem;
-}
-
+/* ========== 卡片布局 ========== */
+.coins,
 .profit-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  display: flex;
   gap: 16px;
+  margin-top: 16px;
 }
 
+.coin,
 .profit-card {
   background: var(--card-bg);
-  border: 1px solid var(--border);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius);
   padding: 16px;
+  box-shadow: var(--shadow);
+  flex: 1;
+  min-width: 0;
+}
+
+/* 顶部卡片布局 */
+.top-section {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: nowrap;
+  width: 100%;
 }
 
-.profit-card .symbol {
-  font-size: 0.9rem;
+/* 资产总览和今日盈亏卡片 */
+.balance-overview,
+.profit-today {
+  flex: 1;
+  min-width: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.balance-overview:hover,
+.profit-today:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 卡片标题样式 */
+.balance-overview h1,
+.profit-today h2 {
+  font-size: 15px;
   color: var(--text-secondary);
+  margin: 0 0 12px 0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
 }
 
-.profit-card .value {
-  font-size: 1.1rem;
+/* 金额样式 */
+.amount {
+  font-size: 28px;
   font-weight: 600;
+  color: var(--text);
+  margin: 8px 0 4px 0;
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: -0.5px;
 }
 
-.profit-card .percent {
-  font-size: 0.85rem;
+/* 涨跌样式 */
+.change {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-top: 4px;
 }
 
-.up .value,
-.up .percent {
+.change i {
+  margin-right: 4px;
+  font-size: 12px;
+}
+
+.change.positive {
   color: var(--success);
 }
 
-.down .value,
-.down .percent {
-  color: var(--danger);
+.change.negative {
+  color: var(--error);
 }
 
-/* ========== 快捷按钮 ========== */
-.quick-actions {
-  display: flex;
-  gap: 16px;
-  margin: 24px 0;
-}
-
-.action-btn {
-  flex: 1;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text);
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-.action-btn i {
-  font-size: 1.4rem;
-  color: var(--primary);
-}
-
-/* ========== 图表区域 ========== */
-.chart-area {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 24px;
-  margin-bottom: 24px;
-}
-
-.chart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.time-filter {
-  display: flex;
-  gap: 8px;
-}
-
-.time-filter button {
-  background: transparent;
-  border: 1px solid var(--border);
+/* 标签样式 */
+.label {
+  font-size: 12px;
   color: var(--text-secondary);
-  padding: 4px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
+  margin-left: 8px;
 }
 
-.time-filter button.active {
-  background: var(--primary);
-  color: #000;
-}
-
-.chart-placeholder {
-  height: 200px;
-  border: 1px dashed var(--border);
-  border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-}
-
-/* ========== 钱包卡片 ========== */
-.wallet-card {
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  border-radius: var(--radius);
-  padding: 24px;
-  margin-bottom: 24px;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-}
-
-.trend.up {
-  color: #00ffa2;
-}
-
-.balance {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin: 8px 0 16px;
-}
-
-.card-number {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 1.1rem;
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-}
-
-.card-holder,
-.expiry {
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-
-/* ========== 最近交易 ========== */
-.transactions h2 {
-  margin-bottom: 16px;
-  font-size: 1.1rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-
-thead {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-th,
-td {
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 0.9rem;
-}
-
-.badge {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.badge.deposit {
-  background: var(--success);
-  color: #000;
-}
-
-/* ========== 响应式微调 ========== */
-@media (max-width: 600px) {
-  .top-bar {
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .top-section {
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
   }
+  
+  .balance-overview,
+  .profit-today {
+    width: 100%;
+  }
+  
+  .amount {
+    font-size: 24px;
+  }
+}
 
-  .quick-actions {
-    flex-direction: column;
-  }
+/* ========== 图表占位 ========== */
+.chart-placeholder{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:200px;
+  border:1px dashed var(--border);
+  border-radius:var(--radius);
+  color:var(--text-secondary);
+}
+
+/* ========== 交易表格 ========== */
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:12px 16px;
+  text-align:left;
+  font-size:.9rem;
+}
+thead{background:rgba(0,0,0,.02)}
+
+/* ========== 收益计算器（右下角） ========== */
+.calculator{
+  position:fixed;
+  right:32px;
+  bottom:32px;
+  max-width:350px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.calculator h3{margin-bottom:12px}
+.calculator label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.calculator input{
+  flex:1;
+  padding:6px 8px;
+  border:1px solid var(--border);
+  border-radius:4px;
+}
+.calculator button{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  padding:8px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ========== 响应式：手机竖屏 ========== */
+@media(max-width:600px){
+  .page{padding:16px}
+  .top-bar{flex-direction:column;gap:8px}
 }

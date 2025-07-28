@@ -1,134 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WallStreetQuad</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="index.css"/>
 </head>
 <body>
-  <!-- ========== 顶部导航 ========== -->
-  <div class="top-bar">
-    <div class="logo"><i class="fa-solid fa-coins"></i> WallStreetQuad</div>
-    <!-- 只保留logo和用户信息 -->
-    <div class="user"><i class="fa-solid fa-user"></i></div>
+  <div class="page">
+    <!-- 顶部导航 -->
+    <header class="top-bar">
+      <div class="logo"><i class="fa-solid fa-coins"></i> WallStreetQuad</div>
+      <div class="user"><i class="fa-solid fa-user"></i></div>
+    </header>
+
+    <div class="top-section">  
+      <!-- 资产总览 -->
+      <section class="balance-overview">
+        <h1>资产总览</h1>
+        <div class="amount" id="totalBalance">$0.00</div>
+        <div class="change" id="balanceChange">
+          <i class="fas fa-caret-up"></i>
+          <span>0.00%</span>
+          <span class="label">较昨日</span>
+        </div>
+      </section>
+
+      <!-- 今日盈亏 -->
+      <section class="profit-today">
+        <h2>今日盈亏</h2>
+        <div class="amount" id="todayProfit">$0.00</div>
+        <div class="change" id="profitChange">
+          <i class="fas fa-caret-up"></i>
+          <span>0.00%</span>
+          <span class="label">较昨日</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- 图表区域 -->
+    <section class="chart-area">
+      <div class="chart-header">MyWallets</div>
+      <div class="chart-placeholder">
+        <canvas id="balanceChart" width="600" height="200"></canvas>
+      </div>
+    </section>
+
+    <!-- 钱包卡片 -->
+    <section class="wallet-card">
+      <div class="card-header">
+        <h3>MyCard</h3>
+        <button id="cardSwitchBtn"><i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+      <div class="balance"></div>
+      <div class="card-number"></div>
+      <div class="card-holder"></div>
+      <div class="expiry"></div>
+      <div class="quick-transfer">
+        <h4>Quick Transfer</h4>
+        <input type="text" placeholder="To Address">
+        <input type="number" placeholder="Amount">
+        <button>Send Now</button>
+      </div>
+    </section>
+
+    <!-- 最近交易 -->
+    <section class="transactions">
+      <h2>Transaction history</h2>
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Coin</th><th>Amount</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge deposit">Deposit</span></td>
+            <td>Bitcoin</td>
+            <td>+1.05401 BTC</td>
+            <td>2022-09-11 20:53</td>
+          </tr>
+          <!-- 其余 <tr> ... -->
+        </tbody>
+      </table>
+    </section>
   </div>
 
-  <!-- ========== 资产总览 ========== -->
-  <section class="balance-overview">
-    <h1>Balance <span class="fiat">USD</span></h1>
-    <div class="coins"></div>
-  </section>
-
-  <!-- ========== 今日盈亏 ========== -->
-  <section class="profit-today">
-    <h2>Profit today</h2>
-    <div class="profit-grid"></div>
-  </section>
-
-  <!-- ========== 图表区域 ========== -->
-  <section class="chart-area">
-    <div class="chart-header">
-      <span>MyWallets</span>
-      <div class="time-filter">
-        <button class="active">1D</button>
-        <button>7D</button>
-        <button>1M</button>
-        <button>3M</button>
-        <button>6M</button>
-        <button>1Y</button>
-        <button>ALL</button>
-      </div>
-    </div>
-    <div class="chart-placeholder">
-      <canvas id="balanceChart" width="600" height="200"></canvas>
-    </div>
-  </section>
-
-  <!-- ========== 钱包卡片 ========== -->
-  <section class="wallet-card" id="walletCard">
-    <div class="card-header">
-      <h3>MyCard</h3>
-      <span class="trend up"></span>
-      <button id="cardSwitchBtn" style="background:none;border:none;color:#fff;cursor:pointer;"><i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-    <div class="balance"></div>
-    <div class="card-number"></div>
-    <div class="card-holder"></div>
-    <div class="expiry"></div>
-    <div class="quick-transfer">
-      <h4>Quick Transfer</h4>
-      <input type="text" placeholder="To Address" style="width:100%;margin-bottom:8px;">
-      <input type="number" placeholder="Amount" style="width:100%;margin-bottom:8px;">
-      <button style="width:100%;background:var(--primary);color:#000;border:none;padding:8px;border-radius:6px;">Send Now</button>
-    </div>
-  </section>
-
-  <!-- ========== 最近交易 ========== -->
-  <section class="transactions">
-    <h2>Transaction history</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Coin</th>
-          <th>Amount</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="badge deposit">Deposit</span></td>
-          <td>Bitcoin</td>
-          <td>+1.05401 BTC</td>
-          <td>2022-09-11 20:53</td>
-        </tr>
-        <tr>
-          <td><span class="badge deposit">Deposit</span></td>
-          <td>Bitcoin</td>
-          <td>+0.02642 BTC</td>
-          <td>2022-09-09 15:21</td>
-        </tr>
-        <tr>
-          <td><span class="badge deposit">Deposit</span></td>
-          <td>ETH</td>
-          <td>+0.0144 ETH</td>
-          <td>2022-09-08 16:45</td>
-        </tr>
-        <tr>
-          <td><span class="badge deposit">Deposit</span></td>
-          <td>USDT</td>
-          <td>+980.97 USDT</td>
-          <td>2022-09-06 09:44</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- ========== 收益计算器 ========== -->
-  <section class="calculator" style="background:var(--card-bg);border-radius:12px;padding:24px;margin-top:24px;max-width:350px;position:fixed;right:32px;bottom:32px;box-shadow:var(--shadow);">
-    <h3 style="margin-bottom:12px;">Calculator</h3>
-    <div style="margin-bottom:8px;">
-      <label>Input name: <input type="text" id="calcName" style="width:70%;"></label>
-    </div>
-    <div style="margin-bottom:8px;">
-      <label>Market price: <input type="number" id="calcPrice" style="width:60%;" placeholder="USD"></label>
-    </div>
-    <div style="margin-bottom:8px;">
-      <label>Buy Quantity: <input type="number" id="calcQty" style="width:60%;"></label>
-    </div>
-    <div style="margin-bottom:8px;">
-      <label>Duration (days): <input type="number" id="calcDays" style="width:50%;"></label>
-    </div>
-    <div style="margin-bottom:8px;">
-      <label>Expected %: <input type="number" id="calcPercent" style="width:50%;" placeholder="e.g. 10"></label>
-    </div>
-    <div>
-      <button id="calcBtn" style="width:100%;background:var(--primary);color:#000;border:none;padding:8px;border-radius:6px;">Calculate</button>
-    </div>
-    <div id="calcResult" style="margin-top:12px;color:var(--success);font-weight:bold;"></div>
-  </section>
+  <!-- 收益计算器（固定在右下角）
+  <aside class="calculator">
+    <h3>Calculator</h3>
+    <label>Input name: <input type="text" id="calcName"></label>
+    <label>Market price: <input type="number" id="calcPrice" placeholder="USD"></label>
+    <label>Buy Quantity: <input type="number" id="calcQty"></label>
+    <label>Duration (days): <input type="number" id="calcDays"></label>
+    <label>Expected %: <input type="number" id="calcPercent" placeholder="e.g. 10"></label>
+    <button id="calcBtn">Calculate</button>
+    <div id="calcResult"></div>
+  </aside> -->
 
   <script src="index.js"></script>
 </body>
