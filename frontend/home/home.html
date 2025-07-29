@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WallStreetQuad - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+  <div class="page-container">
+    <!-- 顶部导航 -->
+    <header class="top-bar">
+      <div class="logo"><i class="fa-solid fa-coins"></i> WallStreetQuad</div>
+      <nav class="main-nav">
+        <a href="#" class="active">Home</a>
+        <a href="#">Market</a>
+        <a href="#">Portfolio</a>
+        <a href="#">Transactions</a>
+      </nav>
+      <div class="user"><i class="fa-solid fa-user"></i></div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+      <!-- 资产概览卡片 -->
+      <section class="overview-cards">
+        <div class="card total-assets">
+          <h2>Total Assets</h2>
+          <div class="amount" id="totalAssets">$0.00</div>
+          <div class="change positive" id="assetChange">
+            <i class="fas fa-caret-up"></i>
+            <span>0.00%</span>
+            <span class="period">Today</span>
+          </div>
+        </div>
+
+        <div class="card daily-profit">
+          <h2>Today's P&L</h2>
+          <div class="amount" id="todayProfit">$0.00</div>
+          <div class="change positive" id="profitChange">
+            <i class="fas fa-caret-up"></i>
+            <span>0.00%</span>
+            <span class="period">vs Yesterday</span>
+          </div>
+        </div>
+
+        <div class="card available-balance">
+          <h2>Available Balance</h2>
+          <div class="amount" id="availableBalance">$0.00</div>
+          <button class="action-btn deposit-btn">Deposit</button>
+        </div>
+      </section>
+
+      <!-- 持仓和市场部分 -->
+      <div class="content-columns">
+        <!-- 左侧列 - 持仓 -->
+        <section class="column portfolio-section">
+          <div class="section-header">
+            <h2>My Portfolio</h2>
+            <div class="actions">
+              <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
+            </div>
+          </div>
+          
+          <div class="portfolio-list" id="portfolioList">
+            <!-- 将由JavaScript填充 -->
+          </div>
+        </section>
+
+        <!-- 右侧列 - 市场 -->
+        <section class="column market-section">
+          <div class="section-header">
+            <h2>Market</h2>
+            <div class="actions">
+              <input type="text" class="search-input" placeholder="Search stocks...">
+              <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
+            </div>
+          </div>
+          
+          <div class="market-list" id="marketList">
+            <!-- 将由JavaScript填充 -->
+          </div>
+        </section>
+      </div>
+
+      <!-- 交易历史 -->
+      <section class="transactions-section">
+        <div class="section-header">
+          <h2>Recent Transactions</h2>
+          <div class="transaction-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="buy">Buy</button>
+            <button class="filter-btn" data-filter="sell">Sell</button>
+          </div>
+        </div>
+        
+        <div class="transaction-list" id="transactionList">
+          <!-- 将由JavaScript填充 -->
+        </div>
+        
+        <div class="view-all">
+          <a href="#">View All Transactions <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部信息 -->
+    <footer class="footer">
+      <p>&copy; 2023 WallStreetQuad. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- 交易弹窗 -->
+  <div class="trade-modal" id="tradeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Trade Stock</h3>
+        <button class="close-btn" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="stock-info" id="modalStockInfo">
+          <!-- 股票信息将在这里显示 -->
+        </div>
+        <form id="tradeForm">
+          <div class="form-group">
+            <label for="tradeType">Action</label>
+            <div class="trade-type-buttons">
+              <button type="button" class="trade-type-btn active" data-type="buy">Buy</button>
+              <button type="button" class="trade-type-btn" data-type="sell">Sell</button>
+            </div>
+            <input type="hidden" id="tradeType" value="buy">
+          </div>
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" min="1" value="1">
+          </div>
+          <div class="form-group">
+            <label for="estimatedCost">Estimated Cost</label>
+            <div id="estimatedCost">$0.00</div>
+          </div>
+          <button type="submit" class="submit-btn">Confirm Trade</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="home.js"></script>
+</body>
+</html>

@@ -1,96 +1,115 @@
-// Application data
-const appData = {
-  // Account summary data
-  account: {
-    totalBalance: 1960479.98,
-    balanceChange: 2.5,
-    todayProfit: 1237.45,
-    profitChange: 1.8,
-    lastUpdated: new Date().toISOString()
-  },
-  
-  // Wallet Data
-  wallet: {
-    balance: 8560.23,
-    change: 1.2,
-    chartData: [65, 59, 80, 81, 56, 55, 40]
-  },
-  
-  // Card Data
-  card: {
-    balance: 4000.66,
-    cardNumber: '**** **** **** 4679',
-    cardHolder: 'John Doe',
-    expiryDate: '12/25',
-    cardType: 'visa'
-  },
-  
-  // Transactions Data
-  transactions: [
-    {
-      id: 1,
-      type: 'buy',
-      symbol: 'AAPL',
-      name: 'Apple Inc.',
-      shares: 5,
-      price: 175.34,
-      total: 876.70,
-      status: 'completed',
-      date: '2023-11-15 14:30:22'
+// Utility functions for random data
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randomFloat(min, max, decimals = 2) {
+  return parseFloat((Math.random() * (max - min) + min).toFixed(decimals));
+}
+function randomPick(arr) {
+  return arr[randomInt(0, arr.length - 1)];
+}
+function randomDate() {
+  const now = new Date();
+  const daysAgo = randomInt(0, 30);
+  now.setDate(now.getDate() - daysAgo);
+  return now.toISOString().slice(0, 10) + ' ' + randomInt(10, 23) + ':' + randomInt(10, 59) + ':' + randomInt(10, 59);
+}
+
+// Generate mock data
+function generateMockData() {
+  // Account
+  const totalBalance = randomInt(10000, 2000000);
+  const balanceChange = randomFloat(-5, 5);
+  const todayProfit = randomFloat(-5000, 5000);
+  const profitChange = randomFloat(-10, 10);
+
+  // Wallet
+  const walletBalance = totalBalance * randomFloat(0.5, 0.8);
+  const walletChange = randomFloat(-3, 3);
+
+  // Card
+  const cardBalance = totalBalance - walletBalance;
+  const cardTypes = ['visa', 'mastercard', 'amex'];
+  const cardType = randomPick(cardTypes);
+  const cardHolder = randomPick(['John Doe', 'Alice Smith', 'Mike Profits', 'Jane Lee']);
+  const cardNumber = '**** **** **** ' + randomInt(1000, 9999);
+  const expiryDate = randomInt(1, 12).toString().padStart(2, '0') + '/' + randomInt(25, 29);
+
+  // Transactions
+  const txTypes = ['buy', 'sell', 'deposit', 'withdraw'];
+  const stockList = [
+    { symbol: 'AAPL', name: 'Apple Inc.' },
+    { symbol: 'MSFT', name: 'Microsoft' },
+    { symbol: 'GOOGL', name: 'Alphabet Inc.' },
+    { symbol: 'TSLA', name: 'Tesla Inc.' },
+    { symbol: 'AMZN', name: 'Amazon.com' }
+  ];
+  const transactions = Array.from({ length: 8 }, (_, i) => {
+    const type = randomPick(txTypes);
+    const stock = randomPick(stockList);
+    const shares = randomInt(1, 10);
+    const price = randomFloat(100, 500);
+    const amount = shares * price;
+    return {
+      id: i + 1,
+      type,
+      symbol: stock.symbol,
+      name: stock.name,
+      shares: type === 'deposit' || type === 'withdraw' ? undefined : shares,
+      price: type === 'deposit' || type === 'withdraw' ? undefined : price,
+      amount: type === 'deposit' || type === 'withdraw' ? randomFloat(100, 5000) : undefined,
+      total: type === 'buy' || type === 'sell' ? amount : undefined,
+      status: randomPick(['completed', 'pending', 'failed']),
+      date: randomDate()
+    };
+  });
+
+  // Holdings
+  const holdings = stockList.map(stock => {
+    const shares = randomFloat(0.5, 20, 2);
+    const avgPrice = randomFloat(100, 400);
+    const currentPrice = avgPrice * randomFloat(0.8, 1.2);
+    const value = shares * currentPrice;
+    const change = ((currentPrice - avgPrice) / avgPrice) * 100;
+    return {
+      symbol: stock.symbol,
+      name: stock.name,
+      shares,
+      avgPrice,
+      currentPrice,
+      change,
+      value
+    };
+  });
+
+  return {
+    account: {
+      totalBalance,
+      balanceChange,
+      todayProfit,
+      profitChange,
+      lastUpdated: new Date().toISOString()
     },
-    {
-      id: 2,
-      type: 'sell',
-      symbol: 'MSFT',
-      name: 'Microsoft',
-      shares: 3,
-      price: 340.50,
-      total: 1021.50,
-      status: 'completed',
-      date: '2023-11-14 10:15:45'
+    wallet: {
+      balance: walletBalance,
+      change: walletChange,
+      chartData: Array.from({ length: 10 }, () => randomFloat(1000, walletBalance))
     },
-    {
-      id: 3,
-      type: 'deposit',
-      symbol: 'USD',
-      name: 'US Dollar',
-      amount: 2000.00,
-      status: 'completed',
-      date: '2023-11-13 09:20:10'
-    }
-  ],
-  
-  // Holdings Data
-  holdings: [
-    {
-      symbol: 'AAPL',
-      name: 'Apple Inc.',
-      shares: 15.25,
-      avgPrice: 165.45,
-      currentPrice: 175.34,
-      change: 5.2,
-      value: 2672.89
+    card: {
+      balance: cardBalance,
+      cardNumber,
+      cardHolder,
+      expiryDate,
+      cardType
     },
-    {
-      symbol: 'GOOGL',
-      name: 'Alphabet Inc.',
-      shares: 5.5,
-      avgPrice: 125.30,
-      currentPrice: 131.80,
-      change: -1.2,
-      value: 724.90
-    },
-    {
-      symbol: 'TSLA',
-      name: 'Tesla Inc.',
-      shares: 3.75,
-      avgPrice: 240.10,
-      currentPrice: 219.96,
-      change: -3.2,
-      value: 824.85
-    }
-  ]
-};
+    transactions,
+    holdings
+  };
+}
+
+// App data (initialized with mock data)
+let appData = generateMockData();
+
 
 // Format currency
 function formatCurrency(amount, decimals = 2) {
@@ -187,23 +206,9 @@ function renderAll() {
   renderHoldings();
 }
 
-// Update data with simulated changes
+// Update all data with new mock data (simulate refresh)
 function updateData() {
-  // Simulate data changes
-  const { account } = appData;
-  
-  // Update account data with small random changes
-  account.totalBalance = Math.max(1000000, account.totalBalance * (1 + (Math.random() * 0.02 - 0.01)));
-  account.balanceChange = Math.max(-5, Math.min(5, account.balanceChange + (Math.random() * 0.4 - 0.2)));
-  account.todayProfit = account.todayProfit * (1 + (Math.random() * 0.1 - 0.05));
-  account.profitChange = Math.max(-10, Math.min(10, account.profitChange + (Math.random() * 0.5 - 0.25)));
-  account.lastUpdated = new Date().toISOString();
-  
-  // Update wallet data
-  appData.wallet.balance = account.totalBalance * 0.7; // 70% in wallet
-  appData.card.balance = account.totalBalance * 0.3; // 30% in card
-  
-  // Re-render all components
+  appData = generateMockData();
   renderAll();
 }
 

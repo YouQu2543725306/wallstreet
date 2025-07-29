@@ -1,0 +1,60 @@
+仿照![alt text](bc965279-d429-490c-97b6-31aade991e1e.png)
+构建我的前端页面 我想做一个类似的页面 但是我想简化一下 去掉一些我不需要的功能
+这是我的布局设计![alt text](cc963da5-325a-4485-bb00-b83c5a289ced.jpg)
+我想做一个渐变浅蓝背景 白色组件的网页前端
+我们的网站品牌叫WallStreetQuad
+然后我想做的是一个简单的股票交易网站，一个demo
+我们假设只有一个用户，这是一个简单的demo，所以我不需要考虑用户注册、登录、权限管理等功能
+我不需要像图一那样可以切换不同周期内的功能，我只需要1day就可以了，不需要1week、1month、1year的功能
+
+后续我会起一个本地的后端用于演示，这个后端会有一些股票的数据，以及交易数据等
+这是建表语句
+CREATE TABLE Stock (
+    stock_id INT AUTO_INCREMENT PRIMARY KEY,
+    symbol VARCHAR(10) NOT NULL UNIQUE,     -- 股票代码，如 AAPL、TSLA
+    name VARCHAR(100) NOT NULL,             -- 股票名称
+    market VARCHAR(50),                     -- 市场，如 NASDAQ、NYSE
+    current_price DECIMAL(10, 2),           -- 当前价格，可选实时更新
+    currency VARCHAR(10) DEFAULT 'USD',     -- 货币单位
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE Cards (
+    card_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,                       -- 关联用户（可后续拓展 User 表）
+    card_number VARCHAR(20) NOT NULL UNIQUE,    -- 卡号
+    bank_name VARCHAR(50),                      -- 开户行名称
+    balance DECIMAL(12, 2) DEFAULT 0.00,        -- 卡内余额
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE Assets (
+    asset_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    stock_id INT NOT NULL,                      -- 股票ID
+    quantity INT NOT NULL,                      -- 持仓数量
+    average_cost DECIMAL(10, 2) NOT NULL,       -- 持仓成本（平均价）
+    total_value DECIMAL(12, 2) AS (quantity * average_cost) STORED,  -- 持仓市值
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (stock_id) REFERENCES Stock(stock_id)
+);
+
+
+CREATE TABLE Transaction (
+    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    stock_id INT NOT NULL,
+    type ENUM('BUY', 'SELL') NOT NULL,          -- 买入或卖出
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,              -- 每股价格
+    total_amount DECIMAL(12, 2) AS (quantity * price) STORED,
+    card_id INT,                                -- 使用的银行卡
+    transaction_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (stock_id) REFERENCES Stock(stock_id),
+    FOREIGN KEY (card_id) REFERENCES Cards(card_id)
+);
+
+
+这是这次任务的参考文档：https://bitbucket.org/neuedamats/portfoliomanager/src/master/
