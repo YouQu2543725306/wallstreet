@@ -35,7 +35,6 @@ function renderCards(cards) {
         </div>
         <div class="card-footer">
           <span class="card-brand">${cardBrand}</span>
-          <span class="card-created">${createdDate}</span>
         </div>
       </div>
     `;
@@ -61,4 +60,39 @@ if (document.readyState === 'loading') {
   loadCards();
 }
 
-console.log('fetch到的数据:', data);
+// 打开添加卡片弹窗
+window.openAddCardModal = function() {
+  document.getElementById('add-card-modal').style.display = 'block';
+}
+// 关闭添加卡片弹窗
+window.closeAddCardModal = function() {
+  document.getElementById('add-card-modal').style.display = 'none';
+}
+
+// 监听添加卡片表单提交
+const addCardForm = document.getElementById('add-card-form');
+if (addCardForm) {
+  addCardForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(addCardForm);
+    const card_number = formData.get('card_number');
+    const bank_name = formData.get('bank_name');
+    const balance = Number(formData.get('balance'));
+    try {
+      const res = await fetch('/api/cards', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ card_number, bank_name, balance })
+      });
+      if (!res.ok) throw new Error('添加失败');
+      window.closeAddCardModal();
+      addCardForm.reset();
+      await loadCards();
+    } catch (err) {
+      alert('添加卡片失败: ' + err.message);
+    }
+  });
+}
+
+
+

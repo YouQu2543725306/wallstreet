@@ -164,12 +164,32 @@
             <div class="card-section">
                 <div class="section-container">
                     <div class="section-header">
-                        <h2>My Card</h2>
-                        <button class="calculator-btn" onclick="openCalculatorModal()">
-                            <i class="fas fa-calculator"></i>
-                            Calculator
-                        </button>
-                    </div>
+            <h2>My Card</h2>
+            <button class="add-card-btn" onclick="openAddCardModal()">
+                <i class="fas fa-plus"></i> 添加卡片
+            </button>
+            <button class="calculator-btn" onclick="openCalculatorModal()">
+                <i class="fas fa-calculator"></i>
+                Calculator
+            </button>
+            </div>
+            <!-- 添加卡片弹窗 -->
+            <div id="add-card-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h3>添加新卡片</h3>
+                <button class="close-btn" onclick="closeAddCardModal()">&times;</button>
+                </div>
+                <form id="add-card-form">
+                <label>卡号：<input type="text" name="card_number" required maxlength="19"></label>
+                <label>银行名：<input type="text" name="bank_name" required></label>
+                <label>余额：<input type="number" name="balance" required min="0"></label>
+                <div class="modal-footer">
+                    <button type="submit" class="submit-btn">提交</button>
+                </div>
+                </form>
+            </div>
+            </div>
                     <div class="cards-container"></div>
                 </div>
             </div>
