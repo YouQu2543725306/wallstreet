@@ -109,6 +109,90 @@ function addNewHolding() {
     closeAddHoldingModal();
 }
 
+// Enable mouse drag to scroll for .cards-container
+function enableCardsContainerDragScroll() {
+    const container = document.querySelector('.cards-container');
+    if (!container) return;
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.classList.add('dragging');
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+        e.preventDefault();
+    });
+    container.addEventListener('mouseleave', () => {
+        isDown = false;
+        container.classList.remove('dragging');
+    });
+    container.addEventListener('mouseup', () => {
+        isDown = false;
+        container.classList.remove('dragging');
+    });
+    container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.2; // scroll speed
+        container.scrollLeft = scrollLeft - walk;
+    });
+}
+
+function enableCardsScrollbarSync() {
+    const container = document.querySelector('.cards-container');
+    const scrollbar = document.querySelector('.cards-scrollbar');
+    const thumb = document.querySelector('.cards-scrollbar-thumb');
+    if (!container || !scrollbar || !thumb) return;
+
+    function updateThumb() {
+        const visibleRatio = container.clientWidth / container.scrollWidth;
+        const thumbWidth = Math.max(scrollbar.clientWidth * visibleRatio, 40);
+        thumb.style.width = thumbWidth + 'px';
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        const maxThumb = scrollbar.clientWidth - thumbWidth;
+        const left = maxScroll > 0 ? (container.scrollLeft / maxScroll) * maxThumb : 0;
+        thumb.style.left = left + 'px';
+    }
+
+    // 同步滚动
+    container.addEventListener('scroll', updateThumb);
+    window.addEventListener('resize', updateThumb);
+    updateThumb();
+
+    // 拖动滑块
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartLeft = 0;
+    thumb.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartLeft = parseInt(thumb.style.left) || 0;
+        document.body.style.userSelect = 'none';
+    });
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - dragStartX;
+        const scrollbarWidth = scrollbar.clientWidth;
+        const thumbWidth = thumb.clientWidth;
+        let newLeft = dragStartLeft + dx;
+        newLeft = Math.max(0, Math.min(newLeft, scrollbarWidth - thumbWidth));
+        thumb.style.left = newLeft + 'px';
+        // 同步内容滚动
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        const maxThumb = scrollbarWidth - thumbWidth;
+        if (maxThumb > 0) {
+            container.scrollLeft = (newLeft / maxThumb) * maxScroll;
+        }
+    });
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        document.body.style.userSelect = '';
+    });
+}
+
 // Close modals when clicking on overlay
 document.addEventListener('DOMContentLoaded', function() {
     const modalOverlay = document.getElementById('modal-overlay');
@@ -130,4 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
             closeAddHoldingModal();
         }
     });
+    enableCardsContainerDragScroll();
+    enableCardsScrollbarSync();
 }); 
