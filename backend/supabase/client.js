@@ -1,11 +1,16 @@
-//supabase 初始化
-const { createClient } = require('@supabase/supabase-js');
+// supabase/client.js
+import dotenv from 'dotenv';
+dotenv.config();               // 读取 .env
+console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
+console.log('SUPABASE_KEY:', process.env.SUPABASE_KEY);
 
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://zintczxoirrkahrlgmyj.supabase.co'
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppbnRjenhvaXJya2FocmxnbXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2ODg0MDAsImV4cCI6MjA2OTI2NDQwMH0.1SZoQZH3XNzRlsvrMYrGWBOg1foyNaSOXMJ9G7ZoREA"
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
 
+const supabase = createClient(supabaseUrl, supabaseKey);
+export default supabase;
 
 module.exports = supabase;
 
