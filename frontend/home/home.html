@@ -8,84 +8,118 @@
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <div class="page">
+  <div class="page-container">
     <!-- 顶部导航 -->
     <header class="top-bar">
       <div class="logo"><i class="fa-solid fa-coins"></i> WallStreetQuad</div>
+      <div class="user"><i class="fa-solid fa-user"></i></div>
     </header>
 
-    <div class="top-section">  
-      <!-- 资产概览和今日盈亏 -->
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+      <!-- 顶部区域：左侧余额和右侧股票趋势 -->
       <div class="top-section">
-        <section class="balance-overview">
+        <!-- 左侧 - 余额卡片 -->
+        <section class="balance-card">
           <h2>Total Assets</h2>
           <div class="amount" id="totalAssets">$0.00</div>
-          <div class="change" id="assetChange">
+          <div class="change positive" id="assetChange">
             <i class="fas fa-caret-up"></i>
             <span>0.00%</span>
-            <span class="label">vs yesterday</span>
+            <span class="period">Today</span>
+          </div>
+          <div class="available-balance">
+            <h3>Available Balance</h3>
+            <div class="amount" id="availableBalance">$0.00</div>
+            <button class="action-btn deposit-btn">Deposit</button>
           </div>
         </section>
 
-        <section class="profit-today">
-          <h2>Today's P&L</h2>
-          <div class="amount" id="todayProfit">$0.00</div>
-          <div class="change" id="profitChange">
-            <i class="fas fa-caret-up"></i>
-            <span>0.00%</span>
-            <span class="label">vs yesterday</span>
-          </div>
-        </section>
-      </div>
-
-      <!-- 钱包和卡片部分 -->
-      <div class="wallet-cards-section">
-        <!-- 钱包 -->
-        <section class="wallet-card">
+        <!-- 右侧 - 股票趋势跟踪 -->
+        <section class="stock-trends-card">
           <div class="card-header">
-            <h3>My Wallet</h3>
-            <button id="walletMenuBtn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-          </div>
-          <div class="wallet-content" id="walletContent">
-            <!-- 将由JavaScript填充 -->
-          </div>
-        </section>
-
-        <!-- 卡片 -->
-        <section class="card-info">
-          <div class="card-header">
-            <h3>My Card</h3>
-            <button id="cardMenuBtn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-          </div>
-          <div class="card-content" id="cardContent">
-            <!-- 将由JavaScript填充 -->
-          </div>
-        </section>
-      </div>
-
-      <!-- 交易部分 -->
-      <div class="trading-section">
-        <!-- 交易历史 -->
-        <section class="transactions">
-          <div class="section-header">
-            <h2>Transaction History</h2>
-            <div class="transaction-filters">
-              <button class="filter-btn active" data-filter="all">All</button>
-              <button class="filter-btn" data-filter="buy">Buy</button>
-              <button class="filter-btn" data-filter="sell">Sell</button>
-              <button class="filter-btn" data-filter="deposit">Deposit</button>
-              <button class="filter-btn" data-filter="withdraw">Withdraw</button>
+            <h2>Stock Trends</h2>
+            <div class="actions">
+              <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
             </div>
           </div>
-          <div class="transaction-list" id="transactionList">
-            <!-- 将由JavaScript填充 -->
-          </div>
-          <div class="view-all">
-            <a href="#">View All Transactions <i class="fas fa-arrow-right"></i></a>
+          <div class="stock-trends-content">
+            <div class="tracked-stocks" id="trackedStocks">
+              <!-- 将由JavaScript填充，最多显示3只股票 -->
+            </div>
+            <div class="stock-selector">
+              <select id="stockSelector" class="stock-select">
+                <option value="">Add stock to track...</option>
+                <!-- 将由JavaScript填充 -->
+              </select>
+            </div>
           </div>
         </section>
       </div>
-    </div>
+
+      <!-- 今日盈亏卡片 -->
+      <section class="card daily-profit">
+        <h2>Today's P&L</h2>
+        <div class="amount" id="todayProfit">$0.00</div>
+        <div class="change positive" id="profitChange">
+          <i class="fas fa-caret-up"></i>
+          <span>0.00%</span>
+          <span class="period">vs Yesterday</span>
+        </div>
+      </section>
+
+      <!-- 持仓和市场部分 -->
+      <div class="content-columns">
+        <!-- 左侧列 - 持仓 -->
+        <section class="column portfolio-section">
+          <div class="section-header">
+            <h2>My Portfolio</h2>
+            <div class="actions">
+              <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
+            </div>
+          </div>
+          
+          <div class="portfolio-list" id="portfolioList">
+            <!-- 将由JavaScript填充 -->
+          </div>
+        </section>
+
+        <!-- 右侧列 - 市场 -->
+        <section class="column market-section">
+          <div class="section-header">
+            <h2>Market</h2>
+            <div class="actions">
+              <input type="text" class="search-input" placeholder="Search stocks...">
+              <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
+            </div>
+          </div>
+          
+          <div class="market-list" id="marketList">
+            <!-- 将由JavaScript填充 -->
+          </div>
+        </section>
+      </div>
+
+      <!-- 交易历史 -->
+      <section class="transactions-section">
+        <div class="section-header">
+          <h2>Recent Transactions</h2>
+          <div class="transaction-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="buy">Buy</button>
+            <button class="filter-btn" data-filter="sell">Sell</button>
+          </div>
+        </div>
+        
+        <div class="transaction-list" id="transactionList">
+          <!-- 将由JavaScript填充 -->
+        </div>
+        
+        <div class="view-all">
+          <a href="#">View All Transactions <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </section>
+    </main>
   </div>
 
   <!-- 交易弹窗 -->
@@ -124,23 +158,117 @@
 
   <script src="home.js"></script>
   <script>
-    // 初始化应用程序
+    // 初始化页面后，设置股票跟踪功能
     document.addEventListener('DOMContentLoaded', () => {
-      // 初始渲染所有组件
-      renderAll();
+      // 初始化页面数据
+      window.appData = initializePageData();
+      
+      // 初始化股票选择器
+      initStockSelector();
+      
+      // 初始化跟踪的股票（默认跟踪前3只股票）
+      initTrackedStocks();
       
       // 设置过滤按钮
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          renderTransactions(btn.dataset.filter);
+          // 这里可以添加过滤逻辑
         });
       });
-      
-      // 每10秒更新数据
-      setInterval(updateData, 10000);
     });
+    
+    // 初始化股票选择器
+    function initStockSelector() {
+      const selector = document.getElementById('stockSelector');
+      const stockList = window.appData.stockList;
+      
+      // 清空现有选项（保留第一个默认选项）
+      while (selector.options.length > 1) {
+        selector.remove(1);
+      }
+      
+      // 添加股票选项
+      stockList.forEach(stock => {
+        const option = document.createElement('option');
+        option.value = stock.symbol;
+        option.textContent = `${stock.symbol} - ${stock.name}`;
+        selector.appendChild(option);
+      });
+      
+      // 添加选择事件
+      selector.addEventListener('change', function() {
+        if (this.value) {
+          addTrackedStock(this.value);
+          this.value = ''; // 重置选择器
+        }
+      });
+    }
+    
+    // 初始化跟踪的股票
+    function initTrackedStocks() {
+      const trackedStocksEl = document.getElementById('trackedStocks');
+      trackedStocksEl.innerHTML = '';
+      
+      // 默认跟踪前3只股票
+      const stocksToTrack = window.appData.stockList.slice(0, 3);
+      stocksToTrack.forEach(stock => {
+        renderTrackedStock(stock);
+      });
+    }
+    
+    // 添加跟踪股票
+    function addTrackedStock(symbol) {
+      const trackedStocksEl = document.getElementById('trackedStocks');
+      const stockData = window.appData.stockList.find(s => s.symbol === symbol);
+      
+      if (!stockData) return;
+      
+      // 检查是否已经在跟踪
+      const existingStock = trackedStocksEl.querySelector(`[data-symbol="${symbol}"]`);
+      if (existingStock) return;
+      
+      // 检查是否已达到最大跟踪数量（3只）
+      if (trackedStocksEl.children.length >= 3) {
+        // 移除第一只股票
+        trackedStocksEl.removeChild(trackedStocksEl.firstChild);
+      }
+      
+      renderTrackedStock(stockData);
+    }
+    
+    // 渲染跟踪的股票
+    function renderTrackedStock(stock) {
+      const trackedStocksEl = document.getElementById('trackedStocks');
+      
+      const stockEl = document.createElement('div');
+      stockEl.className = 'tracked-stock';
+      stockEl.dataset.symbol = stock.symbol;
+      
+      const changeClass = stock.changePercent >= 0 ? 'positive' : 'negative';
+      const changeIcon = stock.changePercent >= 0 ? 'fa-caret-up' : 'fa-caret-down';
+      
+      stockEl.innerHTML = `
+        <div class="stock-header">
+          <div class="stock-symbol">${stock.symbol}</div>
+          <button class="remove-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="stock-name">${stock.name}</div>
+        <div class="stock-price">${formatCurrency(stock.price)}</div>
+        <div class="stock-change ${changeClass}">
+          <i class="fas ${changeIcon}"></i>
+          ${formatPercentage(stock.changePercent)}
+        </div>
+      `;
+      
+      // 添加移除按钮事件
+      stockEl.querySelector('.remove-btn').addEventListener('click', function() {
+        trackedStocksEl.removeChild(stockEl);
+      });
+      
+      trackedStocksEl.appendChild(stockEl);
+    }
   </script>
 </body>
 </html>
