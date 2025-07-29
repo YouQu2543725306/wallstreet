@@ -276,7 +276,7 @@ body {
 }
 
 .wallet-section {
-    width: 50%;
+    width: 60%;
 }
 
 .wallet-chart-container {
@@ -415,43 +415,166 @@ body {
 
 /* Card Section */
 .card-section {
-    width: 50%;
+    width: 40%;
 }
 
 .cards-container {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    padding: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    height: 300px;
     display: flex;
-    gap: 20px;
+    gap: 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* scroll-snap-type: x proximity;  // 如需轻微吸附可用proximity */
+    scroll-snap-type: none;
+    -webkit-overflow-scrolling: touch;
+    align-items: center;
+    height: 300px; /* 统一高度与.wallet-chart-container */
+    min-height: 220px;
+    justify-content: flex-start;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+/* 隐藏滚动条 - Chrome/Safari/Webkit */
+.cards-container::-webkit-scrollbar {
+    display: none;
+}
+
+.cards-scrollbar {
+    width: 100%;
+    height: 8px;
+    margin-top: 10px;
+    background: rgba(200, 200, 255, 0.15);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+.cards-scrollbar-thumb {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+    width: 60px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.cards-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #5a6fd8 0%, #764ba2 100%);
 }
 
 .credit-card {
-    flex: 1;
-    border-radius: 12px;
-    padding: 20px;
-    color: white;
+    flex: 0 0 260px;
+    width: 260px;
+    min-width: 220px;
+    max-width: 320px;
+    aspect-ratio: 16 / 9;
     position: relative;
+    border-radius: 20px;
+    color: #fff;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s ease;
-}
-
-.credit-card:hover {
-    transform: translateY(-2px);
-}
-
-.credit-card.primary {
+    align-items: flex-start;
+    justify-content: flex-end;
+    transition: transform 0.3s, box-shadow 0.3s;
+    /* scroll-snap-align: start;  // 如需轻微吸附可用 */
+    box-sizing: border-box;
+    box-shadow: 0 8px 32px 0 rgba(76, 110, 245, 0.18), 0 1.5px 6px 0 rgba(44,62,80,0.10);
+    overflow: hidden;
+    border: 1.5px solid rgba(255,255,255,0.18);
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 24px 24px 20px 24px; /* 优化内边距 */
+    margin-top: 16px;
+    margin-bottom: 16px;
+    height: 200px; /* 让卡片高度更统一 */
+    justify-content: space-between; /* 让内容分布更均匀 */
 }
-
 .credit-card.secondary {
     background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+}
+.credit-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    z-index: 1;
+}
+.credit-card .card-chip {
+    width: 36px;
+    height: 26px;
+    background: linear-gradient(90deg, #f8e7b9 0%, #e0c36e 100%);
+    border-radius: 6px;
+    margin-bottom: 12px;
+    margin-top: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    z-index: 2;
+}
+.credit-card .card-number-display {
+    font-size: 1.1rem;
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    z-index: 2;
+}
+.credit-card .card-details {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    z-index: 2;
+}
+.credit-card .card-holder {
+    font-weight: 500;
+    letter-spacing: 1px;
+    opacity: 0.92;
+}
+.credit-card .card-expiry {
+    font-weight: 500;
+    opacity: 0.85;
+}
+.credit-card .card-brand {
+    align-self: flex-end;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    z-index: 2;
+    opacity: 0.92;
+}
+.credit-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 16px 48px 0 rgba(76, 110, 245, 0.22), 0 2px 12px 0 rgba(44,62,80,0.13);
+}
+
+.credit-card .card-chip,
+.credit-card .card-number-display,
+.credit-card .card-details,
+.credit-card .card-brand {
+    margin-bottom: 8px;
+}
+
+.credit-card .card-details {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.credit-card .card-brand {
+    align-self: flex-end;
 }
 
 .card-chip {
@@ -653,6 +776,82 @@ body {
     color: #e74c3c;
 }
 
+/* Balance卡片新风格 */
+.new-balance-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  padding: 28px 32px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.balance-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.balance-header-row h3 {
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+.balance-unit {
+  font-size: 15px;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.balance-amount-big {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.balance-distribution-bar {
+  width: 100%;
+  height: 7px;
+  border-radius: 4px;
+  background: #e9eefa;
+  display: flex;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.bar-btc { background: #f6b93b; }
+.bar-eth { background: #4a69bd; }
+.bar-usdt { background: #38ada9; }
+.bar-other { background: #b8b8b8; }
+
+.balance-distribution-labels {
+  display: flex;
+  gap: 18px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.btc-label { color: #f6b93b; }
+.eth-label { color: #4a69bd; }
+.usdt-label { color: #38ada9; }
+.other-label { color: #b8b8b8; }
+
+.balance-profit-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  gap: 18px;
+}
+.profit-today-label {
+  color: #888;
+  font-size: 0.98rem;
+  margin-right: 6px;
+}
+.profit-amount.positive, .profit-percent.positive { color: #27ae60; }
+.profit-amount.negative, .profit-percent.negative { color: #e74c3c; }
 
 
 /* Footer */
@@ -706,10 +905,21 @@ body {
     .wallet-chart-container,
     .cards-container {
         height: auto;
+        min-height: 220px;
     }
     
     .cards-container {
         flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        overflow-x: visible;
+        scrollbar-width: none;
+    }
+    .credit-card {
+        margin: 0 auto 16px auto;
+        height: 180px;
+        min-width: 180px;
+        max-width: 320px;
     }
 }
 
