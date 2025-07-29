@@ -2,6 +2,7 @@
   "dependencies": {
     "@plotex/render-image": "^1.0.21",
     "@supabase/supabase-js": "^2.53.0",
+    "anychart": "^8.13.1",
     "data-forge": "^1.10.4",
     "data-forge-fs": "^0.0.9",
     "data-forge-indicators": "^0.2.7",
