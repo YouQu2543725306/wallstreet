@@ -45,6 +45,36 @@ function closeAddHoldingModal() {
     document.getElementById('holding-return').value = '';
 }
 
+function openTradeHoldingModal(stockTicker, quantity, value) {
+    // Populate modal fields
+    document.getElementById('trade-stock-ticker').textContent = stockTicker;
+    document.getElementById('trade-stock-quantity').textContent = quantity;
+    document.getElementById('trade-stock-value').textContent = value;
+
+    // Show the modal
+    document.getElementById('trade-holding-modal').style.display = 'block';
+}
+
+function closeTradeHoldingModal() {
+    // Hide the modal
+    document.getElementById('trade-holding-modal').style.display = 'none';
+}
+
+function confirmTrade() {
+    const tradeQuantity = document.getElementById('trade-quantity').value;
+
+    if (!tradeQuantity || tradeQuantity <= 0) {
+        alert('Please enter a valid trade quantity.');
+        return;
+    }
+
+    // Perform trade logic here (e.g., update backend or UI)
+    alert(`Trade confirmed for quantity: ${tradeQuantity}`);
+
+    // Close the modal
+    closeTradeHoldingModal();
+}
+
 // Calculator Functions
 function calculateRevenue() {
     const stockName = document.getElementById('stock-name').value;
@@ -107,6 +137,11 @@ function addNewHolding() {
     console.log(`Adding new holding: ${symbol} - ${name}, Quantity: ${quantity}, Cost: $${cost}, Market: ${market}, Expected Return: ${expectedReturn}%`);
     alert(`${symbol} has been added to your holdings`);
     closeAddHoldingModal();
+}
+
+function viewFullRecords() {
+    alert("Redirecting to full records page...");
+    // Add logic to navigate to the full records page or display a modal
 }
 
 // Enable mouse drag to scroll for .cards-container
@@ -202,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeCalculatorModal();
                 closeChangeStockModal();
                 closeAddHoldingModal();
+                closeTradeHoldingModal();
             }
         });
     }
@@ -212,8 +248,9 @@ document.addEventListener('DOMContentLoaded', function() {
             closeCalculatorModal();
             closeChangeStockModal();
             closeAddHoldingModal();
+            closeTradeHoldingModal();
         }
     });
     enableCardsContainerDragScroll();
     enableCardsScrollbarSync();
-}); 
+});

@@ -95,10 +95,17 @@ body {
     color: #2c3e50;
 }
 
+/* Section header buttons */
+.section-header .header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
 /* Button Styles */
 .change-stock-btn,
 .calculator-btn,
-.add-holding-btn {
+.add-holding-btn,
+.full-records-btn {
     padding: 8px 16px;
     border: 1px solid #667eea;
     background: white;
@@ -115,6 +122,7 @@ body {
 
 .change-stock-btn:hover,
 .calculator-btn:hover,
+.full-records-btn:hover,
 .add-holding-btn:hover {
     background: #667eea;
     color: white;
@@ -629,6 +637,30 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Scrollable transaction list */
+.transaction-list.scrollable {
+    max-height: 400px; /* Set the fixed height for the transaction list */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border for better visibility */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    padding: 10px; /* Optional: Add padding for better spacing */
+    background-color: #fff; /* Optional: Ensure the background is consistent */
+}
+
+/* Optional: Style the scrollbar for better appearance */
+.transaction-list.scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+
+.transaction-list.scrollable::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.transaction-list.scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}
+
 .transaction-item {
     display: flex;
     align-items: center;
@@ -729,6 +761,30 @@ body {
     font-size: 14px;
 }
 
+/* Scrollable table */
+.holdings-table.scrollable {
+    max-height: 400px; /* Set the fixed height for the table region */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border for better visibility */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    padding: 10px; /* Optional: Add padding for better spacing */
+    background-color: #fff; /* Optional: Ensure the background is consistent */
+}
+
+/* Optional: Style the scrollbar for better appearance */
+.holdings-table.scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+
+.holdings-table.scrollable::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.holdings-table.scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}
+
 .stock-item {
     display: flex;
     align-items: center;
@@ -775,6 +831,29 @@ body {
 .profit.negative {
     color: #e74c3c;
 }
+
+/* Smaller Version of Button Styles */
+.action-btn {
+    padding: 4px 10px;                 /* 缩小内边距 */
+    border: 1px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 6px;                /* 稍小圆角 */
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;                   /* 缩小字体 */
+}
+
+/* Hover Effect */
+.action-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
 
 /* Balance卡片新风格 */
 .new-balance-card {
@@ -973,4 +1052,4 @@ body {
     }
     
 
-} 
+}
