@@ -4,6 +4,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+node_modules
 
 # ========== 前端常见 ==========
 # Node / npm / pnpm / yarn
