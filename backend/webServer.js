@@ -1,62 +1,29 @@
 //主服务器文件
+import express from 'express';
+import cardsRouter from './routes/cards.js';
 
-const http = require('http');
+const app = express();
+app.use(express.json());
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Hello, World!\n');
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// 解决 __dirname 在 ES module 下不可用的问题
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// 静态托管 frontend 目录
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// 挂载卡片接口
+app.use('/api/cards', cardsRouter);
+
+// 默认返回 index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-
-
-server.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
-//交易执行
-// 执行交易（买入/卖出）
-async function executeTrade(req, res) {
-  const { userId, stockId, type, quantity, price, cardId } = req.body;
-  
-  // 1. 验证银行卡余额（买入时）
-  if (type === 'BUY') {
-    const { data: card } = await supabase
-      .from('Cards')
-      .select('balance')
-      .eq('card_id', cardId)
-      .single();
-    
-    if (card.balance < quantity * price) {
-      return res.status(400).json({ error: '银行卡余额不足' });
-    }
-  }
-
-  // 2. 验证持仓数量（卖出时）
-  if (type === 'SELL') {
-    const { data: asset } = await supabase
-      .from('Assets')
-      .select('quantity')
-      .eq('user_id', userId)
-      .eq('stock_id', stockId)
-      .single();
-    
-    if (!asset || asset.quantity < quantity) {
-      return res.status(400).json({ error: '持仓数量不足' });
-    }
-  }
-
-  // 3. 在事务中执行操作
-  const transaction = await supabase.rpc('execute_trade_transaction', {
-    p_user_id: userId,
-    p_stock_id: stockId,
-    p_type: type,
-    p_quantity: quantity,
-    p_price: price,
-    p_card_id: cardId
-  });
-
-  res.json(transaction);
-}
-
