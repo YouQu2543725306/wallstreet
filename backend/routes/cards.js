@@ -14,25 +14,23 @@ router.get('/', async (req, res) => {
   }
 });
 
-//银行卡管理API
-// 获取用户银行卡列表
-async function getUserCards(req, res) {
-  const { userId } = req.params;
-  const { data, error } = await supabase
-    .from('Cards')
-    .select('*')
-    .eq('user_id', userId);
-  res.json(data || error);
-}
-
-// 添加银行卡
-async function addCard(req, res) {
-  const { userId, cardData } = req.body;
-  const { data, error } = await supabase
-    .from('Cards')
-    .insert([{ ...cardData, user_id: userId }]);
-  res.json(data || error);
-}
+// 添加新卡片
+router.post('/', async (req, res) => {
+  const { card_number, bank_name, balance } = req.body;
+  if (!card_number || !bank_name || balance === undefined) {
+    return res.status(400).json({ error: '缺少必要字段' });
+  }
+  try {
+    const { data, error } = await supabase
+      .from('cards')
+      .insert([{ card_number, bank_name, balance }])
+      .select();
+    if (error) throw error;
+    res.status(201).json(data[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 export default router;
 

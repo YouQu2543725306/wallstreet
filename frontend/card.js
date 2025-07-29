@@ -1,5 +1,44 @@
 // card.js - 渲染我的卡片
 
+function openAddCardModal() {
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('add-card-modal').style.display = 'block';
+}
+
+function closeAddCardModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('add-card-modal').style.display = 'none';
+    // Clear form fields
+    document.getElementById('add-card-form').reset();
+}
+
+function submitNewCard() {
+    const form = document.getElementById('add-card-form');
+    const cardNumber = form.querySelector('[name="card_number"]').value;
+    const bankName = form.querySelector('[name="bank_name"]').value;
+    const balance = form.querySelector('[name="balance"]').value;
+
+    if (!cardNumber || !bankName || !balance) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    if (cardNumber.length !== 12 || !/^\d+$/.test(cardNumber)) {
+        alert('Card number must be exactly 12 digits.');
+        return;
+    }
+
+    console.log('Submitting new card:', { cardNumber, bankName, balance });
+    // Here you would typically make an API call to add the card
+    alert('New card added successfully!');
+    closeAddCardModal();
+}
+
+// Make functions globally available because they are called from onclick
+window.openAddCardModal = openAddCardModal;
+window.closeAddCardModal = closeAddCardModal;
+window.submitNewCard = submitNewCard;
+
 // 卡品牌判断（简单根据卡号前缀）
 function getCardBrand(cardNumber) {
   if (/^4/.test(cardNumber)) return 'VISA';
@@ -35,7 +74,6 @@ function renderCards(cards) {
         </div>
         <div class="card-footer">
           <span class="card-brand">${cardBrand}</span>
-          <span class="card-created">${createdDate}</span>
         </div>
       </div>
     `;
@@ -61,4 +99,39 @@ if (document.readyState === 'loading') {
   loadCards();
 }
 
-console.log('fetch到的数据:', data);
+// 打开添加卡片弹窗
+window.openAddCardModal = function() {
+  document.getElementById('add-card-modal').style.display = 'block';
+}
+// 关闭添加卡片弹窗
+window.closeAddCardModal = function() {
+  document.getElementById('add-card-modal').style.display = 'none';
+}
+
+// 监听添加卡片表单提交
+const addCardForm = document.getElementById('add-card-form');
+if (addCardForm) {
+  addCardForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(addCardForm);
+    const card_number = formData.get('card_number');
+    const bank_name = formData.get('bank_name');
+    const balance = Number(formData.get('balance'));
+    try {
+      const res = await fetch('/api/cards', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ card_number, bank_name, balance })
+      });
+      if (!res.ok) throw new Error('添加失败');
+      window.closeAddCardModal();
+      addCardForm.reset();
+      await loadCards();
+    } catch (err) {
+      alert('添加卡片失败: ' + err.message);
+    }
+  });
+}
+
+
+
