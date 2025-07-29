@@ -42,6 +42,7 @@ function closeAddHoldingModal() {
     document.getElementById('holding-quantity').value = '';
     document.getElementById('holding-cost').value = '';
     document.getElementById('holding-market').value = 'NASDAQ';
+    document.getElementById('holding-return').value = '';
 }
 
 // Calculator Functions
@@ -95,6 +96,7 @@ function addNewHolding() {
     const quantity = parseInt(document.getElementById('holding-quantity').value);
     const cost = parseFloat(document.getElementById('holding-cost').value);
     const market = document.getElementById('holding-market').value;
+    const expectedReturn = parseFloat(document.getElementById('holding-return').value);
     
     if (!symbol || !name || !quantity || !cost) {
         alert('Please fill in all required fields');
@@ -102,7 +104,7 @@ function addNewHolding() {
     }
     
     // Here you would typically make an API call to add the holding
-    console.log(`Adding new holding: ${symbol} - ${name}, Quantity: ${quantity}, Cost: $${cost}, Market: ${market}`);
+    console.log(`Adding new holding: ${symbol} - ${name}, Quantity: ${quantity}, Cost: $${cost}, Market: ${market}, Expected Return: ${expectedReturn}%`);
     alert(`${symbol} has been added to your holdings`);
     closeAddHoldingModal();
 }
