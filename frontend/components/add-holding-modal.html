@@ -1,0 +1,41 @@
+<!-- Add Holding Modal Component -->
+<div id="add-holding-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add New Holding</h3>
+            <button class="close-btn" onclick="closeAddHoldingModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Stock Symbol:</label>
+                <input type="text" id="holding-symbol" placeholder="e.g., GOOGL">
+            </div>
+            <div class="form-group">
+                <label>Stock Name:</label>
+                <input type="text" id="holding-name" placeholder="e.g., Alphabet Inc.">
+            </div>
+            <div class="form-group">
+                <label>Quantity:</label>
+                <input type="number" id="holding-quantity" placeholder="Enter quantity" min="1">
+            </div>
+            <div class="form-group">
+                <label>Average Cost:</label>
+                <input type="number" id="holding-cost" placeholder="Enter average cost" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Market:</label>
+                <select id="holding-market">
+                    <option value="NASDAQ">NASDAQ</option>
+                    <option value="NYSE">NYSE</option>
+                    <option value="AMEX">AMEX</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeAddHoldingModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="addNewHolding()">Add Holding</button>
+        </div>
+    </div>
+</div> 

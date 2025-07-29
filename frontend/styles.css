@@ -95,6 +95,31 @@ body {
     color: #2c3e50;
 }
 
+/* Button Styles */
+.change-stock-btn,
+.calculator-btn,
+.add-holding-btn {
+    padding: 8px 16px;
+    border: 1px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.change-stock-btn:hover,
+.calculator-btn:hover,
+.add-holding-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
 /* First Layer: Balance + Tracked Stocks */
 .first-layer {
     display: flex;
@@ -161,25 +186,6 @@ body {
 /* Tracked Stocks Section */
 .tracked-stocks-section {
     width: 70%;
-}
-
-.add-stock-btn {
-    padding: 8px 16px;
-    border: 1px solid #667eea;
-    background: white;
-    color: #667eea;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.add-stock-btn:hover {
-    background: #667eea;
-    color: white;
 }
 
 .stocks-grid {
@@ -491,28 +497,6 @@ body {
     margin-bottom: 30px;
 }
 
-.history-filters {
-    display: flex;
-    gap: 8px;
-}
-
-.filter-btn {
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.filter-btn.active,
-.filter-btn:hover {
-    background: #667eea;
-    color: white;
-    border-color: #667eea;
-}
-
 .transaction-list {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -599,25 +583,6 @@ body {
     margin-bottom: 30px;
 }
 
-.refresh-btn {
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.refresh-btn:hover {
-    background: #667eea;
-    color: white;
-    border-color: #667eea;
-}
-
 .holdings-table {
     overflow-x: auto;
 }
@@ -687,6 +652,8 @@ body {
 .profit.negative {
     color: #e74c3c;
 }
+
+
 
 /* Footer */
 .footer {
@@ -777,6 +744,8 @@ body {
     .holdings-table td {
         padding: 12px 8px;
     }
+    
+
 }
 
 @media (max-width: 480px) {
@@ -792,4 +761,6 @@ body {
     .cards-container {
         padding: 20px;
     }
+    
+
 } 

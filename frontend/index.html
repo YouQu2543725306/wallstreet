@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WallStreetQuad - Stock Trading Platform</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="modal-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -51,9 +52,9 @@
                 <div class="section-container">
                     <div class="section-header">
                         <h2>Tracked Stocks</h2>
-                        <button class="add-stock-btn">
-                            <i class="fas fa-plus"></i>
-                            Add Stock
+                        <button class="change-stock-btn" onclick="openChangeStockModal()">
+                            <i class="fas fa-exchange-alt"></i>
+                            Change Stock
                         </button>
                     </div>
                     <div class="stocks-grid">
@@ -155,6 +156,10 @@
                 <div class="section-container">
                     <div class="section-header">
                         <h2>My Card</h2>
+                        <button class="calculator-btn" onclick="openCalculatorModal()">
+                            <i class="fas fa-calculator"></i>
+                            Calculator
+                        </button>
                     </div>
                     <div class="cards-container">
                         <div class="credit-card primary">
@@ -186,11 +191,6 @@
             <div class="section-container">
                 <div class="section-header">
                     <h2>Transaction History</h2>
-                    <div class="history-filters">
-                        <button class="filter-btn active">All</button>
-                        <button class="filter-btn">Buy</button>
-                        <button class="filter-btn">Sell</button>
-                    </div>
                 </div>
                 <div class="transaction-list">
                     <div class="transaction-item">
@@ -246,9 +246,9 @@
             <div class="section-container">
                 <div class="section-header">
                     <h2>My Holdings</h2>
-                    <button class="refresh-btn">
-                        <i class="fas fa-sync-alt"></i>
-                        Refresh
+                    <button class="add-holding-btn" onclick="openAddHoldingModal()">
+                        <i class="fas fa-plus"></i>
+                        Add
                     </button>
                 </div>
                 
@@ -340,5 +340,151 @@
             <p>&copy; 2024 WallStreetQuad. This is a demo project.</p>
         </div>
     </footer>
+
+    <!-- Modal Components -->
+    <div id="modal-overlay" class="modal-overlay"></div>
+    
+    <!-- Include Modal Components -->
+    <div id="modal-container">
+        <!-- Calculator Modal -->
+        <div id="calculator-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Calculator</h3>
+                    <button class="close-btn" onclick="closeCalculatorModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Input name:</label>
+                        <input type="text" id="stock-name" placeholder="Enter stock name">
+                    </div>
+                    <div class="form-group">
+                        <label>Market price:</label>
+                        <input type="number" id="market-price" placeholder="Enter current price" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Buy Quantity:</label>
+                        <input type="number" id="buy-quantity" placeholder="Enter quantity" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Duration:</label>
+                        <select id="duration">
+                            <option value="1">1 Month</option>
+                            <option value="3">3 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="12">1 Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Approximate revenue:</label>
+                        <div class="result-display" id="revenue-result">$0.00</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeCalculatorModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="calculateRevenue()">Calculate</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Stock Modal -->
+        <div id="change-stock-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Change Tracked Stock</h3>
+                    <button class="close-btn" onclick="closeChangeStockModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="current-stocks">
+                        <h4>Current Tracked Stocks</h4>
+                        <div class="stock-list">
+                            <div class="stock-item">
+                                <span>AAPL - Apple Inc.</span>
+                                <button class="remove-btn" onclick="removeStock('AAPL')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="stock-item">
+                                <span>TSLA - Tesla Inc.</span>
+                                <button class="remove-btn" onclick="removeStock('TSLA')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="stock-item">
+                                <span>MSFT - Microsoft Corp.</span>
+                                <button class="remove-btn" onclick="removeStock('MSFT')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-stock-section">
+                        <h4>Add New Stock</h4>
+                        <div class="form-group">
+                            <label>Stock Symbol:</label>
+                            <input type="text" id="new-stock-symbol" placeholder="e.g., GOOGL">
+                        </div>
+                        <div class="form-group">
+                            <label>Stock Name:</label>
+                            <input type="text" id="new-stock-name" placeholder="e.g., Alphabet Inc.">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeChangeStockModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="addNewStock()">Add Stock</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Holding Modal -->
+        <div id="add-holding-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Holding</h3>
+                    <button class="close-btn" onclick="closeAddHoldingModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Stock Symbol:</label>
+                        <input type="text" id="holding-symbol" placeholder="e.g., GOOGL">
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Name:</label>
+                        <input type="text" id="holding-name" placeholder="e.g., Alphabet Inc.">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity:</label>
+                        <input type="number" id="holding-quantity" placeholder="Enter quantity" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Average Cost:</label>
+                        <input type="number" id="holding-cost" placeholder="Enter average cost" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Market:</label>
+                        <select id="holding-market">
+                            <option value="NASDAQ">NASDAQ</option>
+                            <option value="NYSE">NYSE</option>
+                            <option value="AMEX">AMEX</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeAddHoldingModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="addNewHolding()">Add Holding</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="scripts.js"></script>
 </body>
 </html> 
