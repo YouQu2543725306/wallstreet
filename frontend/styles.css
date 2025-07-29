@@ -776,6 +776,82 @@ body {
     color: #e74c3c;
 }
 
+/* Balance卡片新风格 */
+.new-balance-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  padding: 28px 32px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.balance-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.balance-header-row h3 {
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+.balance-unit {
+  font-size: 15px;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.balance-amount-big {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.balance-distribution-bar {
+  width: 100%;
+  height: 7px;
+  border-radius: 4px;
+  background: #e9eefa;
+  display: flex;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.bar-btc { background: #f6b93b; }
+.bar-eth { background: #4a69bd; }
+.bar-usdt { background: #38ada9; }
+.bar-other { background: #b8b8b8; }
+
+.balance-distribution-labels {
+  display: flex;
+  gap: 18px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.btc-label { color: #f6b93b; }
+.eth-label { color: #4a69bd; }
+.usdt-label { color: #38ada9; }
+.other-label { color: #b8b8b8; }
+
+.balance-profit-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  gap: 18px;
+}
+.profit-today-label {
+  color: #888;
+  font-size: 0.98rem;
+  margin-right: 6px;
+}
+.profit-amount.positive, .profit-percent.positive { color: #27ae60; }
+.profit-amount.negative, .profit-percent.negative { color: #e74c3c; }
 
 
 /* Footer */
