@@ -51,3 +51,5 @@ logs/
 # ========== Docker / K8s 本地 ==========
 .dockerignore
 .envrc
+
+node_modules
