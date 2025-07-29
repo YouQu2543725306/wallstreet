@@ -55,6 +55,8 @@
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    color: #333;
+    font-weight: bold;
 }
 
 .modal-footer {
