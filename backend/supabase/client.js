@@ -22,3 +22,14 @@ export async function getCards() {
   }
   return data;
 }
+
+// 获取所有卡片数据的接口函数
+export async function getCards() {
+  const { data, error } = await supabase
+    .from('cards')
+    .select();
+  if (error) {
+    throw error;
+  }
+  return data;
+}
