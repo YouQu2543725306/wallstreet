@@ -105,6 +105,7 @@ body {
 .change-stock-btn,
 .calculator-btn,
 .add-holding-btn,
+.full-records-btn,
 .add-card-btn {
     padding: 8px 16px;
     border: 1px solid #667eea;
@@ -123,6 +124,7 @@ body {
 .change-stock-btn:hover,
 .calculator-btn:hover,
 .add-holding-btn:hover,
+.full-records-btn:hover,
 .add-card-btn:hover {
     background: #667eea;
     color: white;
