@@ -7,17 +7,19 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 
+module.exports = supabase;
+
 //  test
-async function fetchCharacters() {
-    const { data, error } = await supabase
-      .from('cards')
-      .select();
+// async function fetchCharacters() {
+//     const { data, error } = await supabase
+//       .from('cards')
+//       .select();
   
-    if (error) {
-      console.error('search error:', error);
-    } else {
-      console.log('search result:', data);
-    }
-  }
+//     if (error) {
+//       console.error('search error:', error);
+//     } else {
+//       console.log('search result:', data);
+//     }
+//   }
   
-  fetchCharacters();
+//   fetchCharacters();

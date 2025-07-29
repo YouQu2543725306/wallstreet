@@ -1,6 +1,9 @@
 //主服务器文件
 
 const http = require('http');
+const supabase = require('./supabase/client');
+
+
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -8,10 +11,11 @@ const server = http.createServer((req, res) => {
 });
 
 
-
 server.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
 });
+
+
 
 
 
