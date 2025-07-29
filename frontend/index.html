@@ -164,39 +164,45 @@
             <div class="card-section">
                 <div class="section-container">
                     <div class="section-header">
-            <h2>My Card</h2>
-            <button class="add-card-btn" onclick="openAddCardModal()">
-                <i class="fas fa-plus"></i> Add Card
-            </button>
-            <button class="calculator-btn" onclick="openCalculatorModal()">
-                <i class="fas fa-calculator"></i>
-                Calculator
-            </button>
+                        <h2>My Card</h2>
+                        <button class="add-card-btn" onclick="openAddCardModal()">
+                            <i class="fas fa-plus"></i> Add Card
+                        </button>
+                        <!-- <button class="calculator-btn" onclick="openCalculatorModal()">
+                            <i class="fas fa-calculator"></i>
+                            Calculator
+                        </button> -->
+                    </div>
+                    <!-- Add Card Modal -->
+                    <div id="add-card-modal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>Add New Card</h3>
+                                <button class="close-btn" onclick="closeAddCardModal()"><i class="fas fa-times"></i></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="add-card-form">
+                                    <div class="form-group">
+                                        <label for="card-number">Card Number</label>
+                                        <input type="text" id="card-number" name="card_number" required pattern="\d{12}" maxlength="12" minlength="12" placeholder="Enter 12-digit card number">
+                                        <small class="input-hint">Card number must be exactly 12 digits.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bank-name">Bank Name</label>
+                                        <input type="text" id="bank-name" name="bank_name" required placeholder="Enter bank name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="card-balance">Balance</label>
+                                        <input type="number" id="card-balance" name="balance" required min="0" placeholder="Enter balance">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" onclick="closeAddCardModal()">Cancel</button>
+                                <button class="btn btn-primary" onclick="submitNewCard()">Add Card</button>
+                            </div>
                         </div>
-                        <!-- Add Card Modal -->
-            <div id="add-card-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h3>Add New Card</h3>
-                <button class="close-btn" onclick="closeAddCardModal()">&times;</button>
-                </div>
-                <form id="add-card-form">
-                <label>Card Number:
-                    <input type="text" name="card_number" required pattern="\d{12}" maxlength="12" minlength="12" placeholder="Enter 12-digit card number">
-                </label>
-                <small class="input-hint">Card number must be exactly 12 digits.</small>
-                <label>Bank Name:
-                    <input type="text" name="bank_name" required placeholder="Enter bank name">
-                </label>
-                <label>Balance:
-                    <input type="number" name="balance" required min="0" placeholder="Enter balance">
-                </label>
-                <div class="modal-footer">
-                    <button type="submit" class="submit-btn">Submit</button>
-                </div>
-                </form>
-            </div>
-            </div>
+                    </div>
                     <div class="cards-container"></div>
                 </div>
             </div>
