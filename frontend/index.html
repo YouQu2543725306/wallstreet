@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WallStreetQuad - Stock Trading Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="modal-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-chart-line"></i>
+                <span>WallStreetQuad</span>
+            </div>
+            <div class="nav-user">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Demo User</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- First Layer: Balance + Tracked Stocks -->
+        <section class="first-layer">
+            <div class="balance-section">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2>Balance</h2>
+                    </div>
+                    <div class="balance-card">
+                        <div class="balance-info">
+                            <h3>Total Balance</h3>
+                            <div class="balance-amount">$125,430.50</div>
+                            <div class="balance-change positive">+$2,450.30 (+2.0%)</div>
+                        </div>
+                        <div class="balance-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tracked-stocks-section">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2>Tracked Stocks</h2>
+                        <button class="change-stock-btn" onclick="openChangeStockModal()">
+                            <i class="fas fa-exchange-alt"></i>
+                            Change Stock
+                        </button>
+                    </div>
+                    <div class="stocks-grid">
+                        <div class="stock-card">
+                            <div class="stock-header">
+                                <div class="stock-info">
+                                    <div class="stock-symbol">AAPL</div>
+                                    <div class="stock-name">Apple Inc.</div>
+                                </div>
+                                <div class="stock-price">
+                                    <div class="current-price">$175.43</div>
+                                    <div class="price-change positive">+$2.15 (+1.24%)</div>
+                                </div>
+                            </div>
+                            <div class="stock-chart">
+                                <div class="mini-chart">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stock-card">
+                            <div class="stock-header">
+                                <div class="stock-info">
+                                    <div class="stock-symbol">TSLA</div>
+                                    <div class="stock-name">Tesla Inc.</div>
+                                </div>
+                                <div class="stock-price">
+                                    <div class="current-price">$195.20</div>
+                                    <div class="price-change positive">+$3.45 (+1.80%)</div>
+                                </div>
+                            </div>
+                            <div class="stock-chart">
+                                <div class="mini-chart">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stock-card">
+                            <div class="stock-header">
+                                <div class="stock-info">
+                                    <div class="stock-symbol">MSFT</div>
+                                    <div class="stock-name">Microsoft Corp.</div>
+                                </div>
+                                <div class="stock-price">
+                                    <div class="current-price">$315.60</div>
+                                    <div class="price-change negative">-$2.30 (-0.72%)</div>
+                                </div>
+                            </div>
+                            <div class="stock-chart">
+                                <div class="mini-chart">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Second Layer: My Wallet + My Card -->
+        <section class="second-layer">
+            <div class="wallet-section">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2>My Wallet</h2>
+                    </div>
+                    <div class="wallet-chart-container">
+                        <div class="chart-header">
+                            <div class="chart-title">My Balance</div>
+                            <div class="chart-value">$1,176,356.46</div>
+                            <div class="chart-change positive">+3.21%</div>
+                        </div>
+                        <div class="chart-area">
+                            <div class="line-chart-placeholder">
+                                <div class="chart-line"></div>
+                                <div class="chart-point"></div>
+                                <div class="chart-tooltip">
+                                    <div class="tooltip-title">My Balance</div>
+                                    <div class="tooltip-value">$1,176,356.46</div>
+                                    <div class="tooltip-change positive">+3.21%</div>
+                                </div>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Jan</span>
+                                <span>Feb</span>
+                                <span>Mar</span>
+                                <span>Apr</span>
+                                <span>May</span>
+                                <span>Jun</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-section">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2>My Card</h2>
+                        <button class="calculator-btn" onclick="openCalculatorModal()">
+                            <i class="fas fa-calculator"></i>
+                            Calculator
+                        </button>
+                    </div>
+                    <div class="cards-container">
+                        <div class="credit-card primary">
+                            <div class="card-chip"></div>
+                            <div class="card-number-display">1234 5678 9012 3456</div>
+                            <div class="card-details">
+                                <div class="card-holder">DEMO USER</div>
+                                <div class="card-expiry">12/25</div>
+                            </div>
+                            <div class="card-brand">VISA</div>
+                        </div>
+                        
+                        <div class="credit-card secondary">
+                            <div class="card-chip"></div>
+                            <div class="card-number-display">9876 5432 1098 7654</div>
+                            <div class="card-details">
+                                <div class="card-holder">DEMO USER</div>
+                                <div class="card-expiry">08/26</div>
+                            </div>
+                            <div class="card-brand">MASTERCARD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Third Layer: Transaction History -->
+        <section class="history-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>Transaction History</h2>
+                </div>
+                <div class="transaction-list">
+                    <div class="transaction-item">
+                        <div class="transaction-icon buy">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Bought AAPL</div>
+                            <div class="transaction-subtitle">100 shares @ $175.43</div>
+                            <div class="transaction-date">Today, 2:30 PM</div>
+                        </div>
+                        <div class="transaction-amount">
+                            <div class="amount">-$17,543.00</div>
+                            <div class="status completed">Completed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon sell">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Sold TSLA</div>
+                            <div class="transaction-subtitle">50 shares @ $195.20</div>
+                            <div class="transaction-date">Yesterday, 4:15 PM</div>
+                        </div>
+                        <div class="transaction-amount">
+                            <div class="amount">+$9,760.00</div>
+                            <div class="status completed">Completed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon buy">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Bought MSFT</div>
+                            <div class="transaction-subtitle">75 shares @ $315.60</div>
+                            <div class="transaction-date">Dec 15, 2023</div>
+                        </div>
+                        <div class="transaction-amount">
+                            <div class="amount">-$23,670.00</div>
+                            <div class="status completed">Completed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fourth Layer: Holdings -->
+        <section class="holdings-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>My Holdings</h2>
+                    <button class="add-holding-btn" onclick="openAddHoldingModal()">
+                        <i class="fas fa-plus"></i>
+                        Add
+                    </button>
+                </div>
+                
+                <div class="holdings-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stock</th>
+                                <th>Symbol</th>
+                                <th>Quantity</th>
+                                <th>Avg Cost</th>
+                                <th>Current Price</th>
+                                <th>Market Value</th>
+                                <th>P&L</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="stock-item">
+                                        <div class="stock-icon">A</div>
+                                        <div class="stock-details">
+                                            <div class="stock-name">Apple Inc.</div>
+                                            <div class="stock-market">NASDAQ</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>AAPL</td>
+                                <td>100</td>
+                                <td>$165.20</td>
+                                <td>$175.43</td>
+                                <td>$17,543.00</td>
+                                <td class="profit positive">+$1,023.00</td>
+                                <td>
+                                    <button class="action-btn">Trade</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="stock-item">
+                                        <div class="stock-icon">T</div>
+                                        <div class="stock-details">
+                                            <div class="stock-name">Tesla Inc.</div>
+                                            <div class="stock-market">NASDAQ</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>TSLA</td>
+                                <td>50</td>
+                                <td>$180.50</td>
+                                <td>$195.20</td>
+                                <td>$9,760.00</td>
+                                <td class="profit positive">+$735.00</td>
+                                <td>
+                                    <button class="action-btn">Trade</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="stock-item">
+                                        <div class="stock-icon">M</div>
+                                        <div class="stock-details">
+                                            <div class="stock-name">Microsoft Corp.</div>
+                                            <div class="stock-market">NASDAQ</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>MSFT</td>
+                                <td>75</td>
+                                <td>$320.80</td>
+                                <td>$315.60</td>
+                                <td>$23,670.00</td>
+                                <td class="profit negative">-$390.00</td>
+                                <td>
+                                    <button class="action-btn">Trade</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 WallStreetQuad. This is a demo project.</p>
+        </div>
+    </footer>
+
+    <!-- Modal Components -->
+    <div id="modal-overlay" class="modal-overlay"></div>
+    
+    <!-- Include Modal Components -->
+    <div id="modal-container">
+        <!-- Calculator Modal -->
+        <div id="calculator-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Calculator</h3>
+                    <button class="close-btn" onclick="closeCalculatorModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Input name:</label>
+                        <input type="text" id="stock-name" placeholder="Enter stock name">
+                    </div>
+                    <div class="form-group">
+                        <label>Market price:</label>
+                        <input type="number" id="market-price" placeholder="Enter current price" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Buy Quantity:</label>
+                        <input type="number" id="buy-quantity" placeholder="Enter quantity" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Duration:</label>
+                        <select id="duration">
+                            <option value="1">1 Month</option>
+                            <option value="3">3 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="12">1 Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Approximate revenue:</label>
+                        <div class="result-display" id="revenue-result">$0.00</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeCalculatorModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="calculateRevenue()">Calculate</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Stock Modal -->
+        <div id="change-stock-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Change Tracked Stock</h3>
+                    <button class="close-btn" onclick="closeChangeStockModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="current-stocks">
+                        <h4>Current Tracked Stocks</h4>
+                        <div class="stock-list">
+                            <div class="stock-item">
+                                <span>AAPL - Apple Inc.</span>
+                                <button class="remove-btn" onclick="removeStock('AAPL')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="stock-item">
+                                <span>TSLA - Tesla Inc.</span>
+                                <button class="remove-btn" onclick="removeStock('TSLA')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="stock-item">
+                                <span>MSFT - Microsoft Corp.</span>
+                                <button class="remove-btn" onclick="removeStock('MSFT')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-stock-section">
+                        <h4>Add New Stock</h4>
+                        <div class="form-group">
+                            <label>Stock Symbol:</label>
+                            <input type="text" id="new-stock-symbol" placeholder="e.g., GOOGL">
+                        </div>
+                        <div class="form-group">
+                            <label>Stock Name:</label>
+                            <input type="text" id="new-stock-name" placeholder="e.g., Alphabet Inc.">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeChangeStockModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="addNewStock()">Add Stock</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Holding Modal -->
+        <div id="add-holding-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Holding</h3>
+                    <button class="close-btn" onclick="closeAddHoldingModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Stock Symbol:</label>
+                        <input type="text" id="holding-symbol" placeholder="e.g., GOOGL">
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Name:</label>
+                        <input type="text" id="holding-name" placeholder="e.g., Alphabet Inc.">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity:</label>
+                        <input type="number" id="holding-quantity" placeholder="Enter quantity" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Average Cost:</label>
+                        <input type="number" id="holding-cost" placeholder="Enter average cost" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Market:</label>
+                        <select id="holding-market">
+                            <option value="NASDAQ">NASDAQ</option>
+                            <option value="NYSE">NYSE</option>
+                            <option value="AMEX">AMEX</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeAddHoldingModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="addNewHolding()">Add Holding</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="scripts.js"></script>
+</body>
+</html> 
