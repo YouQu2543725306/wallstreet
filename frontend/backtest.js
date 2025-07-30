@@ -94,8 +94,9 @@ function resetUI() {
 function showResults(result) {
     console.log("[RESULT] Displaying:", result);
 
+    const resultsSection = document.getElementById('backtest-results');
     document.getElementById('backtest-results').style.display = 'block';
-
+    
     // Summary Table
     document.getElementById('result-summary').innerHTML = `
         <tr><th>Ticker</th><td>${result.ticker}</td></tr>
@@ -119,8 +120,8 @@ function showResults(result) {
             ${result.outputFiles.equityCurve ? `
                 <div>
                     <p>Equity Curve</p>
-                    <a href="/backend/output/${result.ticker}/${result.outputFiles.equityCurve}" target="_blank">
-                        <img src="/backend/output/${result.ticker}/${result.outputFiles.equityCurve}" alt="Equity Curve" style="max-width:250px;">
+                    <a href="/backend/output/${result.outputFiles.equityCurve}" target="_blank">
+                        <img src="/backend/output/${result.outputFiles.equityCurve}" alt="Equity Curve" style="max-width:250px;">
                     </a>
                 </div>` : ''}
     `;
