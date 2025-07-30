@@ -6,6 +6,7 @@
     "data-forge": "^1.10.4",
     "data-forge-fs": "^0.0.9",
     "data-forge-indicators": "^0.2.7",
+    "data-forge-plot": "^1.0.2",
     "dotenv": "^17.2.1",
     "easy-table": "^1.2.0",
     "express": "^5.1.0",
