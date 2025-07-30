@@ -301,6 +301,9 @@
                             <i class="fas fa-list"></i>
                             Full Records
                         </button>
+                        <button class="backtest-btn" onclick="openBacktestModal()">
+                            <i class="fas fa-flask"></i> Backtest
+                        </button>
                     </div>
                 </div>
                 
@@ -627,6 +630,61 @@
                 </div>
             </div>
         </div>
+
+        <!-- Backtest Modal -->
+        <div id="backtest-modal" class="modal">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h3>Run Backtest</h3>
+                    <button class="close-btn" onclick="closeBacktestModal()">×</button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="backtest-ticker">Ticker:</label>
+                        <input id="backtest-ticker" placeholder="e.g. AAPL" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="starting-capital">Starting Capital (USD):</label>
+                        <input id="starting-capital" type="number" value="10000" min="100" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sma-period">SMA Period:</label>
+                        <select id="sma-period">
+                            <option value="5">5</option>
+                            <option value="30" selected>30</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <div class="progress-container">
+                        <div id="progress-bar" class="progress-bar"></div>
+                    </div>
+                    <span id="progress-text">0%</span>
+                    <div class="button-group">
+                        <button id="run-btn" class="btn-primary" onclick="runBacktest()">Run</button>
+                        <button id="stop-btn" class="btn-danger" onclick="stopBacktest()">Stop</button>
+                        <button class="btn-secondary" onclick="closeBacktestModal()">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Backtest Results -->
+                <div id="backtest-results" style="display:none;">
+                    <h4>Results</h4>
+                    <table class="summary-table">
+                        <tbody id="result-summary"></tbody>
+                    </table>
+                    <div id="result-images" class="chart-grid"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- JavaScript -->
@@ -635,6 +693,6 @@
     <script type="module" src="stock.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="transaction.js"></script>
-
+    <script src="backtest.js"></script>
 </body>
 </html>

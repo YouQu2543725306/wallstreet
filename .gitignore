@@ -33,6 +33,7 @@ backend/gradlew
 backend/gradlew.bat
 backend/build/
 backend/out/
+backend/output/
 
 # Python
 backend/__pycache__/
