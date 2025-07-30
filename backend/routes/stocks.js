@@ -9,7 +9,7 @@ const prevDateStr = prevDate.toISOString().slice(0, 10);
 
 /**
  * @route GET /stocks
- * @desc 获取tracked的股票代码(ticker)
+ * @desc 获取tracked_stocks同时计算出每个股票的当前收盘价、前一天收盘价、价格差和增长率
  */
 router.get('/', async (req, res) => {
   try {
@@ -56,7 +56,79 @@ router.get('/', async (req, res) => {
 });
 
 /**
- * 从word_stocks表获取所有不重复的ticker
+ * @route GET /removeStockList
+ * @desc 对当前trackd的stock进行删除
+ */
+
+router.get('/removeStockList', async (req, res) => {
+  const { data, error } = await supabase
+    .from('track_stocks')
+    .select()
+  //console.log('获取removeStockList:', data);   //这句后面可以删掉
+  if (error) {
+    throw new Error(`Supabase error: ${error.message}`);
+  }
+  return res.json(
+    { success: true, 
+      count:data.length, 
+      data: data 
+    });
+});
+
+router.post('/removeStockList/delete', async (req, res) => {
+  const { tickername } = req.body;
+  if (!tickername) {
+    return res.status(400).json({ error: '缺少必要字段: tickername' }); 
+  }
+  try {
+    const { data, error } = await supabase
+      .from('track_stocks')
+      .delete()
+      .eq('ticker', tickername)
+      .select();
+    if (error) throw error;
+    res.status(200).json({ success: true, data: data });
+  } catch (error) {
+    console.error('Error removing stock:', error.message);
+    res.status(500).json({ error: '删除关注股票失败', details: error.message });
+  }
+});
+
+/**
+ * @route GET /addStocks
+ * @desc 对当前trackd的stock进行删除和增加
+ */
+router.put('/addStocks', async (req, res) => {
+  const { ticker, brand_name } = req.body;
+  if (!ticker || !brand_name) {
+    return res.status(400).json({ error: 'Missing ticker or brand_name' });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('track_stocks')
+      .insert([{ ticker, brand_name }]);
+
+    if (error) throw error;
+
+    res.status(201).json({  // 201 Created 更符合新增语义
+      success: true,
+      action: 'inserted',
+      ticker,
+      brand_name
+    });
+  } catch (err) {
+    if (err.code === '23505') {  // Supabase 主键冲突错误码
+      res.status(409).json({ error: 'Stock already exists' });
+    } else {
+      console.error('Database Error:', err);
+      res.status(500).json({ error: 'Failed to add stock' });
+    }
+  }
+});
+
+/**
+ * 从tracked_stocks表获取跟踪的的ticker
  */
 async function getTrackTickers() {
   const { data, error } = await supabase
@@ -80,5 +152,7 @@ async function calSharePri(ticker,searchDate) {
   }
   return data;
 }
+
+
 
 export default router;

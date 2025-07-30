@@ -1,3 +1,34 @@
+// Enable mouse drag to scroll for .stocks-grid（参考 cards-container 的左滑实现）
+function enableStocksGridDragScroll() {
+    const container = document.querySelector('.stocks-grid');
+    if (!container) return;
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.classList.add('dragging');
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+        e.preventDefault();
+    });
+    container.addEventListener('mouseleave', () => {
+        isDown = false;
+        container.classList.remove('dragging');
+    });
+    container.addEventListener('mouseup', () => {
+        isDown = false;
+        container.classList.remove('dragging');
+    });
+    container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.2; // scroll speed
+        container.scrollLeft = scrollLeft - walk;
+    });
+}
 // Modal Management Functions
 function openCalculatorModal() {
     document.getElementById('modal-overlay').style.display = 'block';
@@ -87,30 +118,6 @@ function calculateRevenue() {
     const totalRevenue = totalInvestment + totalReturn;
     
     document.getElementById('revenue-result').textContent = `$${totalRevenue.toFixed(2)}`;
-}
-
-// Stock Management Functions
-function removeStock(symbol) {
-    if (confirm(`Are you sure you want to remove ${symbol} from tracked stocks?`)) {
-        // Here you would typically make an API call to remove the stock
-        console.log(`Removing stock: ${symbol}`);
-        alert(`${symbol} has been removed from tracked stocks`);
-    }
-}
-
-function addNewStock() {
-    const symbol = document.getElementById('new-stock-symbol').value;
-    const name = document.getElementById('new-stock-name').value;
-    
-    if (!symbol || !name) {
-        alert('Please fill in both stock symbol and name');
-        return;
-    }
-    
-    // Here you would typically make an API call to add the stock
-    console.log(`Adding new stock: ${symbol} - ${name}`);
-    alert(`${symbol} has been added to tracked stocks`);
-    closeChangeStockModal();
 }
 
 async function updateHoldingDetails() {
@@ -262,7 +269,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
     // Close modals with Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
@@ -274,4 +280,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     enableCardsContainerDragScroll();
     enableCardsScrollbarSync();
+    enableStocksGridDragScroll(); // 启用 stocks-grid 横向拖动
 });
