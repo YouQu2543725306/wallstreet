@@ -8,6 +8,74 @@ let userOptions = { volume: false, events: false, ema: false, macd: false, rsi: 
 let volumeSeries, emaSeries, macdIndicator, rsiIndicator;
 let newsMarkers;
 
+
+function drawPortfolioCharts(details) {
+  if (!details || details.length === 0) return;
+
+  // Sort by holding value (descending)
+  const sortedByValue = [...details].sort((a, b) => b.holding_value - a.holding_value);
+
+  // Top 6 + Others for Holding Value
+  const topValueItems = sortedByValue.slice(0, 6);
+  const othersValue = sortedByValue.slice(6).reduce((sum, item) => sum + item.holding_value, 0);
+
+  const valueData = topValueItems.map(item => ({
+    x: item.ticker,
+    value: item.holding_value
+  }));
+  if (othersValue > 0) {
+    valueData.push({ x: 'Others', value: othersValue });
+  }
+
+  // Sort by quantity (descending)
+  const sortedByQuantity = [...details].sort((a, b) => b.net_quantity - a.net_quantity);
+
+  // Top 6 + Others for Quantity
+  const topQuantityItems = sortedByQuantity.slice(0, 6);
+  const othersQuantity = sortedByQuantity.slice(6).reduce((sum, item) => sum + item.net_quantity, 0);
+
+  const quantityData = topQuantityItems.map(item => ({
+    x: item.ticker,
+    value: item.net_quantity
+  }));
+  if (othersQuantity > 0) {
+    quantityData.push({ x: 'Others', value: othersQuantity });
+  }
+
+  // Create consistent color mapping
+  const uniqueTickers = [...new Set([...valueData.map(d => d.x), ...quantityData.map(d => d.x)])];
+  const colorPalette = anychart.palettes.distinctColors();
+  const colorMap = {};
+  uniqueTickers.forEach((ticker, index) => {
+    colorMap[ticker] = (ticker === 'Others') ? '#B0B0B0' : colorPalette.items()[index % colorPalette.items().length];
+  });
+
+  // Apply colors
+  valueData.forEach(item => item.normal = { fill: colorMap[item.x] });
+  quantityData.forEach(item => item.normal = { fill: colorMap[item.x] });
+
+  // Holding Value Donut Chart
+  const valueChart = anychart.pie(valueData);
+  valueChart.title('Holding Value by Ticker (Top 6 + Others)');
+  valueChart.innerRadius('40%'); // Donut effect
+  valueChart.legend().position('right').itemsLayout('vertical');
+  valueChart.labels().format("{%x}: {%percentValue}%");
+  valueChart.labels().enabled(false); 
+  valueChart.container('holding-value-chart');
+  valueChart.draw();
+
+  // Quantity Donut Chart
+  const quantityChart = anychart.pie(quantityData);
+  quantityChart.title('Quantity by Ticker (Top 6 + Others)');
+  quantityChart.innerRadius('40%'); // Donut effect
+  quantityChart.legend().position('right').itemsLayout('vertical');
+  quantityChart.labels().format("{%x}: {%percentValue}%");
+  quantityChart.labels().enabled(false); 
+  quantityChart.container('quantity-chart');
+  quantityChart.draw();
+}
+
+
 async function loadPortfolioSummary() {
   try {
     const response = await fetch('/api/analytics/portfolio-summary');
@@ -28,11 +96,16 @@ async function loadPortfolioSummary() {
       select.appendChild(option);
     });
 
-    if (summary.details.length > 0) updateChart(summary.details[0].ticker);
+    if (summary.details.length > 0) {
+        updateChart(summary.details[0].ticker);
+    drawPortfolioCharts(summary.details);
+    }
   } catch (err) {
     console.error('Error loading summary:', err);
   }
 }
+
+
 
 async function updateChart(ticker = null) {
   if (!ticker) ticker = document.getElementById('ticker-select').value;
