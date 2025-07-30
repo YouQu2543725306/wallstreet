@@ -131,11 +131,12 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
 
         console.log("\n=== Summary ===");
         console.table([
-    {
-        Ticker: ticker,
-        "Final Capital ($)": analysis.finalCapital.toFixed(2),
-        "Profit %": analysis.profitPct.toFixed(2)
-    }])
+            {
+                Ticker: ticker,
+                "Final Capital ($)": analysis.finalCapital.toFixed(2),
+                "Profit %": analysis.profitPct.toFixed(2)
+            }
+        ]);
 
     } catch (err) {
         jobs[jobId].status = 'error';
