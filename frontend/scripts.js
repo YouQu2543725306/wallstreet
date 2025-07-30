@@ -438,7 +438,7 @@ async function fetchHoldings() {
                     <div class="stock-item">
                         <div class="stock-icon">${holding.ticker.charAt(0)}</div>
                         <div class="stock-details">
-                            <div class="stock-name">${holding.ticker}</div>
+                            <div class="stock-name" id="stock-name-${holding.ticker}">Loading...</div>
                         </div>
                     </div>
                 </td>
@@ -458,10 +458,30 @@ async function fetchHoldings() {
             `;
 
             holdingsTableBody.appendChild(row);
+
+            // Call the function for the current holding
+            fetchStockName(holding.ticker);
         });
     } catch (error) {
         console.error('Error fetching holdings:', error);
         alert('Failed to load holdings. Please try again later.');
+    }
+}
+
+// Fetch the stock name from the database and update the UI
+async function fetchStockName(ticker) {
+    try {
+        const response = await fetch(`/api/holdings/tickerCompany/${ticker}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch stock name');
+        }
+        const data = await response.json();
+        const stockNameElement = document.getElementById(`stock-name-${ticker}`);
+        stockNameElement.textContent = data.company || 'Unknown';
+    } catch (error) {
+        console.error('Error fetching stock name:', error);
+        const stockNameElement = document.getElementById(`stock-name-${ticker}`);
+        stockNameElement.textContent = 'Error';
     }
 }
 
