@@ -63,10 +63,73 @@ async function submitNewCard() {
     }
 }
 
+// Delete Card Modal 控制
+function openDeleteCardModal() {
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('delete-card-modal').style.display = 'block';
+    populateDeleteCardSelect();
+}
+
+function closeDeleteCardModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('delete-card-modal').style.display = 'none';
+    // 清空选择
+    const select = document.getElementById('delete-card-select');
+    if (select) select.innerHTML = '';
+}
+
+async function populateDeleteCardSelect() {
+    try {
+        const res = await fetch('http://localhost:3000/api/cards');
+        const cards = await res.json();
+        const select = document.getElementById('delete-card-select');
+        select.innerHTML = '';
+        if (!cards || cards.length === 0) {
+            select.innerHTML = '<option value="">No cards available</option>';
+            return;
+        }
+        cards.forEach(card => {
+            const option = document.createElement('option');
+            option.value = card.id || card._id || card.card_id || card.cardID || card.cardId;
+            option.textContent = `${card.bank_name} - ${card.card_number}`;
+            select.appendChild(option);
+        });
+    } catch (e) {
+        alert('Failed to load cards');
+    }
+}
+
+async function submitDeleteCard() {
+    const select = document.getElementById('delete-card-select');
+    const cardId = select.value;
+    if (!cardId) {
+        alert('Please select a card to delete.');
+        return;
+    }
+    if (!confirm('Are you sure you want to delete this card?')) return;
+    try {
+        const res = await fetch(`http://localhost:3000/api/cards/${cardId}`, {
+            method: 'DELETE'
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Delete failed');
+        }
+        alert('Card deleted successfully!');
+        closeDeleteCardModal();
+        await loadCards();
+    } catch (e) {
+        alert('Failed to delete card: ' + e.message);
+    }
+}
+
 // Make functions globally available because they are called from onclick
 window.openAddCardModal = openAddCardModal;
 window.closeAddCardModal = closeAddCardModal;
 window.submitNewCard = submitNewCard;
+window.openDeleteCardModal = openDeleteCardModal;
+window.closeDeleteCardModal = closeDeleteCardModal;
+window.submitDeleteCard = submitDeleteCard;
 
 document.getElementById('add-card-form').onsubmit = submitNewCard;
 

@@ -155,6 +155,9 @@
                 <div class="section-container">
                     <div class="section-header">
                         <h2>My Card</h2>
+                        <button class="delete-card-btn" onclick="openDeleteCardModal()">
+                            <i class="fas fa-trash"></i> Delete Card
+                        </button>
                         <button class="add-card-btn" onclick="openAddCardModal()">
                             <i class="fas fa-plus"></i> Add Card
                         </button>
@@ -563,6 +566,30 @@
                 <div class="modal-footer">
                     <button class="btn btn-secondary" onclick="closeAddHoldingModal()">Cancel</button>
                     <button class="btn btn-primary" onclick="addNewHolding()">Add Holding</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Card Modal -->
+        <div id="delete-card-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Delete Card</h3>
+                    <button class="close-btn" onclick="closeDeleteCardModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <form id="delete-card-form">
+                        <div class="form-group">
+                            <label for="delete-card-select">Select Card to Delete</label>
+                            <select id="delete-card-select" name="card_id" required>
+                                <!-- 动态填充卡片列表 -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeDeleteCardModal()">Cancel</button>
+                    <button class="btn btn-danger" onclick="submitDeleteCard()">Delete</button>
                 </div>
             </div>
         </div>
