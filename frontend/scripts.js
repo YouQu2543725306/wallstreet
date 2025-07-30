@@ -65,8 +65,16 @@ function openAddHoldingModal() {
 }
 
 function closeAddHoldingModal() {
+    // Hide the modal
     document.getElementById('modal-overlay').style.display = 'none';
     document.getElementById('add-holding-modal').style.display = 'none';
+
+    // Clear the input fields and reset the modal
+    document.getElementById('holding-symbol').value = '';
+    document.getElementById('holding-quantity').value = '';
+    document.getElementById('holding-unit-price').textContent = '$0.00';
+    document.getElementById('holding-total-price').textContent = '$0.00';
+    document.getElementById('holding-estimated-gain').textContent = '$0.00';
 }
 
 function openTradeHoldingModal(stockTicker, quantity, value) {
@@ -74,6 +82,9 @@ function openTradeHoldingModal(stockTicker, quantity, value) {
     document.getElementById('trade-stock-ticker').textContent = stockTicker;
     document.getElementById('trade-stock-quantity').textContent = quantity;
     document.getElementById('trade-stock-value').textContent = value;
+
+    // Clear the trade quantity input field
+    document.getElementById('trade-quantity').value = '';
 
     // Show the modal
     document.getElementById('trade-holding-modal').style.display = 'block';
@@ -84,19 +95,50 @@ function closeTradeHoldingModal() {
     document.getElementById('trade-holding-modal').style.display = 'none';
 }
 
-function confirmTrade() {
-    const tradeQuantity = document.getElementById('trade-quantity').value;
+async function confirmTrade() {
+    const stockTicker = document.getElementById('trade-stock-ticker').textContent;
+    const tradeQuantity = parseInt(document.getElementById('trade-quantity').value, 10);
+    const stockValue = parseFloat(document.getElementById('trade-stock-value').textContent.replace('$', ''));
 
     if (!tradeQuantity || tradeQuantity <= 0) {
         alert('Please enter a valid trade quantity.');
         return;
     }
 
-    // Perform trade logic here (e.g., update backend or UI)
-    alert(`Trade confirmed for quantity: ${tradeQuantity}`);
+    try {
+        // Generate a new transaction record
+        const response = await fetch('/api/transactions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ticker: stockTicker,
+                quantity: tradeQuantity,
+                price: (stockValue / tradeQuantity).toFixed(2), // Calculate unit price
+                total_amount: stockValue,
+                type: tradeQuantity > 0 ? 'SELL' : 'BUY', // Determine transaction type
+                tradeDate: new Date().toISOString(), // Current timestamp
+                status: 'ACTIVE', // Assuming the transaction is active
+            }),
+        });
 
-    // Close the modal
-    closeTradeHoldingModal();
+        if (!response.ok) {
+            throw new Error('Failed to save transaction');
+        }
+
+        alert(`Trade confirmed for ${tradeQuantity} shares of ${stockTicker}.`);
+
+        // Refresh the holdings and transaction history
+        await fetchHoldings();
+        await fetchTransactionHistory();
+
+        // Close the modal
+        closeTradeHoldingModal();
+    } catch (error) {
+        console.error('Error confirming trade:', error);
+        alert('Failed to confirm trade. Please try again later.');
+    }
 }
 
 // Calculator Functions
@@ -124,17 +166,33 @@ async function updateHoldingDetails() {
     const ticker = document.getElementById('holding-symbol').value.toUpperCase();
     const quantity = parseInt(document.getElementById('holding-quantity').value, 10) || 0;
 
-    // Simulate fetching the unit price from an API
-    const unitPrice = await fetchUnitPrice(ticker);
+    if (!ticker) {
+        alert('Please enter a valid stock ticker.');
+        return;
+    }
 
-    // Calculate total price and estimated gain
-    const totalPrice = unitPrice * quantity;
-    const estimatedGain = totalPrice * 0.1; // Assuming a 10% gain
+    try {
+        // Fetch unit price and estimated gain from the backend
+        const response = await fetch(`/api/stocks/price/${ticker}`);
+        const data = await response.json();
 
-    // Update the modal fields
-    document.getElementById('holding-unit-price').textContent = `$${unitPrice.toFixed(2)}`;
-    document.getElementById('holding-total-price').textContent = `$${totalPrice.toFixed(2)}`;
-    document.getElementById('holding-estimated-gain').textContent = `$${estimatedGain.toFixed(2)}`;
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to fetch stock data');
+        }
+
+        const unitPrice = data.open || 0;
+        // Calculate total price and estimated gain
+        const estimatedGain = (data.close - data.open)*quantity || 0;
+        const totalPrice = unitPrice * quantity;
+
+        // Update the modal fields
+        document.getElementById('holding-unit-price').textContent = `$${unitPrice.toFixed(2)}`;
+        document.getElementById('holding-total-price').textContent = `$${totalPrice.toFixed(2)}`;
+        document.getElementById('holding-estimated-gain').textContent = `$${estimatedGain.toFixed(2)}`;
+    } catch (error) {
+        console.error('Error fetching stock data:', error);
+        alert('Failed to load stock data. Please try again later.');
+    }
 }
 
 async function fetchUnitPrice(ticker) {
@@ -148,7 +206,7 @@ async function fetchUnitPrice(ticker) {
     return mockPrices[ticker] || 0; // Return 0 if ticker is not found
 }
 
-function addNewHolding() {
+async function addNewHolding() {
     const ticker = document.getElementById('holding-symbol').value.toUpperCase();
     const quantity = parseInt(document.getElementById('holding-quantity').value, 10);
     const unitPrice = parseFloat(document.getElementById('holding-unit-price').textContent.replace('$', ''));
@@ -160,11 +218,69 @@ function addNewHolding() {
         return;
     }
 
-    // Add the holding logic (e.g., update backend or UI)
-    alert(`Added Holding:\nTicker: ${ticker}\nQuantity: ${quantity}\nTotal Price: $${totalPrice.toFixed(2)}\nEstimated Gain: $${estimatedGain.toFixed(2)}`);
+    try {
+        // Add the holding logic (e.g., update backend or UI)
+        alert(`Added Holding:\nTicker: ${ticker}\nQuantity: ${quantity}\nTotal Price: $${totalPrice.toFixed(2)}\nEstimated Gain: $${estimatedGain.toFixed(2)}`);
 
-    // Close the modal
-    closeAddHoldingModal();
+        // Insert the new transaction into the transaction table
+        const response = await fetch('/api/transactions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ticker: ticker,
+                quantity: quantity,
+                price: unitPrice,
+                total_amount: totalPrice,
+                type: 'BUY', // Assuming this is a buying transaction
+                tradeDate: new Date().toISOString(), // Current timestamp
+                status: 'ACTIVE', // Assuming the transaction is completed
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save transaction');
+        }
+
+        // Refresh the transaction history
+        await fetchTransactionHistory();
+
+        // Refresh the holdings block
+        await fetchHoldings();
+
+
+        // Close the modal
+        closeAddHoldingModal();
+    } catch (error) {
+        console.error('Error adding holding:', error);
+        alert('Failed to add holding. Please try again later.');
+    }
+}
+
+async function validateTicker(ticker) {
+    try {
+        // Fetch the list of distinct tickers from the backend
+        const response = await fetch('/api/stocks/distinct-tickers');
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to fetch distinct tickers');
+        }
+
+        // Check if the input ticker exists in the list
+        const isValid = data.tickers.includes(ticker.toUpperCase());
+        if (!isValid) {
+            alert('Invalid Ticker. Please enter a valid stock ticker.');
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error validating ticker:', error);
+        alert('Failed to validate ticker. Please try again later.');
+        return false;
+    }
 }
 
 function viewFullRecords() {
@@ -256,6 +372,99 @@ function enableCardsScrollbarSync() {
     });
 }
 
+// Fetch and display transaction history
+async function fetchTransactionHistory() {
+    try {
+        const response = await fetch('/api/transactions/top-ten');
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to fetch transaction history');
+        }
+
+        const transactionList = document.querySelector('.transaction-list');
+        transactionList.innerHTML = ''; // Clear existing items
+
+        data.forEach(transaction => {
+            const transactionItem = document.createElement('div');
+            transactionItem.classList.add('transaction-item');
+
+            // Normalize the transaction type to lowercase for comparison
+            const transactionType = transaction.type.toLowerCase();
+            const transactionTypeClass = transactionType === 'buy' ? 'buy' : 'sell';
+            const transactionAmountClass = transactionType === 'buy' ? 'negative' : 'positive';
+
+            transactionItem.innerHTML = `
+                <div class="transaction-icon ${transactionTypeClass}">
+                    <i class="fas ${transactionType === 'buy' ? 'fa-shopping-cart' : 'fa-arrow-up'}"></i>
+                </div>
+                <div class="transaction-details">
+                    <div class="transaction-title">${transactionType === 'buy' ? 'Bought' : 'Sold'} ${transaction.ticker}</div>
+                    <div class="transaction-subtitle">${transaction.quantity} shares @ $${(transaction.total_amount / transaction.quantity).toFixed(3)}</div>
+                    <div class="transaction-date">${new Date(transaction.trade_date).toLocaleString()}</div>
+                </div>
+                <div class="transaction-amount">
+                    <div class="amount ${transactionAmountClass}">${transactionType === 'buy' ? '-' : '+'}$${transaction.total_amount.toFixed(2)}</div>
+                    <div class="status ${transaction.status.toLowerCase()}">${transaction.status}</div>
+                </div>
+            `;
+
+            transactionList.appendChild(transactionItem);
+        });
+    } catch (error) {
+        console.error('Error fetching transaction history:', error);
+        alert('Failed to load transaction history. Please try again later.');
+    }
+}
+
+// Fetch and display holdings
+async function fetchHoldings() {
+    try {
+        const response = await fetch('/api/holdings/fetchHolding');
+        const holdings = await response.json();
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch holdings');
+        }
+
+        const holdingsTableBody = document.querySelector('.holdings-table tbody');
+        holdingsTableBody.innerHTML = ''; // Clear existing rows
+
+        holdings.forEach(holding => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>
+                    <div class="stock-item">
+                        <div class="stock-icon">${holding.ticker.charAt(0)}</div>
+                        <div class="stock-details">
+                            <div class="stock-name">${holding.ticker}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>${holding.ticker}</td>
+                <td>${holding.net_quantity}</td>
+                <td>$${holding.average_buy_price.toFixed(2)}</td>
+                <td>$${holding.latest_price.toFixed(2)}</td>
+                <td>$${holding.holding_value.toFixed(2)}</td>
+                <td class="profit ${holding.unrealized_pl >= 0 ? 'positive' : 'negative'}">
+                    ${holding.unrealized_pl >= 0 ? '+' : ''}$${holding.unrealized_pl.toFixed(2)}
+                </td>
+                <td>
+                    <button class="action-btn" onclick="openTradeHoldingModal('${holding.ticker}', '${holding.net_quantity}', '$${holding.holding_value.toFixed(2)}')">
+                        Trade
+                    </button>
+                </td>
+            `;
+
+            holdingsTableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error fetching holdings:', error);
+        alert('Failed to load holdings. Please try again later.');
+    }
+}
+
 // Close modals when clicking on overlay
 document.addEventListener('DOMContentLoaded', function() {
     const modalOverlay = document.getElementById('modal-overlay');
@@ -287,4 +496,44 @@ document.addEventListener('DOMContentLoaded', function() {
     enableCardsContainerDragScroll();
     enableCardsScrollbarSync();
     enableStocksGridDragScroll(); // 启用 stocks-grid 横向拖动
+    fetchTransactionHistory();
+    fetchHoldings();
 });
+
+document.getElementById("holding-symbol").addEventListener("keypress", async (event) => {
+    if (event.key === "Enter") {
+        const symbol = event.target.value.trim().toUpperCase();
+        if (symbol) {
+            // Validate the ticker
+            const isValid = await validateTicker(symbol);
+            if (!isValid) {
+                // Clear the input field if the ticker is invalid
+                event.target.value = '';
+                return;
+            }
+
+            // Fetch stock data if the ticker is valid
+            fetchStockData(symbol);
+        }
+    }
+});
+
+function fetchStockData(symbol) {
+    // Example API call to fetch stock data
+    fetch(`/api/stocks/${symbol}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Cannot load stock data");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // Update the UI with stock data
+            document.getElementById("holding-unit-price").textContent = `$${data.unitPrice}`;
+            document.getElementById("holding-total-price").textContent = `$${data.totalPrice}`;
+        })
+        .catch((error) => {
+            console.error(error.message);
+            alert("Cannot load stock data");
+        });
+}

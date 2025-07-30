@@ -787,7 +787,9 @@ body {
 }
 
 .holdings-table {
-    overflow-x: auto;
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;
+    display: block;
 }
 
 .holdings-table table {
@@ -937,6 +939,7 @@ body {
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 12px;
+
 }
 
 .balance-distribution-bar {
