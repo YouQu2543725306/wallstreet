@@ -5,7 +5,11 @@ import path from 'path';
 import dataForge from 'data-forge';
 import 'data-forge-fs';
 import 'data-forge-indicators';
-import { backtest, analyze, computeEquityCurve, computeDrawdown } from 'grademark';
+import 'data-forge-plot';  // Adds plot() to Series/DataFrame
+import { plot } from 'plot';
+import '@plotex/render-image';
+import '@plotex/render-image'; // Enables renderImage
+import { backtest, analyze, computeEquityCurve} from 'grademark';
 import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url';
 import Table from 'easy-table';
@@ -32,7 +36,7 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
             .from('world_stocks')
             .select('ticker, date, open, high, low, close, volume')
             .eq('ticker', ticker)
-            .order('date', { ascending: true })
+            .order('date', { ascending: true });
 
         if (error) throw new Error(error.message);
         if (!data || data.length === 0) throw new Error(`No data found for ${ticker}`);
@@ -55,12 +59,11 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
             entryRule: (enterPosition, args) => {
                 if (!args.position && args.bar.close < args.bar.sma) enterPosition();
             },
-            exitRule: (exitPosition, args)  => {
+            exitRule: (exitPosition, args) => {
                 if (args.position && args.bar.close > args.bar.sma) exitPosition();
             },
-            stopLoss: args => args.entryPrice * 0.95 // Stop out on 5% loss from entry price.
+            stopLoss: args => args.entryPrice * 0.05 // 5% stop-loss
         };
-
 
         // Backtest
         const trades = backtest(strategy, df);
@@ -73,11 +76,20 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
 
         // Compute curves
         const equityCurve = computeEquityCurve(startingCapital, trades);
-        const drawdown = computeDrawdown(startingCapital, trades);
 
         // Prepare output folder
         const outputDir = path.join(baseOutputDir, ticker);
         if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+
+        // Save plots
+        const equityPath = path.join(outputDir, `${ticker}_equity.png`);
+        await plot(equityCurve, {
+            chartType: "area",
+            y: { label: "Equity $" }
+        }).renderImage(equityPath);
+
+        console.log(">> Saved Equity Curve:", equityPath);
+
 
         // Save trades to CSV
         new dataForge.DataFrame(trades)
@@ -86,9 +98,6 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
 
         // Save analysis as TXT table
         const analysisTable = new Table();
-        const summaryResults = [];
-        summaryResults.push({ ticker, finalCapital: analysis.finalCapital, profitPct: analysis.profitPct });
-
         for (const key of Object.keys(analysis)) {
             analysisTable.cell('Metric', key);
             analysisTable.cell('Value', analysis[key]);
@@ -104,22 +113,29 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
             ticker,
             smaPeriod,
             startingCapital,
-            finalCapital: analysis.finalCapital,
-            profit: analysis.profit,
-            profitPct: analysis.profitPct * 100,
-            maxDrawdown: analysis.maxDrawdown,
-            maxDrawdownPct: analysis.maxDrawdownPct * 100,
+            finalCapital: analysis.finalCapital.toFixed(2),
+            profit: analysis.profit.toFixed(2),
+            profitPct: analysis.profitPct.toFixed(2),
+            maxDrawdown: analysis.maxDrawdown.toFixed(2),
+            maxDrawdownPct: analysis.maxDrawdownPct.toFixed(2),
             totalTrades: analysis.totalTrades,
-            percentProfitable: analysis.percentProfitable * 100,
-            profitFactor: analysis.profitFactor,
-            expectancy: analysis.expectancy,
-            outputFiles: {
-                tradesCSV: `${ticker}/${ticker}_trades.csv`,
-                analysisTXT: `${ticker}/${ticker}_analysis.txt`,
-            }
+            percentProfitable: analysis.percentProfitable.toFixed(2),
+            profitFactor: analysis.profitFactor.toFixed(2),
+            expectancy: (analysis.expectency || 0).toFixed(4),
+            expectedValue: analysis.expectedValue.toFixed(4)
         };
+
+        jobs[jobId].result.outputFiles = {
+            equityCurve: `${ticker}/${ticker}_equity.png`
+        };
+
         console.log("\n=== Summary ===");
-        console.table(summaryResults);
+        console.table([
+    {
+        Ticker: ticker,
+        "Final Capital ($)": analysis.finalCapital.toFixed(2),
+        "Profit %": analysis.profitPct.toFixed(2)
+    }])
 
     } catch (err) {
         jobs[jobId].status = 'error';
@@ -128,7 +144,7 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
     }
 }
 
-//  Start job
+// Start job
 router.post('/start', (req, res) => {
     const { ticker, startingCapital, smaPeriod } = req.body;
     if (!ticker || !startingCapital) return res.status(400).json({ error: 'Missing parameters.' });
@@ -140,7 +156,7 @@ router.post('/start', (req, res) => {
     res.json({ job_id: jobId });
 });
 
-//  Check job status
+// Check job status
 router.get('/status', (req, res) => {
     const { job_id } = req.query;
     if (!jobs[job_id]) return res.status(404).json({ error: 'Job not found.' });

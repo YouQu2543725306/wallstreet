@@ -100,25 +100,29 @@ function showResults(result) {
         <tr><th>SMA Period</th><td>${result.smaPeriod}</td></tr>
         <tr><th>Starting Capital</th><td>$${result.startingCapital.toLocaleString()}</td></tr>
         <tr><th>Final Capital</th><td>$${Number(result.finalCapital).toLocaleString()}</td></tr>
-        <tr><th>Profit %</th><td>${result.profitPct.toFixed(2)}%</td></tr>
-        <tr><th>Max Drawdown</th><td>$${Number(result.maxDrawdown).toLocaleString()} (${result.maxDrawdownPct.toFixed(2)}%)</td></tr>
+        <tr><th>Profit %</th><td>${result.profitPct}%</td></tr>
+        <tr><th>Max Drawdown</th><td>$${Number(result.maxDrawdown).toLocaleString()} (${result.maxDrawdownPct}%)</td></tr>
         <tr><th>Total Trades</th><td>${result.totalTrades}</td></tr>
-        <tr><th>Winning %</th><td>${result.percentProfitable.toFixed(2)}%</td></tr>
-        <tr><th>Profit Factor</th><td>${result.profitFactor.toFixed(2)}</td></tr>
-        <tr><th>Expectancy</th><td>${result.expectancy.toFixed(4)}</td></tr>
+        <tr><th>Winning %</th><td>${result.percentProfitable}%</td></tr>
+        <tr><th>Profit Factor</th><td>${result.profitFactor}</td></tr>
+        <tr><th>Expectancy</th><td>${result.expectancy}</td></tr>
+        <tr><th>Expected Value</th><td>${result.expectedValue}</td></tr>
     `;
 
     document.getElementById('backtest-results').style.display = 'block';
-    // Download Links Section
-    const links = `
-        <h4>Download Results:</h4>
-        <ul>
-            <li><a href="/backend/output/${result.outputFiles.tradesCSV}" target="_blank">Trades CSV</a></li>
-            <li><a href="/backend/output/${result.outputFiles.analysisTXT}" target="_blank">Analysis Report (TXT)</a></li>
-            <li><a href="/backend/output/${result.outputFiles.equityCurveCSV}" target="_blank">Equity Curve CSV</a></li>
-            <li><a href="/backend/output/${result.outputFiles.drawdownCSV}" target="_blank">Drawdown CSV</a></li>
-        </ul>
+
+    let imageLinksHTML = `
+        <h4>Charts:</h4>
+        <div class="chart-grid">
+            ${result.outputFiles.equityCurve ? `
+                <div>
+                    <p>Equity Curve</p>
+                    <a href="/backend/output/${result.ticker}/${result.outputFiles.equityCurve}" target="_blank">
+                        <img src="/backend/output/${result.ticker}/${result.outputFiles.equityCurve}" alt="Equity Curve" style="max-width:250px;">
+                    </a>
+                </div>` : ''}
     `;
 
-    document.getElementById('result-images').innerHTML = links;
+    // Append below table
+    resultsSection.innerHTML += imageLinksHTML;
 }
