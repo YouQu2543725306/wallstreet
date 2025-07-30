@@ -1,6 +1,9 @@
 //主服务器文件
 import express from 'express';
 import cardsRouter from './routes/cards.js';
+import transactionsRouter from './routes/transactions.js'; // Import transactions route
+import stocksRouter from './routes/stocks.js'; // Import the stocks route
+import holdingRouter from './routes/holdings.js';
 
 const app = express();
 app.use(express.json());
@@ -17,6 +20,16 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // 挂载卡片接口
 app.use('/api/cards', cardsRouter);
+
+// Mount the transactions route
+app.use('/api/transactions', transactionsRouter); // Ensure this line is present
+
+// Mount the stocks route
+app.use('/api/stocks', stocksRouter);
+
+//Mount the holdings route
+app.use('/api/holdings',holdingRouter);
+
 
 // 默认返回 index.html
 app.get('/', (req, res) => {
