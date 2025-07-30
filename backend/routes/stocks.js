@@ -154,5 +154,40 @@ async function calSharePri(ticker,searchDate) {
 }
 
 
+async function loadStockNews() {
+  try {
+    const response = await fetch('/api/analytics/tracked-news?limit=4');
+    const result = await response.json();
+
+    if (!result.success || !result.data.length) {
+      document.getElementById('news-section').innerHTML = '<p>No news available.</p>';
+      return;
+    }
+
+    const container = document.getElementById('news-section');
+    container.innerHTML = '';
+
+    result.data.forEach(stock => {
+      const tickerBlock = document.createElement('div');
+      tickerBlock.className = 'news-block';
+
+      const header = `<h3>${stock.ticker} News</h3>`;
+      const list = stock.news.map(item => `
+        <div class="news-item">
+          <img src="${item.favicon_url}" alt="icon" width="16" height="16">
+          <a href="${item.url}" target="_blank">${item.title}</a>
+          <p>${item.description}</p>
+        </div>
+      `).join('');
+
+      tickerBlock.innerHTML = header + list;
+      container.appendChild(tickerBlock);
+    });
+  } catch (err) {
+    console.error('Error loading news:', err);
+  }
+}
+
+loadStockNews();
 
 export default router;

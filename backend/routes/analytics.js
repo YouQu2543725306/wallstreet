@@ -73,5 +73,24 @@ router.get('/stock-details', async (req, res) => {
   }
 });
 
+router.get('/company-info', async (req, res) => {
+  const { companyName } = req.query;
+  if (!companyName) return res.status(400).json({ error: 'Ticker is required' });
+
+  try {
+    const { data, error } = await supabase
+      .from('company_info')
+      .select('date, name, sector, market_cap, pe_ratio, dividend_yield, volatility, sentiment_score, trend')
+      .ilike('name', companyName) 
+      .order('date', { ascending: false })
+      .limit(1);
+
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data && data.length > 0 ? data[0] : {});
+  } catch (err) {
+    console.error('Error fetching company info:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 export default router;

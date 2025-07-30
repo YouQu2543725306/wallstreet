@@ -69,6 +69,56 @@
       </div>
     </section>
 
+    <!-- Company Info Section -->
+    <section id="company-info-section" style="margin-top: 30px;">
+      <h2>Company Information</h2>
+      
+      <!-- Search Bar -->
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <input 
+          type="text" 
+          id="company-input" 
+          placeholder="Enter company name (e.g., Apple)" 
+          style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 6px;"
+        >
+        <button 
+          class="btn btn-primary" 
+          onclick="handleCompanySearch()">Search</button>
+      </div>
+
+      <!-- Company Info Table -->
+      <div style="overflow-x: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 10px; min-height: 120px;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead style="background: #f8f9fa;">
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Sector</th>
+              <th>Market Cap</th>
+              <th>P/E Ratio</th>
+              <th>Dividend Yield</th>
+              <th>Volatility</th>
+              <th>Sentiment Score</th>
+              <th>Trend</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="ci-date" style="padding: 10px;"></td>
+              <td id="ci-name" style="padding: 10px;"></td>
+              <td id="ci-sector" style="padding: 10px;"></td>
+              <td id="ci-market_cap" style="padding: 10px;"></td>
+              <td id="ci-pe_ratio" style="padding: 10px;"></td>
+              <td id="ci-dividend_yield" style="padding: 10px;"></td>
+              <td id="ci-volatility" style="padding: 10px;"></td>
+              <td id="ci-sentiment_score" style="padding: 10px;"></td>
+              <td id="ci-trend" style="padding: 10px;"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
     <!-- Chart Header -->
     <div class="chart-header">
       <h2>Stock Price Chart</h2>
