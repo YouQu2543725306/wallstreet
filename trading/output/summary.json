@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "AAPL",
+    "finalCapital": 13656.358501524435,
+    "profitPct": 36.56358501524436
+  },
+  {
+    "ticker": "GOOGL",
+    "finalCapital": 9129.12077027777,
+    "profitPct": -8.708792297222297
+  },
+  {
+    "ticker": "TSLA",
+    "finalCapital": 15422.03020928116,
+    "profitPct": 54.2203020928116
+  }
+]
