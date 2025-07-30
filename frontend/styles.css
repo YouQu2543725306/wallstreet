@@ -300,6 +300,7 @@ body {
     align-items: center;
     max-width: 650px; /* Keep it contained */
     margin: auto;
+    height: 420px; /* 使My Wallet和My Card高度一致 */
 }
 
 .chart-header {
@@ -379,7 +380,7 @@ body {
     scroll-snap-type: none;
     -webkit-overflow-scrolling: touch;
     align-items: center;
-    height: 300px; /* 统一高度与.wallet-chart-container */
+    height: 420px; /* 统一高度与.wallet-chart-container */
     min-height: 220px;
     justify-content: flex-start;
     scrollbar-width: none; /* Firefox */
