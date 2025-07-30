@@ -5,6 +5,7 @@ import cardsRouter from './routes/cards.js';
 import stocksRouter from './routes/stocks.js';
 import transactionsRouter from './routes/transactions.js';
 import backtestRouter from './routes/backtest.js';
+import analyticsRoutes from './routes/analytics.js';
 
 const app = express();
 app.use(express.json());
@@ -28,6 +29,7 @@ app.use('/api/stocks', stocksRouter);
 
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/backtest', backtestRouter);
+app.use('/api/analytics', analyticsRoutes);
 
 
 // 默认返回 index.html

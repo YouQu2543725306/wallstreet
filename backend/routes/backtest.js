@@ -43,8 +43,11 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
 
         // Prepare DataFrame
         let df = new dataForge.DataFrame(data)
+            .transformSeries({
+                date: value => new Date(value) // Convert timestamp string to Date object
+            })
             .setIndex('date')
-            .renameSeries({ date: 'time' });
+            .renameSeries({ date: 'time' });;
 
         // Compute SMA
         const sma = df.deflate(row => row.close).sma(smaPeriod);
