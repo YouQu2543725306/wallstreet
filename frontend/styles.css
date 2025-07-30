@@ -107,7 +107,8 @@ body {
 .add-holding-btn,
 .full-records-btn,
 .add-card-btn,
-.backtest-btn {
+.backtest-btn,
+.delete-card-btn {
     padding: 8px 16px;
     border: 1px solid #667eea;
     background: white;
@@ -127,7 +128,8 @@ body {
 .add-holding-btn:hover,
 .full-records-btn:hover,
 .add-card-btn:hover,
-.backtest-btn:hover {
+.backtest-btn:hover,
+.delete-card-btn:hover {
     background: #667eea;
     color: white;
 }
