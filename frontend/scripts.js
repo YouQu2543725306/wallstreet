@@ -36,13 +36,36 @@ function openAddHoldingModal() {
 function closeAddHoldingModal() {
     document.getElementById('modal-overlay').style.display = 'none';
     document.getElementById('add-holding-modal').style.display = 'none';
-    // Clear form fields
-    document.getElementById('holding-symbol').value = '';
-    document.getElementById('holding-name').value = '';
-    document.getElementById('holding-quantity').value = '';
-    document.getElementById('holding-cost').value = '';
-    document.getElementById('holding-market').value = 'NASDAQ';
-    document.getElementById('holding-return').value = '';
+}
+
+function openTradeHoldingModal(stockTicker, quantity, value) {
+    // Populate modal fields
+    document.getElementById('trade-stock-ticker').textContent = stockTicker;
+    document.getElementById('trade-stock-quantity').textContent = quantity;
+    document.getElementById('trade-stock-value').textContent = value;
+
+    // Show the modal
+    document.getElementById('trade-holding-modal').style.display = 'block';
+}
+
+function closeTradeHoldingModal() {
+    // Hide the modal
+    document.getElementById('trade-holding-modal').style.display = 'none';
+}
+
+function confirmTrade() {
+    const tradeQuantity = document.getElementById('trade-quantity').value;
+
+    if (!tradeQuantity || tradeQuantity <= 0) {
+        alert('Please enter a valid trade quantity.');
+        return;
+    }
+
+    // Perform trade logic here (e.g., update backend or UI)
+    alert(`Trade confirmed for quantity: ${tradeQuantity}`);
+
+    // Close the modal
+    closeTradeHoldingModal();
 }
 
 // Calculator Functions
@@ -90,23 +113,56 @@ function addNewStock() {
     closeChangeStockModal();
 }
 
+async function updateHoldingDetails() {
+    const ticker = document.getElementById('holding-symbol').value.toUpperCase();
+    const quantity = parseInt(document.getElementById('holding-quantity').value, 10) || 0;
+
+    // Simulate fetching the unit price from an API
+    const unitPrice = await fetchUnitPrice(ticker);
+
+    // Calculate total price and estimated gain
+    const totalPrice = unitPrice * quantity;
+    const estimatedGain = totalPrice * 0.1; // Assuming a 10% gain
+
+    // Update the modal fields
+    document.getElementById('holding-unit-price').textContent = `$${unitPrice.toFixed(2)}`;
+    document.getElementById('holding-total-price').textContent = `$${totalPrice.toFixed(2)}`;
+    document.getElementById('holding-estimated-gain').textContent = `$${estimatedGain.toFixed(2)}`;
+}
+
+async function fetchUnitPrice(ticker) {
+    // Simulate an API call to fetch the stock price
+    const mockPrices = {
+        AAPL: 175.43,
+        TSLA: 195.20,
+        MSFT: 315.60,
+        GOOGL: 2800.50,
+    };
+    return mockPrices[ticker] || 0; // Return 0 if ticker is not found
+}
+
 function addNewHolding() {
-    const symbol = document.getElementById('holding-symbol').value;
-    const name = document.getElementById('holding-name').value;
-    const quantity = parseInt(document.getElementById('holding-quantity').value);
-    const cost = parseFloat(document.getElementById('holding-cost').value);
-    const market = document.getElementById('holding-market').value;
-    const expectedReturn = parseFloat(document.getElementById('holding-return').value);
-    
-    if (!symbol || !name || !quantity || !cost) {
-        alert('Please fill in all required fields');
+    const ticker = document.getElementById('holding-symbol').value.toUpperCase();
+    const quantity = parseInt(document.getElementById('holding-quantity').value, 10);
+    const unitPrice = parseFloat(document.getElementById('holding-unit-price').textContent.replace('$', ''));
+    const totalPrice = parseFloat(document.getElementById('holding-total-price').textContent.replace('$', ''));
+    const estimatedGain = parseFloat(document.getElementById('holding-estimated-gain').textContent.replace('$', ''));
+
+    if (!ticker || quantity <= 0 || unitPrice <= 0) {
+        alert('Please enter valid stock details.');
         return;
     }
-    
-    // Here you would typically make an API call to add the holding
-    console.log(`Adding new holding: ${symbol} - ${name}, Quantity: ${quantity}, Cost: $${cost}, Market: ${market}, Expected Return: ${expectedReturn}%`);
-    alert(`${symbol} has been added to your holdings`);
+
+    // Add the holding logic (e.g., update backend or UI)
+    alert(`Added Holding:\nTicker: ${ticker}\nQuantity: ${quantity}\nTotal Price: $${totalPrice.toFixed(2)}\nEstimated Gain: $${estimatedGain.toFixed(2)}`);
+
+    // Close the modal
     closeAddHoldingModal();
+}
+
+function viewFullRecords() {
+    alert("Redirecting to full records page...");
+    // Add logic to navigate to the full records page or display a modal
 }
 
 // Enable mouse drag to scroll for .cards-container
@@ -202,6 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeCalculatorModal();
                 closeChangeStockModal();
                 closeAddHoldingModal();
+                closeTradeHoldingModal();
             }
         });
     }
@@ -212,8 +269,9 @@ document.addEventListener('DOMContentLoaded', function() {
             closeCalculatorModal();
             closeChangeStockModal();
             closeAddHoldingModal();
+            closeTradeHoldingModal();
         }
     });
     enableCardsContainerDragScroll();
     enableCardsScrollbarSync();
-}); 
+});

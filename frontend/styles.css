@@ -95,10 +95,17 @@ body {
     color: #2c3e50;
 }
 
+/* Section header buttons */
+.section-header .header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
 /* Button Styles */
 .change-stock-btn,
 .calculator-btn,
 .add-holding-btn,
+.full-records-btn,
 .add-card-btn {
     padding: 8px 16px;
     border: 1px solid #667eea;
@@ -117,6 +124,7 @@ body {
 .change-stock-btn:hover,
 .calculator-btn:hover,
 .add-holding-btn:hover,
+.full-records-btn:hover,
 .add-card-btn:hover {
     background: #667eea;
     color: white;
@@ -277,142 +285,77 @@ body {
     margin-bottom: 30px;
 }
 
+/* Wallet Section */
 .wallet-section {
     width: 60%;
 }
 
 .wallet-chart-container {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: #fff;
     border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    height: 300px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(52, 152, 219, 0.15);
     display: flex;
     flex-direction: column;
+    align-items: center;
+    max-width: 650px; /* Keep it contained */
+    margin: auto;
 }
 
 .chart-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    text-align: center;
 }
 
 .chart-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
-    color: #666;
+    color: #333;
+    margin-bottom: 8px;
 }
 
 .chart-value {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: #2c3e50;
 }
 
 .chart-change {
     font-size: 14px;
-    font-weight: 500;
+    margin-top: 4px;
 }
 
-.chart-change.positive {
-    color: #27ae60;
-}
-
-.chart-change.negative {
-    color: #e74c3c;
-}
+.chart-change.positive { color: #2ecc71; }
+.chart-change.negative { color: #e74c3c; }
 
 .chart-area {
-    flex: 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.line-chart-placeholder {
-    flex: 1;
-    position: relative;
-    background: rgba(102, 126, 234, 0.05);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.chart-line {
-    width: 80%;
-    height: 2px;
-    background: linear-gradient(90deg, #27ae60 0%, #667eea 50%, #27ae60 100%);
-    position: relative;
-    border-radius: 1px;
-}
-
-.chart-line::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: 0;
     width: 100%;
-    height: 6px;
-    background: linear-gradient(90deg, #27ae60 0%, #667eea 50%, #27ae60 100%);
-    border-radius: 3px;
-    opacity: 0.3;
+    height: 260px; /* contained */
 }
 
-.chart-point {
-    position: absolute;
-    right: 20%;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    background: #27ae60;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 0 0 2px #27ae60;
-}
-
-.chart-tooltip {
-    position: absolute;
-    right: 25%;
-    top: 20%;
-    background: rgba(44, 62, 80, 0.9);
-    color: white;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    min-width: 120px;
-}
-
-.tooltip-title {
-    font-weight: 500;
-    margin-bottom: 4px;
-}
-
-.tooltip-value {
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 2px;
-}
-
-.tooltip-change {
-    font-weight: 500;
-}
-
-.tooltip-change.positive {
-    color: #27ae60;
-}
-
-.chart-labels {
+.chart-toggle {
     display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: #666;
-    padding: 0 10px;
+    justify-content: center; /* Center horizontally */
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.chart-toggle button {
+    padding: 6px 14px;
+    background: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.chart-toggle button:hover {
+    background: #2980b9;
 }
 
 /* Card Section */
@@ -631,6 +574,30 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Scrollable transaction list */
+.transaction-list.scrollable {
+    max-height: 400px; /* Set the fixed height for the transaction list */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border for better visibility */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    padding: 10px; /* Optional: Add padding for better spacing */
+    background-color: #fff; /* Optional: Ensure the background is consistent */
+}
+
+/* Optional: Style the scrollbar for better appearance */
+.transaction-list.scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+
+.transaction-list.scrollable::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.transaction-list.scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}
+
 .transaction-item {
     display: flex;
     align-items: center;
@@ -731,6 +698,30 @@ body {
     font-size: 14px;
 }
 
+/* Scrollable table */
+.holdings-table.scrollable {
+    max-height: 400px; /* Set the fixed height for the table region */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border for better visibility */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    padding: 10px; /* Optional: Add padding for better spacing */
+    background-color: #fff; /* Optional: Ensure the background is consistent */
+}
+
+/* Optional: Style the scrollbar for better appearance */
+.holdings-table.scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+
+.holdings-table.scrollable::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.holdings-table.scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}
+
 .stock-item {
     display: flex;
     align-items: center;
@@ -777,6 +768,29 @@ body {
 .profit.negative {
     color: #e74c3c;
 }
+
+/* Smaller Version of Button Styles */
+.action-btn {
+    padding: 4px 10px;                 /* 缩小内边距 */
+    border: 1px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 6px;                /* 稍小圆角 */
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;                   /* 缩小字体 */
+}
+
+/* Hover Effect */
+.action-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
 
 /* Balance卡片新风格 */
 .new-balance-card {
@@ -976,3 +990,128 @@ body {
     
 
 } 
+
+/* Back Testing */
+/* Progress Bar */
+.progress-container {
+    width: 100%;
+    background: #f1f1f1;
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 8px;
+    background: #3498db;
+    transition: width 0.3s ease;
+}
+
+#progress-text {
+    font-size: 14px;
+    text-align: right;
+    margin-top: 4px;
+    color: #555;
+}
+
+/* Buttons */
+button {
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#run-btn {
+    background: #3498db;
+    color: white;
+}
+
+#run-btn:hover {
+    background: #2980b9;
+}
+
+#stop-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+#stop-btn:hover {
+    background: #c0392b;
+}
+
+/* Backtest Results */
+/* Modal Overlay */
+..modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 450px;
+    max-width: 90%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.close-btn {
+    font-size: 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.progress-container {
+    background: #f1f1f1;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #3498db;
+    transition: width 0.3s ease;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-primary { background: #3498db; color: #fff; }
+.btn-danger { background: #e74c3c; color: #fff; }
+.btn-secondary { background: #ccc; color: #000; }
