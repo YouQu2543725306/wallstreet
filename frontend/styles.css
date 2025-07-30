@@ -1045,7 +1045,7 @@ button {
 
 /* Backtest Results */
 /* Modal Overlay */
-..modal {
+.modal {
     display: none; /* Hidden by default */
     position: fixed;
     top: 0;
