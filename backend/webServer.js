@@ -7,6 +7,7 @@ import transactionsRouter from './routes/transactions.js';
 import backtestRouter from './routes/backtest.js';
 import balanceRouter from './routes/balance.js';
 import analyticsRoutes from './routes/analytics.js';
+import chatRoutes from './routes/chat.js';
 
 const app = express();
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use('/api/transactions', transactionsRouter);
 app.use('/api/backtest', backtestRouter);
 app.use('/api/balance', balanceRouter);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api', chatRoutes);
 
 
 // 默认返回 index.html

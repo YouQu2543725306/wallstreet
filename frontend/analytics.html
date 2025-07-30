@@ -163,5 +163,27 @@
       panel.classList.toggle('visible');
     }
   </script>
+
+  <!-- AI Chatbox -->
+  <div id="ai-chatbox-container">
+    <div id="ai-chat-header">
+      AI Chat
+      <div id="ai-chat-tabs">
+        <button id="tab-portfolio" class="active">Portfolio</button>
+        <button id="tab-company">Company Info</button>
+        <button id="tab-general">General</button>
+      </div>
+    </div>
+    <div id="ai-chat-messages">
+      <div><em>Welcome! Ask me anything about your portfolio or stocks.</em></div>
+    </div>
+    <form id="ai-chat-form">
+      <textarea id="ai-chat-input" placeholder="Type your question..." rows="2"></textarea>
+      <button id="ai-chat-send-btn" type="submit">Send</button>
+    </form>
+  </div>
+
+  <script src="chat.js"></script>
+
 </body>
 </html>
