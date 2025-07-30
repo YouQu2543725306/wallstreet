@@ -132,10 +132,12 @@ if (document.readyState === 'loading') {
 
 // 打开添加卡片弹窗
 window.openAddCardModal = function() {
+  document.getElementById('modal-overlay').style.display = 'block';
   document.getElementById('add-card-modal').style.display = 'block';
 }
 // 关闭添加卡片弹窗
 window.closeAddCardModal = function() {
+  document.getElementById('modal-overlay').style.display = 'none';
   document.getElementById('add-card-modal').style.display = 'none';
 }
 
