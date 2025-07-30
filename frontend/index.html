@@ -184,8 +184,8 @@
                                 <form id="add-card-form">
                                     <div class="form-group">
                                         <label for="card-number">Card Number</label>
-                                        <input type="text" id="card-number" name="card_number" required pattern="\d{12}" maxlength="12" minlength="12" placeholder="Enter 12-digit card number">
-                                        <small class="input-hint">Card number must be exactly 12 digits.</small>
+                                        <input type="text" id="card-number" name="card_number" required pattern="\d{12,19}" maxlength="19" minlength="12" placeholder="Enter 12 to 19-digit card number">
+                                        <small class="input-hint">Card number must be 12 to 19 digits.</small>
                                     </div>
                                     <div class="form-group">
                                         <label for="bank-name">Bank Name</label>
@@ -513,5 +513,6 @@
     <!-- JavaScript -->
     <script src="scripts.js"></script>
     <script type="module" src="card.js"></script>
+    <script src="test-add-card.js"></script>
 </body>
 </html> 
