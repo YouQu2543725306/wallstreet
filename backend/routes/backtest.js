@@ -30,12 +30,13 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod, monteCa
         jobs[jobId].progress = 5;
 
         // Fetch stock data from Supabase
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('world_stocks')
             .select('ticker, date, open, high, low, close, volume')
             .eq('ticker', ticker)
-            .order('date', { ascending: true });
+            .order('date', { ascending: false });
 
+        data = data.reverse()
         if (error) throw new Error(error.message);
         if (!data || data.length === 0) throw new Error(`No data found for ${ticker}`);
 
