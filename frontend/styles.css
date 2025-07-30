@@ -221,7 +221,9 @@ body {
 .calculator-btn,
 .add-holding-btn,
 .full-records-btn,
-.add-card-btn {
+.add-card-btn,
+.backtest-btn,
+.delete-card-btn {
     padding: 8px 16px;
     border: 1px solid #667eea;
     background: white;
@@ -240,7 +242,9 @@ body {
 .calculator-btn:hover,
 .add-holding-btn:hover,
 .full-records-btn:hover,
-.add-card-btn:hover {
+.add-card-btn:hover,
+.backtest-btn:hover,
+.delete-card-btn:hover {
     background: #667eea;
     color: white;
 }
@@ -409,12 +413,13 @@ body {
     background: #fff;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 4px 20px rgba(52, 152, 219, 0.15)
+    box-shadow: 0 4px 20px rgba(52, 152, 219, 0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 650px; /* Keep it contained */
     margin: auto;
+    height: 420px; /* 使My Wallet和My Card高度一致 */
 }
 
 .chart-header {
@@ -494,7 +499,7 @@ body {
     scroll-snap-type: none;
     -webkit-overflow-scrolling: touch;
     align-items: center;
-    height: 300px; /* 统一高度与.wallet-chart-container */
+    height: 420px; /* 统一高度与.wallet-chart-container */
     min-height: 220px;
     justify-content: flex-start;
     scrollbar-width: none; /* Firefox */
@@ -530,44 +535,35 @@ body {
 }
 
 .credit-card {
-    flex: 0 0 260px;
-    width: 260px;
-    min-width: 220px;
-    max-width: 320px;
-    aspect-ratio: 16 / 9;
-    position: relative;
+    /* 尺寸与布局 */
+    height: 320px;
+    width: 450px;
+    flex-shrink: 0;
+    box-sizing: border-box;
     border-radius: 20px;
-    color: #fff;
+    padding: 24px 24px 20px 24px;
+    margin: 16px 0;
+
+    /* Flex 布局 */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-end;
+    justify-content: space-between;
+
+    /* 外观 */
+    color: #fff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 8px 32px 0 rgba(76, 110, 245, 0.18), 0 1.5px 6px 0 rgba(44,62,80,0.10);
+    border: 1.5px solid rgba(255,255,255,0.18);
+    overflow: hidden;
+
+    /* 动画 */
     transition: transform 0.3s, box-shadow 0.3s;
     /* scroll-snap-align: start;  // 如需轻微吸附可用 */
-    box-sizing: border-box;
-    box-shadow: 0 8px 32px 0 rgba(76, 110, 245, 0.18), 0 1.5px 6px 0 rgba(44,62,80,0.10);
-    overflow: hidden;
-    border: 1.5px solid rgba(255,255,255,0.18);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 24px 24px 20px 24px; /* 优化内边距 */
-    margin-top: 16px;
-    margin-bottom: 16px;
-    height: 200px; /* 让卡片高度更统一 */
-    justify-content: space-between; /* 让内容分布更均匀 */
 }
+
 .credit-card.secondary {
     background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-}
-.credit-card::before {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 100px;
-    height: 100px;
-    background: rgba(255,255,255,0.12);
-    border-radius: 50%;
-    z-index: 1;
 }
 .credit-card .card-chip {
     width: 36px;

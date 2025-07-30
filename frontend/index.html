@@ -17,6 +17,10 @@
                 <i class="fas fa-chart-line"></i>
                 <span>WallStreetQuad</span>
             </div>
+            <div class="nav-menu">
+                <a href="index.html">Dashboard</a>
+                <a href="analytics.html">Analytics</a>
+            </div>
             <div class="nav-user">
                 <div class="user-info">
                     <i class="fas fa-user-circle"></i>
@@ -25,6 +29,7 @@
             </div>
         </div>
     </nav>
+
 
     <!-- Main Content -->
     <main class="main-content">
@@ -163,36 +168,6 @@
                             Calculator
                         </button> -->
                     </div>
-                    <!-- Add Card Modal -->
-                    <div id="add-card-modal" class="modal">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3>Add New Card</h3>
-                                <button class="close-btn" onclick="closeAddCardModal()"><i class="fas fa-times"></i></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="add-card-form">
-                                    <div class="form-group">
-                                        <label for="card-number">Card Number</label>
-                                        <input type="text" id="card-number" name="card_number" required pattern="\d{12}" maxlength="12" minlength="12" placeholder="Enter 12-digit card number">
-                                        <small class="input-hint">Card number must be exactly 12 digits.</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="bank-name">Bank Name</label>
-                                        <input type="text" id="bank-name" name="bank_name" required placeholder="Enter bank name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="card-balance">Balance</label>
-                                        <input type="number" id="card-balance" name="balance" required min="0" placeholder="Enter balance">
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" onclick="closeAddCardModal()">Cancel</button>
-                                <button class="btn btn-primary" onclick="submitNewCard()">Add Card</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="cards-container"></div>
                 </div>
             </div>
@@ -300,6 +275,9 @@
                         <button class="full-records-btn" onclick="viewFullRecords()">
                             <i class="fas fa-list"></i>
                             Full Records
+                        </button>
+                        <button class="backtest-btn" onclick="openBacktestModal()">
+                            <i class="fas fa-flask"></i> Backtest
                         </button>
                     </div>
                 </div>
@@ -594,6 +572,37 @@
             </div>
         </div>
 
+        <!-- Add Card Modal -->
+        <div id="add-card-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Card</h3>
+                    <button class="close-btn" onclick="closeAddCardModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-card-form">
+                        <div class="form-group">
+                            <label for="card-number">Card Number</label>
+                            <input type="text" id="card-number" name="card_number" required pattern="\d{12,19}" maxlength="19" minlength="12" placeholder="Enter 12 to 19-digit card number">
+                            <small class="input-hint">Card number must be 12 to 19 digits.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="bank-name">Bank Name</label>
+                            <input type="text" id="bank-name" name="bank_name" required placeholder="Enter bank name">
+                        </div>
+                        <div class="form-group">
+                            <label for="card-balance">Balance</label>
+                            <input type="number" id="card-balance" name="balance" required min="0" placeholder="Enter balance">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeAddCardModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="submitNewCard()">Add Card</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Trade Holding Modal -->
         <div id="trade-holding-modal" class="modal">
             <div class="modal-content">
@@ -627,6 +636,57 @@
                 </div>
             </div>
         </div>
+
+        <!-- Backtest Modal -->
+        <div id="backtest-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Run Backtest</h3>
+                    <button class="close-btn" onclick="closeBacktestModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="backtest-form">
+                        <div class="form-group">
+                            <label for="backtest-ticker">Ticker</label>
+                            <input id="backtest-ticker" placeholder="e.g. AAPL" autocomplete="off" />
+                        </div>
+                        <div class="form-group">
+                            <label for="starting-capital">Starting Capital (USD)</label>
+                            <input id="starting-capital" type="number" value="10000" min="100" placeholder="e.g. 10000" />
+                        </div>
+                        <div class="form-group">
+                            <label for="sma-period">SMA Period</label>
+                            <select id="sma-period">
+                                <option value="5">5</option>
+                                <option value="30" selected>30</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div class="progress-row">
+                        <div class="progress-container">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div id="backtest-results" class="backtest-results" style="display:none;">
+                        <hr />
+                        <h4>Results</h4>
+                        <table class="summary-table">
+                            <tbody id="result-summary"></tbody>
+                        </table>
+                        <div id="result-images" class="chart-grid"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="run-btn" class="btn btn-primary" onclick="runBacktest()">Run</button>
+                    <button id="stop-btn" class="btn btn-danger" onclick="stopBacktest()">Stop</button>
+                    <button class="btn btn-secondary" onclick="closeBacktestModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- JavaScript -->
@@ -635,6 +695,7 @@
     <script type="module" src="stock.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="transaction.js"></script>
-
+    <script src="backtest.js"></script>
+    <script src="test-add-card.js"></script>
 </body>
 </html>

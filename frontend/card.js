@@ -12,32 +12,126 @@ function closeAddCardModal() {
     document.getElementById('add-card-form').reset();
 }
 
-function submitNewCard() {
+async function submitNewCard() {
     const form = document.getElementById('add-card-form');
-    const cardNumber = form.querySelector('[name="card_number"]').value;
-    const bankName = form.querySelector('[name="bank_name"]').value;
-    const balance = form.querySelector('[name="balance"]').value;
+    // 获取卡号并去除所有非数字字符
+    let card_number = form.querySelector('[name="card_number"]').value.replace(/\D/g, '');
+    const bank_name = form.querySelector('[name="bank_name"]').value;
+    const balance = parseFloat(form.querySelector('[name="balance"]').value);
 
-    if (!cardNumber || !bankName || !balance) {
+    if (!card_number || !bank_name || isNaN(balance)) {
         alert('Please fill in all fields.');
         return;
     }
 
-    if (cardNumber.length !== 12 || !/^\d+$/.test(cardNumber)) {
-        alert('Card number must be exactly 12 digits.');
+    // Card number validation
+    if (card_number.length < 12 || card_number.length > 19 || !/^\d+$/.test(card_number)) {
+        alert('Card number must be 12 to 19 digits.');
         return;
     }
 
-    console.log('Submitting new card:', { cardNumber, bankName, balance });
-    // Here you would typically make an API call to add the card
-    alert('New card added successfully!');
-    closeAddCardModal();
+    try {
+        const response = await fetch('http://localhost:3000/api/cards', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ card_number, bank_name, balance }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to add card.');
+        }
+
+        const newCard = await response.json();
+        console.log('New card added:', newCard);
+        alert('Card added successfully!');
+        closeAddCardModal();
+        
+        // 假设有一个函数来重新加载/渲染卡片
+        if (window.renderCards) {
+            window.renderCards();
+        } else {
+            // 如果渲染函数不存在，则重新加载页面
+            location.reload();
+        }
+
+    } catch (error) {
+        console.error('Error adding card:', error);
+        alert(`Error: ${error.message}`);
+    }
+}
+
+// Delete Card Modal 控制
+function openDeleteCardModal() {
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('delete-card-modal').style.display = 'block';
+    populateDeleteCardSelect();
+}
+
+function closeDeleteCardModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('delete-card-modal').style.display = 'none';
+    // 清空选择
+    const select = document.getElementById('delete-card-select');
+    if (select) select.innerHTML = '';
+}
+
+async function populateDeleteCardSelect() {
+    try {
+        const res = await fetch('http://localhost:3000/api/cards');
+        const cards = await res.json();
+        const select = document.getElementById('delete-card-select');
+        select.innerHTML = '';
+        if (!cards || cards.length === 0) {
+            select.innerHTML = '<option value="">No cards available</option>';
+            return;
+        }
+        cards.forEach(card => {
+            const option = document.createElement('option');
+            option.value = card.id || card._id || card.card_id || card.cardID || card.cardId;
+            option.textContent = `${card.bank_name} - ${card.card_number}`;
+            select.appendChild(option);
+        });
+    } catch (e) {
+        alert('Failed to load cards');
+    }
+}
+
+async function submitDeleteCard() {
+    const select = document.getElementById('delete-card-select');
+    const cardId = select.value;
+    if (!cardId) {
+        alert('Please select a card to delete.');
+        return;
+    }
+    if (!confirm('Are you sure you want to delete this card?')) return;
+    try {
+        const res = await fetch(`http://localhost:3000/api/cards/${cardId}`, {
+            method: 'DELETE'
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Delete failed');
+        }
+        alert('Card deleted successfully!');
+        closeDeleteCardModal();
+        await loadCards();
+    } catch (e) {
+        alert('Failed to delete card: ' + e.message);
+    }
 }
 
 // Make functions globally available because they are called from onclick
 window.openAddCardModal = openAddCardModal;
 window.closeAddCardModal = closeAddCardModal;
 window.submitNewCard = submitNewCard;
+window.openDeleteCardModal = openDeleteCardModal;
+window.closeDeleteCardModal = closeDeleteCardModal;
+window.submitDeleteCard = submitDeleteCard;
+
+document.getElementById('add-card-form').onsubmit = submitNewCard;
 
 // 卡品牌判断（简单根据卡号前缀）
 function getCardBrand(cardNumber) {
@@ -84,11 +178,11 @@ function renderCards(cards) {
 // 获取卡片数据并渲染
 export async function loadCards() {
   try {
-    const res = await fetch('/api/cards');
+    const res = await fetch('http://localhost:3000/api/cards');
     const data = await res.json();
     renderCards(data);
   } catch (err) {
-    console.error('加载卡片失败', err);
+    console.error('Failed to load cards', err);
   }
 }
 
@@ -101,10 +195,12 @@ if (document.readyState === 'loading') {
 
 // 打开添加卡片弹窗
 window.openAddCardModal = function() {
+  document.getElementById('modal-overlay').style.display = 'block';
   document.getElementById('add-card-modal').style.display = 'block';
 }
 // 关闭添加卡片弹窗
 window.closeAddCardModal = function() {
+  document.getElementById('modal-overlay').style.display = 'none';
   document.getElementById('add-card-modal').style.display = 'none';
 }
 
@@ -118,20 +214,29 @@ if (addCardForm) {
     const bank_name = formData.get('bank_name');
     const balance = Number(formData.get('balance'));
     try {
-      const res = await fetch('/api/cards', {
+      const res = await fetch('http://localhost:3000/api/cards', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ card_number, bank_name, balance })
       });
-      if (!res.ok) throw new Error('添加失败');
+      if (!res.ok) {
+        let errorMsg = 'Failed to add card.';
+        try {
+          const errData = await res.json();
+          if (errData && errData.error && errData.error.includes('duplicate key value')) {
+            errorMsg = 'Card number already exists. Please check your card number.';
+          } else if (errData && errData.error) {
+            errorMsg = errData.error;
+          }
+        } catch (e) {}
+        throw new Error(errorMsg);
+      }
       window.closeAddCardModal();
       addCardForm.reset();
+      alert('Card added successfully!');
       await loadCards();
     } catch (err) {
-      alert('添加卡片失败: ' + err.message);
+      alert(err.message);
     }
   });
 }
-
-
-

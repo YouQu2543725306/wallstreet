@@ -32,5 +32,23 @@ router.post('/', async (req, res) => {
   }
 });
 
+// 删除卡片
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ error: '缺少卡片ID' });
+  }
+  try {
+    const { error } = await supabase
+      .from('cards')
+      .delete()
+      .eq('card_id', id);
+    if (error) throw error;
+    res.status(200).json({ message: '卡片已删除' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;
 

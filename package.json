@@ -1,8 +1,20 @@
 {
   "dependencies": {
+    "@plotex/render-image": "^1.0.21",
     "@supabase/supabase-js": "^2.53.0",
+    "cors": "^2.8.5",
+    "data-forge": "^1.10.4",
+    "data-forge-fs": "^0.0.9",
+    "data-forge-indicators": "^0.2.7",
+    "data-forge-plot": "^1.0.2",
     "dotenv": "^17.2.1",
-    "express": "^5.1.0"
+    "easy-table": "^1.2.0",
+    "express": "^5.1.0",
+    "grademark": "^0.3.0",
+    "moment": "^2.30.1",
+    "plot": "^1.0.22",
+    "supabase": "^2.33.5",
+    "uuid": "^11.1.0"
   },
   "type": "module"
 }

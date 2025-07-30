@@ -4,6 +4,7 @@ import express from 'express';
 import cardsRouter from './routes/cards.js';
 import stocksRouter from './routes/stocks.js';
 import transactionsRouter from './routes/transactions.js';
+import backtestRouter from './routes/backtest.js';
 
 const app = express();
 app.use(express.json());
@@ -17,6 +18,7 @@ const __dirname = path.dirname(__filename);
 
 // 静态托管 frontend 目录
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/backend/output', express.static(path.resolve('backend/output')));
 
 // 挂载卡片接口
 app.use('/api/cards', cardsRouter);
@@ -25,6 +27,7 @@ app.use('/api/cards', cardsRouter);
 app.use('/api/stocks', stocksRouter);
 
 app.use('/api/transactions', transactionsRouter);
+app.use('/api/backtest', backtestRouter);
 
 
 // 默认返回 index.html

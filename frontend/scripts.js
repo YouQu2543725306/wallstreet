@@ -266,6 +266,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeChangeStockModal();
                 closeAddHoldingModal();
                 closeTradeHoldingModal();
+                closeDeleteCardModal();
+                closeAddCardModal();
+                closeBacktestModal();
             }
         });
     }
@@ -276,6 +279,9 @@ document.addEventListener('DOMContentLoaded', function() {
             closeChangeStockModal();
             closeAddHoldingModal();
             closeTradeHoldingModal();
+            closeDeleteCardModal();
+            closeAddCardModal();
+            closeBacktestModal();
         }
     });
     enableCardsContainerDragScroll();
