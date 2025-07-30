@@ -1,5 +1,5 @@
 // Chatbox tab logic
-let currentChatTab = 'Portfolio';
+let currentChatTab = 'portfolio';
 
 const tabs = document.querySelectorAll('#ai-chat-tabs button');
 tabs.forEach(tabBtn => {
@@ -9,6 +9,39 @@ tabs.forEach(tabBtn => {
     currentChatTab = tabBtn.id.replace('tab-', '');
   });
 });
+
+async function getPortfolioContext() {
+  try {
+    const res = await fetch('/api/analytics/portfolio-summary');
+    const summary = await res.json();
+    if (summary.error) {
+      console.error('Error:', summary.error);
+      return '';
+    }
+
+    let context = `
+Portfolio Summary:
+Total Value: ${summary.totalValue}
+Unrealized P/L: ${summary.unrealizedPL}
+Realized P/L: ${summary.realizedPL}
+`;
+
+    const topHoldings = summary.details
+      .slice()
+      .sort((a, b) => b.holding_value - a.holding_value)
+      .slice(0, 6);
+
+    context += 'Top Holdings by Value:\n';
+    topHoldings.forEach((item, i) => {
+      context += `${i + 1}. ${item.ticker} — $${Number(item.holding_value).toFixed(2)}\n`;
+    });
+
+    return context;
+  } catch (err) {
+    console.error('Failed to get portfolio context:', err);
+    return '';
+  }
+}
 
 // Send message event
 document.getElementById('ai-chat-form').addEventListener('submit', async e => {
@@ -29,14 +62,9 @@ document.getElementById('ai-chat-form').addEventListener('submit', async e => {
 
   // Build context for prompt
   let context = '';
-  if (currentChatTab === 'Portfolio') {
-    context = `
-Portfolio Summary:
-Total Value: ${document.getElementById('total-value').textContent}
-Unrealized P/L: ${document.getElementById('unrealized-pl').textContent}
-Realized P/L: ${document.getElementById('realized-pl').textContent}
-    `;
-  } else if (currentChatTab === 'Company Info') {
+  if (currentChatTab === 'portfolio') {
+      context = await getPortfolioContext();
+  } else if (currentChatTab === 'company') {
     const fields = ['name', 'sector', 'market_cap', 'pe_ratio', 'dividend_yield', 'volatility', 'sentiment_score', 'trend'];
     context = 'Company Information:\n';
     for (const f of fields) {
