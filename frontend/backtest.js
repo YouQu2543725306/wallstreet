@@ -2,11 +2,13 @@ let currentJobId = null;
 let pollInterval = null;
 
 function openBacktestModal() {
-    document.getElementById('backtest-modal').style.display = 'flex';
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('backtest-modal').style.display = 'block';
     resetUI();
 }
 
 function closeBacktestModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
     document.getElementById('backtest-modal').style.display = 'none';
     clearInterval(pollInterval);
     resetUI();

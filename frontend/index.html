@@ -695,19 +695,19 @@
                         </div>
                         <span id="progress-text">0%</span>
                     </div>
+                    <div id="backtest-results" class="backtest-results" style="display:none;">
+                        <hr />
+                        <h4>Results</h4>
+                        <table class="summary-table">
+                            <tbody id="result-summary"></tbody>
+                        </table>
+                        <div id="result-images" class="chart-grid"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button id="run-btn" class="btn btn-primary" onclick="runBacktest()">Run</button>
                     <button id="stop-btn" class="btn btn-danger" onclick="stopBacktest()">Stop</button>
                     <button class="btn btn-secondary" onclick="closeBacktestModal()">Cancel</button>
-                </div>
-                <div id="backtest-results" class="backtest-results" style="display:none;">
-                    <hr />
-                    <h4>Results</h4>
-                    <table class="summary-table">
-                        <tbody id="result-summary"></tbody>
-                    </table>
-                    <div id="result-images" class="chart-grid"></div>
                 </div>
             </div>
         </div>
