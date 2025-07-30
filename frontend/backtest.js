@@ -52,7 +52,6 @@ async function runBacktest() {
             if (statusData.status === 'completed') {
                 clearInterval(pollInterval);
                 showResults(statusData.result);
-                resetUI();
             } else if (statusData.status === 'error') {
                 clearInterval(pollInterval);
                 alert('Error: ' + statusData.error);
@@ -88,13 +87,11 @@ function resetUI() {
     document.getElementById('progress-text').textContent = '0%';
     document.getElementById('backtest-results').style.display = 'none';
     document.getElementById('result-summary').innerHTML = '';
-    document.getElementById('result-images').innerHTML = '';
 }
 
 function showResults(result) {
     console.log("[RESULT] Displaying:", result);
 
-    const resultsSection = document.getElementById('backtest-results');
     document.getElementById('backtest-results').style.display = 'block';
     
     // Summary Table
@@ -111,21 +108,4 @@ function showResults(result) {
         <tr><th>Expectancy</th><td>${result.expectancy}</td></tr>
         <tr><th>Expected Value</th><td>${result.expectedValue}</td></tr>
     `;
-
-    document.getElementById('backtest-results').style.display = 'block';
-
-    let imageLinksHTML = `
-        <h4>Charts:</h4>
-        <div class="chart-grid">
-            ${result.outputFiles.equityCurve ? `
-                <div>
-                    <p>Equity Curve</p>
-                    <a href="/backend/output/${result.outputFiles.equityCurve}" target="_blank">
-                        <img src="/backend/output/${result.outputFiles.equityCurve}" alt="Equity Curve" style="max-width:250px;">
-                    </a>
-                </div>` : ''}
-    `;
-
-    // Append below table
-    resultsSection.innerHTML += imageLinksHTML;
 }

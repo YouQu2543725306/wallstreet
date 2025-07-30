@@ -6,10 +6,8 @@ import dataForge from 'data-forge';
 import 'data-forge-fs';
 import 'data-forge-indicators';
 import 'data-forge-plot';  // Adds plot() to Series/DataFrame
-import { plot } from 'plot';
-import '@plotex/render-image';
 import '@plotex/render-image'; // Enables renderImage
-import { backtest, analyze, computeEquityCurve} from 'grademark';
+import { backtest, analyze} from 'grademark';
 import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url';
 import Table from 'easy-table';
@@ -74,21 +72,9 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
 
         jobs[jobId].progress = 75;
 
-        // Compute curves
-        const equityCurve = computeEquityCurve(startingCapital, trades);
-
         // Prepare output folder
         const outputDir = path.join(baseOutputDir, ticker);
         if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
-
-        // Save plots
-        const equityPath = path.join(outputDir, `${ticker}_equity.png`);
-        await plot(equityCurve, {
-            chartType: "area",
-            y: { label: "Equity $" }
-        }).renderImage(equityPath);
-
-        console.log(">> Saved Equity Curve:", equityPath);
 
 
         // Save trades to CSV
@@ -123,10 +109,6 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
             profitFactor: analysis.profitFactor.toFixed(2),
             expectancy: (analysis.expectency || 0).toFixed(4),
             expectedValue: analysis.expectedValue.toFixed(4)
-        };
-
-        jobs[jobId].result.outputFiles = {
-            equityCurve: `${ticker}/${ticker}_equity.png`
         };
 
         console.log("\n=== Summary ===");
