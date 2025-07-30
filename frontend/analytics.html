@@ -4,23 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Analytics - WallStreetQuad</title>
-  <link rel="stylesheet" href="styles.css">
 
-  <!-- AnyChart for Stock Charts -->
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="analytics.css">
+  <link rel="stylesheet" href="modal-styles.css">
+
+  <!-- AnyChart -->
   <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
   <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
   <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
   <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
   <link rel="stylesheet" href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css">
   <link rel="stylesheet" href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css">
+
+  <style>
+    /* Quick fix for time-frame UI */
+    .range-controls {
+      display: flex;
+      justify-content: flex-end;
+      margin: 10px 0;
+      gap: 10px;
+    }
+  </style>
 </head>
 <body>
+  <!-- Navigation -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-brand"><i class="fas fa-chart-line"></i> WallStreetQuad</a>
-      <span>Analytics</span>
+      <span class="nav-title">Analytics</span>
     </div>
   </nav>
+
+  <!-- Main Content -->
   <main class="main-content">
     <h1>Analytics Dashboard</h1>
 
@@ -43,21 +60,49 @@
       </div>
     </section>
 
-    <!-- Stock Chart -->
-    <section id="stock-chart">
+    <!-- Chart Header -->
+    <div class="chart-header">
       <h2>Stock Price Chart</h2>
-      <select id="ticker-select">
-        <option value="AAPL">Apple (AAPL)</option>
-        <option value="GOOGL">Alphabet (GOOGL)</option>
-        <option value="TSLA">Tesla (TSLA)</option>
-        <option value="MSFT">Microsoft (MSFT)</option>
-      </select>
-      <div id="container" style="width:95%; height:600px;"></div>
-      <div id="loading">Loading chart...</div>
-    </section>
+      <div class="chart-controls">
+        <select id="ticker-select" class="chart-dropdown"></select>
+        <button class="btn btn-primary" onclick="toggleOptionsPanel()">Options</button>
+      </div>
+    </div>
+
+    <!-- Time Frame Controls -->
+    <div class="range-controls">
+      <div id="range-picker-container"></div>
+      <div id="range-selector-container"></div>
+    </div>
+
+    <!-- Inline Options Panel -->
+    <div id="chart-options-panel" class="options-panel">
+      <h4>Customize Chart</h4>
+      <div class="form-group">
+        <label><input type="checkbox" id="toggle-volume"> Add Volume </label><br>
+        <label><input type="checkbox" id="toggle-events"> Add Events </label><br>
+        <label><input type="checkbox" id="toggle-ema"> EMA</label>
+        <label><input type="checkbox" id="toggle-macd"> MACD</label>
+        <label><input type="checkbox" id="toggle-rsi"> RSI</label>
+      </div>
+      <div class="options-footer" style="margin-top: 10px;">
+        <button class="btn btn-secondary" onclick="toggleOptionsPanel()">Close</button>
+        <button class="btn btn-primary" onclick="applyChartOptions()">Apply</button>
+      </div>
+    </div>
+
+    <!-- Chart Area -->
+    <div id="container" class="chart-container"></div>
+    <div id="loading" class="loading-text">Loading chart...</div>
   </main>
 
-  <!-- JS File -->
+  <!-- JS -->
   <script src="analytics.js"></script>
+  <script>
+    function toggleOptionsPanel() {
+      const panel = document.getElementById('chart-options-panel');
+      panel.classList.toggle('visible');
+    }
+  </script>
 </body>
 </html>
