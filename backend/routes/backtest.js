@@ -7,7 +7,7 @@ import 'data-forge-fs';
 import 'data-forge-indicators';
 import 'data-forge-plot';  // Adds plot() to Series/DataFrame
 import '@plotex/render-image'; // Enables renderImage
-import { backtest, analyze} from 'grademark';
+import { backtest, analyze, monteCarlo} from 'grademark';
 import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url';
 import Table from 'easy-table';
@@ -24,7 +24,7 @@ if (!fs.existsSync(baseOutputDir)) {
 
 const jobs = {}; // job_id → {status, progress, result, error}
 
-async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
+async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod, monteCarloParams) {
     try {
         jobs[jobId].status = 'running';
         jobs[jobId].progress = 5;
@@ -73,6 +73,28 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
         // Analyze results
         const analysis = analyze(startingCapital, trades);
 
+        let monteCarloStats = null;
+        if (monteCarloParams && monteCarloParams.numIterations && monteCarloParams.numSamples) {
+            const mcSamples = monteCarlo(trades, monteCarloParams.numIterations, monteCarloParams.numSamples);
+
+            // Compute statistics from MC samples
+            const sampleReturns = mcSamples.map(sample =>
+                sample.reduce((sum, t) => sum + (t.profit || 0), 0) // sum profits in sample
+            );
+
+            const avgReturn = sampleReturns.reduce((a, b) => a + b, 0) / sampleReturns.length;
+            const sorted = [...sampleReturns].sort((a, b) => a - b);
+            const percentile = (p) => sorted[Math.floor(p * sorted.length)];
+            
+            monteCarloStats = {
+                avgReturn: avgReturn.toFixed(2),
+                worstCase: percentile(0.05).toFixed(2),
+                bestCase: percentile(0.95).toFixed(2),
+                stdDev: Math.sqrt(sampleReturns.reduce((a, r) => a + Math.pow(r - avgReturn, 2), 0) / sampleReturns.length).toFixed(2)
+            };
+        }
+
+
         jobs[jobId].progress = 75;
 
         // Prepare output folder
@@ -111,8 +133,10 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
             percentProfitable: analysis.percentProfitable.toFixed(2),
             profitFactor: analysis.profitFactor.toFixed(2),
             expectancy: (analysis.expectency || 0).toFixed(4),
-            expectedValue: analysis.expectedValue.toFixed(4)
+            expectedValue: analysis.expectedValue.toFixed(4),
+            monteCarlo: monteCarloStats 
         };
+
 
         console.log("\n=== Summary ===");
         console.table([
@@ -132,13 +156,13 @@ async function runBacktestJob(jobId, ticker, startingCapital, smaPeriod) {
 
 // Start job
 router.post('/start', (req, res) => {
-    const { ticker, startingCapital, smaPeriod } = req.body;
+    const { ticker, startingCapital, smaPeriod, monteCarlo } = req.body;
     if (!ticker || !startingCapital) return res.status(400).json({ error: 'Missing parameters.' });
 
     const jobId = uuidv4();
     jobs[jobId] = { status: 'pending', progress: 0 };
 
-    setTimeout(() => runBacktestJob(jobId, ticker, startingCapital, smaPeriod || 30), 0);
+    setTimeout(() => runBacktestJob(jobId, ticker, startingCapital, smaPeriod || 30, monteCarlo), 0);
     res.json({ job_id: jobId });
 });
 

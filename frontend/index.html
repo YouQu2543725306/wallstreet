@@ -664,6 +664,22 @@
                                 <option value="50">50</option>
                             </select>
                         </div>
+                        <hr />
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="enable-montecarlo"> Include Monte Carlo Simulation
+                            </label>
+                        </div>
+                        <div id="montecarlo-settings" style="display:none; margin-top:10px;">
+                            <div class="form-group">
+                                <label for="mc-iterations">Iterations:</label>
+                                <input type="number" id="mc-iterations" value="1000" min="10">
+                            </div>
+                            <div class="form-group">
+                                <label for="mc-samples">Samples per Iteration:</label>
+                                <input type="number" id="mc-samples" value="50" min="1">
+                            </div>
+                        </div>
                     </form>
                     <div class="progress-row">
                         <div class="progress-container">

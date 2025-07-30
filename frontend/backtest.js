@@ -14,10 +14,19 @@ function closeBacktestModal() {
     resetUI();
 }
 
+document.getElementById('enable-montecarlo').addEventListener('change', function () {
+    const settingsDiv = document.getElementById('montecarlo-settings');
+    settingsDiv.style.display = this.checked ? 'block' : 'none';
+});
+
 async function runBacktest() {
     const ticker = document.getElementById('backtest-ticker').value.trim();
     const startingCapital = parseFloat(document.getElementById('starting-capital').value);
     const smaPeriod = parseInt(document.getElementById('sma-period').value);
+
+    const monteCarloEnabled = document.getElementById('enable-montecarlo').checked;
+    const mcIterations = parseInt(document.getElementById('mc-iterations').value);
+    const mcSamples = parseInt(document.getElementById('mc-samples').value);
 
     if (!ticker || startingCapital <= 0) {
         alert('Please enter valid inputs.');
@@ -29,10 +38,25 @@ async function runBacktest() {
     document.getElementById('progress-text').textContent = 'Starting...';
 
     try {
+        // Prepare payload
+        const payload = {
+            ticker,
+            startingCapital,
+            smaPeriod
+        };
+
+        // Include Monte Carlo params if enabled
+        if (monteCarloEnabled) {
+            payload.monteCarlo = {
+                numIterations: mcIterations,
+                numSamples: mcSamples
+            };
+        }
+
         const res = await fetch('/api/backtest/start', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ticker, startingCapital, smaPeriod })
+            body: JSON.stringify(payload)
         });
 
         const data = await res.json();
@@ -51,7 +75,7 @@ async function runBacktest() {
 
             if (statusData.status === 'completed') {
                 clearInterval(pollInterval);
-                showResults(statusData.result);
+                showResults(statusData.result); // result will include monteCarlo stats
             } else if (statusData.status === 'error') {
                 clearInterval(pollInterval);
                 alert('Error: ' + statusData.error);
@@ -63,6 +87,7 @@ async function runBacktest() {
         resetUI();
     }
 }
+
 
 function stopBacktest() {
     if (currentJobId) {
@@ -95,7 +120,7 @@ function showResults(result) {
     document.getElementById('backtest-results').style.display = 'block';
     
     // Summary Table
-    document.getElementById('result-summary').innerHTML = `
+    let html = `
         <tr><th>Ticker</th><td>${result.ticker}</td></tr>
         <tr><th>SMA Period</th><td>${result.smaPeriod}</td></tr>
         <tr><th>Starting Capital</th><td>$${result.startingCapital.toLocaleString()}</td></tr>
@@ -108,4 +133,17 @@ function showResults(result) {
         <tr><th>Expectancy</th><td>${result.expectancy}</td></tr>
         <tr><th>Expected Value</th><td>${result.expectedValue}</td></tr>
     `;
+
+    if (result.monteCarlo) {
+        html += `
+            <tr><th colspan="2" style="text-align:center; background:#f4f4f4;">Monte Carlo Simulation</th></tr>
+            <tr><th>Average Return</th><td>${result.monteCarlo.avgReturn}</td></tr>
+            <tr><th>Worst Case (5%)</th><td>${result.monteCarlo.worstCase}</td></tr>
+            <tr><th>Best Case (95%)</th><td>${result.monteCarlo.bestCase}</td></tr>
+            <tr><th>Standard Deviation</th><td>${result.monteCarlo.stdDev}</td></tr>
+        `;
+    }
+
+    document.getElementById('result-summary').innerHTML = html;
+
 }
