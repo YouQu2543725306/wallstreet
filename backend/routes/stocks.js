@@ -1,12 +1,25 @@
 import express from 'express';
 import supabase from '../supabase/client.js';
-
-
 const router = express.Router();
 const searchDate ='2025-07-03';
 const prevDate = new Date(searchDate);
 prevDate.setDate(prevDate.getDate() - 1);
 const prevDateStr = prevDate.toISOString().slice(0, 10);
+
+
+// 获取所有可选股票ticker和brand_name
+router.get('/all-tickers', async (req, res) => {
+  try {
+    // 调用数据库function distinct_ticker_brand_name()，更加高效
+    const { data, error } = await supabase
+      .rpc('distinct_ticker_brand_name');
+    if (error) throw error;
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 
 /**
  * @route GET /stocks

@@ -1,3 +1,28 @@
+// 加载所有可选ticker并填充下拉框
+async function loadAllTickers() {
+  try {
+    const res = await fetch('/api/stocks/all-tickers');
+    const result = await res.json();
+    if (!result.success) return;
+    const select = document.getElementById('new-stock-symbol-select');
+    if (!select) return;
+    select.innerHTML = '<option value="">请选择股票代码</option>';
+    result.data.forEach(item => {
+      select.innerHTML += `<option value="${item.ticker}" data-brand="${item.brand_name}">${item.ticker} - ${item.brand_name}</option>`;
+    });
+    // 监听选择变化，自动填充brand_name
+    select.onchange = function() {
+      const brand = select.options[select.selectedIndex].getAttribute('data-brand') || '';
+      document.getElementById('new-stock-name').value = brand;
+      document.getElementById('new-stock-symbol').value = select.value;
+    };
+  } catch (err) {
+    // 可选：错误处理
+  }
+}
+
+// 页面加载时自动填充下拉
+document.addEventListener('DOMContentLoaded', loadAllTickers);
 // 删除关注股票列表的展示
 async function removeStockList() {
   try {
@@ -115,7 +140,7 @@ function randerStock(data) {
         const stockCard = document.createElement('div');
         stockCard.className = 'stock-card';
         let growthRateVal = stock.growthRate;
-        let isPositive = growthRateVal > 0 ? 'positive' : 'negative';
+        let isPositive = growthRateVal >= 0 ? 'positive' : 'negative';
         let growthRateText = Math.abs(growthRateVal) !== null && Math.abs(growthRateVal) !== undefined
           ? `${Number(Math.abs(growthRateVal)).toFixed(2)}%`
           : '';
