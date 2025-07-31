@@ -7,6 +7,8 @@ import transactionsRouter from './routes/transactions.js';
 import backtestRouter from './routes/backtest.js';
 import balanceRouter from './routes/balance.js';
 import analyticsRoutes from './routes/analytics.js';
+import holdingRouter from './routes/holdings.js';
+
 import chatRoutes from './routes/chat.js';
 
 const app = express();
@@ -25,14 +27,14 @@ app.use('/backend/output', express.static(path.resolve('backend/output')));
 
 // 挂载卡片接口
 app.use('/api/cards', cardsRouter);
-
 // 挂载股票接口
 app.use('/api/stocks', stocksRouter);
-
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/backtest', backtestRouter);
 app.use('/api/balance', balanceRouter);
 app.use('/api/analytics', analyticsRoutes);
+//Mount the holdings route
+app.use('/api/holdings',holdingRouter);
 app.use('/api', chatRoutes);
 
 
