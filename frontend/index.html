@@ -130,7 +130,49 @@
             </div>
         </section>
 
-        <!-- Second Layer: My Wallet + My Card -->
+        <!-- Second Layer: Holdings -->
+        <section class="holdings-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>My Holdings</h2>
+                    <div class="header-buttons">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="search-ticker" placeholder="Enter ticker name (e.g., AAPL)" onkeypress="handleSearchKeyPress(event)" />
+                        </div>
+                        <button class="add-holding-btn" onclick="openAddHoldingModal()">
+                            <i class="fas fa-plus"></i>
+                            Add
+                        </button>
+                        <button class="backtest-btn" onclick="openBacktestModal()">
+                            <i class="fas fa-flask"></i> Backtest
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="holdings-table scrollable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stock</th>
+                                <th>Symbol</th>
+                                <th>Quantity</th>
+                                <th>Avg Cost</th>
+                                <th>Current Price</th>
+                                <th>Market Value</th>
+                                <th>P&L</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Third Layer: My Wallet + My Card -->
         <section class="second-layer">
             <div class="wallet-section">
                 <div class="section-container">
@@ -174,7 +216,7 @@
             </div>
         </section>
 
-        <!-- Third Layer: Transaction History -->
+        <!-- Fourth Layer: Transaction History -->
         <section class="history-section">
             <div class="section-container">
                 <div class="section-header">
@@ -185,48 +227,6 @@
                     </button> -->
                 </div>
                 <div class="transaction-list scrollable"></div>
-            </div>
-        </section>
-
-        <!-- Fourth Layer: Holdings -->
-        <section class="holdings-section">
-            <div class="section-container">
-                <div class="section-header">
-                    <h2>My Holdings</h2>
-                    <div class="header-buttons">
-                        <div class="search-container">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" id="search-ticker" placeholder="Enter ticker name (e.g., AAPL)" onkeypress="handleSearchKeyPress(event)" />
-                        </div>
-                        <button class="add-holding-btn" onclick="openAddHoldingModal()">
-                            <i class="fas fa-plus"></i>
-                            Add
-                        </button>
-                        <button class="backtest-btn" onclick="openBacktestModal()">
-                            <i class="fas fa-flask"></i> Backtest
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="holdings-table scrollable">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Stock</th>
-                                <th>Symbol</th>
-                                <th>Quantity</th>
-                                <th>Avg Cost</th>
-                                <th>Current Price</th>
-                                <th>Market Value</th>
-                                <th>P&L</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Rows will be dynamically inserted here -->
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </section>
     </main>
@@ -393,7 +393,7 @@
         <div id="trade-holding-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Trade Holding</h3>
+                    <h3>Sell Holding</h3>
                     <button class="close-btn" onclick="closeTradeHoldingModal()">
                         <i class="fas fa-times"></i>
                     </button>
@@ -412,7 +412,7 @@
                         <div id="trade-stock-value" class="readonly-field">$17,543.00</div>
                     </div>
                     <div class="form-group">
-                        <label>Trade Quantity:</label>
+                        <label>Sell Quantity:</label>
                         <input type="number" id="trade-quantity" placeholder="Enter quantity to trade" min="1">
                     </div>
                 </div>

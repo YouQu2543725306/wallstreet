@@ -451,7 +451,7 @@ async function fetchHoldings() {
                 </td>
                 <td>
                     <button class="action-btn" onclick="openTradeHoldingModal('${holding.ticker}', '${holding.net_quantity}', '$${holding.holding_value.toFixed(2)}')">
-                        Trade
+                        Sell
                     </button>
                 </td>
             `;
