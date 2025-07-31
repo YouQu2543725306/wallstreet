@@ -575,141 +575,120 @@ body {
     background: linear-gradient(90deg, #5a6fd8 0%, #764ba2 100%);
 }
 
+/* Credit Card Styles */
 .credit-card {
-    /* 尺寸与布局 */
-    height: 320px;
-    width: 450px;
+    /* Dimensions and Layout */
+    width: 100%;
+    max-width: 450px;
+    height: 280px;
     flex-shrink: 0;
     box-sizing: border-box;
     border-radius: 20px;
-    padding: 24px 24px 20px 24px;
-    margin: 16px 0;
+    padding: 24px;
+    margin: 16px;
+    position: relative;
+    overflow: hidden;
 
-    /* Flex 布局 */
+    /* Flex Layout */
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     justify-content: space-between;
 
-    /* 外观 */
+    /* Appearance */
     color: #fff;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     box-shadow: 0 8px 32px 0 rgba(76, 110, 245, 0.18), 0 1.5px 6px 0 rgba(44,62,80,0.10);
     border: 1.5px solid rgba(255,255,255,0.18);
-    overflow: hidden;
 
-    /* 动画 */
-    transition: transform 0.3s, box-shadow 0.3s;
-    /* scroll-snap-align: start;  // 如需轻微吸附可用 */
+    /* Animation */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .credit-card.secondary {
     background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
 }
+
 .credit-card .card-chip {
-    width: 36px;
-    height: 26px;
+    width: 40px;
+    height: 30px;
     background: linear-gradient(90deg, #f8e7b9 0%, #e0c36e 100%);
     border-radius: 6px;
-    margin-bottom: 12px;
-    margin-top: 18px;
+    margin: 0 0 20px 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     z-index: 2;
 }
+
 .credit-card .card-number-display {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     font-family: 'Roboto Mono', monospace;
-    letter-spacing: 2px;
-    font-weight: 600;
-    margin-bottom: 10px;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    margin: 0 0 24px 0;
     z-index: 2;
+    word-spacing: 4px;
 }
+
 .credit-card .card-details {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.95rem;
-    margin-bottom: 8px;
+    margin: 0 0 24px 0;
     z-index: 2;
 }
-.credit-card .card-holder {
-    font-weight: 500;
-    letter-spacing: 1px;
-    opacity: 0.92;
-}
+
+.credit-card .card-holder,
 .credit-card .card-expiry {
+    font-size: 0.9rem;
     font-weight: 500;
-    opacity: 0.85;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    margin: 0;
 }
+
+.credit-card .card-holder {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
 .credit-card .card-brand {
     align-self: flex-end;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    letter-spacing: 1.5px;
-    margin-bottom: 10px;
+    letter-spacing: 1px;
+    margin: 0;
     z-index: 2;
-    opacity: 0.92;
+    opacity: 0.95;
+    text-transform: uppercase;
 }
+
 .credit-card:hover {
-    transform: translateY(-4px) scale(1.03);
+    transform: translateY(-4px) scale(1.02);
     box-shadow: 0 16px 48px 0 rgba(76, 110, 245, 0.22), 0 2px 12px 0 rgba(44,62,80,0.13);
 }
 
-.credit-card .card-chip,
-.credit-card .card-number-display,
-.credit-card .card-details,
-.credit-card .card-brand {
-    margin-bottom: 8px;
-}
-
-.credit-card .card-details {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.credit-card .card-brand {
-    align-self: flex-end;
-}
-
-.card-chip {
-    width: 30px;
-    height: 24px;
-    background: #f39c12;
-    border-radius: 4px;
-    margin-bottom: 15px;
-}
-
-.card-number-display {
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
-}
-
-.card-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.card-holder {
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.card-expiry {
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.card-brand {
-    font-size: 14px;
-    font-weight: 600;
-    text-align: right;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .credit-card {
+        height: 250px;
+        padding: 20px;
+    }
+    
+    .credit-card .card-number-display {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+    
+    .credit-card .card-chip {
+        width: 36px;
+        height: 26px;
+        margin-bottom: 16px;
+    }
+    
+    .credit-card .card-brand {
+        font-size: 1rem;
+    }
 }
 
 /* Transaction History Section */
