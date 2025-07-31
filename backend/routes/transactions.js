@@ -101,15 +101,16 @@ router.get('/top-ten', getTopTenTransactionHistory);
 
 // API to add a new transaction
 router.post('/', async (req, res) => {
-    const { ticker, quantity, price, totalPrice, type, tradeDate, status } = req.body;
-    const card_id = 1;
+    const { ticker, quantity, price, totalPrice, type, tradeDate, status, card_id } = req.body;
+
+    if (!card_id) {
+        return res.status(400).json({ error: 'Missing card_id' });
+    }
 
     try {
         const { data, error } = await supabase
             .from('transactions')
-            .insert([
-                { ticker, quantity, price, type, trade_date: tradeDate, status, card_id},
-            ]);
+            .insert([{ ticker, quantity, price, type, trade_date: tradeDate, status, card_id }]);
 
         if (error) {
             console.error('Error inserting transaction:', error);
@@ -122,6 +123,7 @@ router.post('/', async (req, res) => {
         res.status(500).json({ error: 'Unexpected error occurred' });
     }
 });
+
 
 // Route: Get user activity (trade_date + ticker)
 router.get('/graph_activity', async (req, res) => {

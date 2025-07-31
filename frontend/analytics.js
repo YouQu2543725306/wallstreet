@@ -43,7 +43,7 @@ function drawPortfolioCharts(details) {
 
   // Holding Value Donut
   const valueChart = anychart.pie(valueData);
-  valueChart.title('Holding Value by Ticker (Top 6 + Others)');
+  valueChart.title('Holding Value by Ticker (Top 6)');
   valueChart.innerRadius('40%');
   valueChart.legend().position('right').itemsLayout('vertical');
   valueChart.labels().enabled(false);
@@ -52,7 +52,7 @@ function drawPortfolioCharts(details) {
 
   // Quantity Donut
   const quantityChart = anychart.pie(quantityData);
-  quantityChart.title('Quantity by Ticker (Top 6 + Others)');
+  quantityChart.title('Quantity by Ticker (Top 6)');
   quantityChart.innerRadius('40%');
   quantityChart.legend().position('right').itemsLayout('vertical');
   quantityChart.labels().enabled(false);

@@ -13,7 +13,7 @@ export async function askOllama(question, context = '') {
   messages.push({ role: 'user', content: question });
 
   const response = await ollama.chat({
-    model: 'llama3:latest',
+    model: 'smollm:135m',
     messages,
     stream: false,
   });

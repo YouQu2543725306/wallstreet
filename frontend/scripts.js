@@ -62,6 +62,7 @@ function closeChangeStockModal() {
 function openAddHoldingModal() {
     document.getElementById('modal-overlay').style.display = 'block';
     document.getElementById('add-holding-modal').style.display = 'block';
+    loadCardOptions('holding-card-id');
 }
 
 function closeAddHoldingModal() {
@@ -84,10 +85,35 @@ function openTradeHoldingModal(stockTicker, quantity, value) {
 
     // Clear the trade quantity input field
     document.getElementById('trade-quantity').value = '';
+    
+    // Load card options
+    loadCardOptions('trade-card-id');
 
     // Show the modal
     document.getElementById('trade-holding-modal').style.display = 'block';
 }
+
+async function loadCardOptions(targetSelectId) {
+  try {
+    const response = await fetch('/api/cards/list'); 
+    if (!response.ok) throw new Error('Failed to fetch card list');
+
+    const cards = await response.json();
+    const select = document.getElementById(targetSelectId);
+    select.innerHTML = ''; // Clear old options
+
+    cards.forEach(card => {
+      const option = document.createElement('option');
+      option.value = card.card_id;
+      option.textContent = `${card.card_name} (${card.last4}) - $${parseFloat(card.balance).toFixed(2)}`;
+      select.appendChild(option);
+    });
+  } catch (err) {
+    console.error('Error loading cards:', err);
+    alert('Failed to load cards.');
+  }
+}
+
 
 function closeTradeHoldingModal() {
     // Hide the modal
@@ -96,8 +122,12 @@ function closeTradeHoldingModal() {
 
 async function confirmTrade() {
     const stockTicker = document.getElementById('trade-stock-ticker').textContent;
+    const availableQuantity = parseInt(document.getElementById('trade-stock-quantity').textContent, 10);
     const tradeQuantity = parseInt(document.getElementById('trade-quantity').value, 10);
     const stockValue = parseFloat(document.getElementById('trade-stock-value').textContent.replace('$', ''));
+    const selectedCardId = document.getElementById('trade-card-id').value;
+    const unitPrice = (stockValue / availableQuantity).toFixed(2);
+    const sellAmount = (unitPrice * tradeQuantity).toFixed(2);
 
     if (!tradeQuantity || tradeQuantity <= 0) {
         alert('Please enter a valid trade quantity.');
@@ -114,11 +144,12 @@ async function confirmTrade() {
             body: JSON.stringify({
                 ticker: stockTicker,
                 quantity: tradeQuantity,
-                price: (stockValue / tradeQuantity).toFixed(2), // Calculate unit price
+                price:  sellAmount, // Calculate unit price
                 total_amount: stockValue,
                 type: tradeQuantity > 0 ? 'SELL' : 'BUY', // Determine transaction type
                 tradeDate: new Date().toISOString(), // Current timestamp
-                status: 'ACTIVE', // Assuming the transaction is active
+                status: 'ACTIVE', // Assuming the transaction is active,
+                card_id: selectedCardId
             }),
         });
 
@@ -132,6 +163,15 @@ async function confirmTrade() {
         await fetchHoldings();
         await fetchTransactionHistory();
 
+        await fetch('/api/cards/updateBalance', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                card_id: selectedCardId,
+                amount:  sellAmount, 
+                operation: 'SELL'
+            })
+        });
         // Close the modal
         closeTradeHoldingModal();
     } catch (error) {
@@ -207,6 +247,8 @@ async function addNewHolding() {
     const quantity = parseInt(document.getElementById('holding-quantity').value, 10);
     const unitPrice = parseFloat(document.getElementById('holding-unit-price').textContent.replace('$', ''));
     const totalPrice = parseFloat(document.getElementById('holding-total-price').textContent.replace('$', ''));
+    const selectedCardId = document.getElementById('holding-card-id').value;
+
 
     if (!ticker || quantity <= 0 || unitPrice <= 0) {
         alert('Please enter valid stock details.');
@@ -214,6 +256,16 @@ async function addNewHolding() {
     }
 
     try {
+        // Validate Balance
+        const cardResponse = await fetch(`/api/cards/${selectedCardId}`);
+        const cardData = await cardResponse.json();
+        if (!cardResponse.ok) throw new Error('Failed to fetch card balance');
+
+        if (cardData.balance < totalPrice) {
+            alert(`Insufficient funds! Required: $${totalPrice.toFixed(2)}, Available: $${cardData.balance.toFixed(2)}`);
+            return;
+        }
+
         // Add the holding logic (e.g., update backend or UI)
         alert(`Added Holding:\nTicker: ${ticker}\nQuantity: ${quantity}\nTotal Price: $${totalPrice.toFixed(2)}`);
 
@@ -231,6 +283,7 @@ async function addNewHolding() {
                 type: 'BUY', // Assuming this is a buying transaction
                 tradeDate: new Date().toISOString(), // Current timestamp
                 status: 'ACTIVE', // Assuming the transaction is completed
+                card_id: selectedCardId
             }),
         });
 
@@ -244,7 +297,17 @@ async function addNewHolding() {
         // Refresh the holdings block
         await fetchHoldings();
 
+        alert(`Holding added successfully for ${ticker} (${quantity} shares).`);
 
+        await fetch('/api/cards/updateBalance', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                card_id: selectedCardId,
+                amount: unitPrice,
+                operation: 'BUY'
+            }),
+        });
         // Close the modal
         closeAddHoldingModal();
     } catch (error) {
