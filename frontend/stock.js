@@ -115,7 +115,7 @@ function randerStock(data) {
         const stockCard = document.createElement('div');
         stockCard.className = 'stock-card';
         let growthRateVal = stock.growthRate;
-        let isPositive = growthRateVal > 0 ? 'positive' : 'negative';
+        let isPositive = growthRateVal >= 0 ? 'positive' : 'negative';
         let growthRateText = Math.abs(growthRateVal) !== null && Math.abs(growthRateVal) !== undefined
           ? `${Number(Math.abs(growthRateVal)).toFixed(2)}%`
           : '';
