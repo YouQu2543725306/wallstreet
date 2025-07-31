@@ -6,7 +6,7 @@ async function loadAllTickers() {
     if (!result.success) return;
     const select = document.getElementById('new-stock-symbol-select');
     if (!select) return;
-    select.innerHTML = '<option value="">请选择股票代码</option>';
+    select.innerHTML = '<option value="">Please select a stock code</option>';
     result.data.forEach(item => {
       select.innerHTML += `<option value="${item.ticker}" data-brand="${item.brand_name}">${item.ticker} - ${item.brand_name}</option>`;
     });
