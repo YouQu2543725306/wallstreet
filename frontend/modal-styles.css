@@ -152,6 +152,25 @@
     align-items: flex-start;
 }
 
+.modal-body .form-group.horizontal {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.modal-body .form-group.horizontal input[type="checkbox"] {
+    margin: 0.2em 0 0 0;
+    width: auto;
+    height: 1em;
+}
+
+.modal-body .form-group.horizontal label {
+    line-height: 1.5;
+    margin: 0;
+}
+
 .modal-body label {
     font-size: 15px;
     font-weight: 500;
