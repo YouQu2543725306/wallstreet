@@ -198,10 +198,10 @@
                             <i class="fas fa-plus"></i>
                             Add
                         </button>
-                        <button class="full-records-btn" onclick="viewFullRecords()">
-                            <i class="fas fa-list"></i>
-                            Full Records
-                        </button>
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="search-ticker" placeholder="Enter ticker name (e.g., AAPL)" onkeypress="handleSearchKeyPress(event)" />
+                        </div>
                         <button class="backtest-btn" onclick="openBacktestModal()">
                             <i class="fas fa-flask"></i> Backtest
                         </button>

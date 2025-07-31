@@ -3,12 +3,19 @@ import express from 'express';
 import supabase from '../supabase/client.js';
 const router = express.Router();
 
-// API to fetch holdings
+// API to fetch holdings (with optional ticker filter)
 router.get('/fetchHolding', async (req, res) => {
+    const { ticker } = req.query; // Get the ticker from query parameters
+
     try {
-        const { data, error } = await supabase
-            .from('holdings')
-            .select();
+        let query = supabase.from('holdings').select();
+
+        // If a ticker is provided, filter the results
+        if (ticker) {
+            query = query.eq('ticker', ticker.toUpperCase());
+        }
+
+        const { data, error } = await query;
 
         if (error) {
             console.error('Error fetching holdings:', error);

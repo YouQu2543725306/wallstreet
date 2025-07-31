@@ -294,7 +294,6 @@ function enableCardsContainerDragScroll() {
     if (!container) return;
     let isDown = false;
     let startX;
-    let scrollLeft;
 
     container.addEventListener('mousedown', (e) => {
         isDown = true;
@@ -556,4 +555,78 @@ function fetchStockData(symbol) {
             console.error(error.message);
             alert("Cannot load stock data");
         });
+}
+
+function handleSearchKeyPress(event) {
+    if (event.key === 'Enter') {
+        searchTicker();
+    }
+}
+
+async function searchTicker() {
+    const ticker = document.getElementById('search-ticker').value.trim().toUpperCase();
+
+    if (!ticker) {
+        alert('Please enter a ticker name.');
+        return;
+    }
+
+    if (ticker === 'ALL') {
+        // Call fetchHoldings to display all data
+        await fetchHoldings();
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/holdings/fetchHolding?ticker=${ticker}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch data for the given ticker.');
+        }
+
+        const holdings = await response.json();
+
+        if (holdings.length === 0) {
+            alert('No data found for the given ticker.');
+            return;
+        }
+
+        // Clear existing table rows
+        const holdingsTableBody = document.querySelector('.holdings-table tbody');
+        holdingsTableBody.innerHTML = '';
+
+        // Add the fetched data to the table
+        holdings.forEach(holding => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <div class="stock-item">
+                        <div class="stock-icon">${holding.ticker.charAt(0)}</div>
+                        <div class="stock-details">
+                            <div class="stock-name" id="stock-name-${holding.ticker}">Loading...</div>
+                        </div>
+                    </div>
+                </td>
+                <td>${holding.ticker}</td>
+                <td>${holding.net_quantity}</td>
+                <td>$${holding.average_buy_price.toFixed(2)}</td>
+                <td>$${holding.latest_price.toFixed(2)}</td>
+                <td>$${holding.holding_value.toFixed(2)}</td>
+                <td class="profit ${holding.unrealized_pl >= 0 ? 'positive' : 'negative'}">
+                    ${holding.unrealized_pl >= 0 ? '+' : ''}$${holding.unrealized_pl.toFixed(2)}
+                </td>
+                <td>
+                    <button class="action-btn" onclick="openTradeHoldingModal('${holding.ticker}', '${holding.net_quantity}', '$${holding.holding_value.toFixed(2)}')">
+                        Trade
+                    </button>
+                </td>
+            `;
+            holdingsTableBody.appendChild(row);
+
+            // Fetch and update the stock name for the current holding
+            fetchStockName(holding.ticker);
+        });
+    } catch (error) {
+        console.error('Error fetching ticker data:', error);
+        alert('Failed to fetch data. Please check the ticker name and try again.');
+    }
 }

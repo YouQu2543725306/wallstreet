@@ -1004,6 +1004,31 @@ body {
 .profit-amount.negative, .profit-percent.negative { color: #e74c3c; }
 
 
+/* Search Container */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.search-icon {
+    color: #007bff;
+    font-size: 16px;
+}
+
+.search-container input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    padding: 4px;
+}
+
 /* Footer */
 .footer {
     background: rgba(255, 255, 255, 0.95);
@@ -1123,4 +1148,4 @@ body {
     }
     
 
-} 
+}
