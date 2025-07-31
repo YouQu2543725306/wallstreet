@@ -261,7 +261,6 @@ body {
 
 /* Button Styles */
 .change-stock-btn,
-.calculator-btn,
 .add-holding-btn,
 .full-records-btn,
 .add-card-btn,
@@ -282,7 +281,6 @@ body {
 }
 
 .change-stock-btn:hover,
-.calculator-btn:hover,
 .add-holding-btn:hover,
 .full-records-btn:hover,
 .add-card-btn:hover,
