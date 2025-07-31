@@ -74,7 +74,6 @@ function closeAddHoldingModal() {
     document.getElementById('holding-quantity').value = '';
     document.getElementById('holding-unit-price').textContent = '$0.00';
     document.getElementById('holding-total-price').textContent = '$0.00';
-    document.getElementById('holding-estimated-gain').textContent = '$0.00';
 }
 
 function openTradeHoldingModal(stockTicker, quantity, value) {
@@ -181,14 +180,11 @@ async function updateHoldingDetails() {
         }
 
         const unitPrice = data.open || 0;
-        // Calculate total price and estimated gain
-        const estimatedGain = (data.close - data.open)*quantity || 0;
         const totalPrice = unitPrice * quantity;
 
         // Update the modal fields
         document.getElementById('holding-unit-price').textContent = `$${unitPrice.toFixed(2)}`;
         document.getElementById('holding-total-price').textContent = `$${totalPrice.toFixed(2)}`;
-        document.getElementById('holding-estimated-gain').textContent = `$${estimatedGain.toFixed(2)}`;
     } catch (error) {
         console.error('Error fetching stock data:', error);
         alert('Failed to load stock data. Please try again later.');
@@ -211,7 +207,6 @@ async function addNewHolding() {
     const quantity = parseInt(document.getElementById('holding-quantity').value, 10);
     const unitPrice = parseFloat(document.getElementById('holding-unit-price').textContent.replace('$', ''));
     const totalPrice = parseFloat(document.getElementById('holding-total-price').textContent.replace('$', ''));
-    const estimatedGain = parseFloat(document.getElementById('holding-estimated-gain').textContent.replace('$', ''));
 
     if (!ticker || quantity <= 0 || unitPrice <= 0) {
         alert('Please enter valid stock details.');
@@ -220,7 +215,7 @@ async function addNewHolding() {
 
     try {
         // Add the holding logic (e.g., update backend or UI)
-        alert(`Added Holding:\nTicker: ${ticker}\nQuantity: ${quantity}\nTotal Price: $${totalPrice.toFixed(2)}\nEstimated Gain: $${estimatedGain.toFixed(2)}`);
+        alert(`Added Holding:\nTicker: ${ticker}\nQuantity: ${quantity}\nTotal Price: $${totalPrice.toFixed(2)}`);
 
         // Insert the new transaction into the transaction table
         const response = await fetch('/api/transactions', {
@@ -555,6 +550,7 @@ function fetchStockData(symbol) {
             console.error(error.message);
             alert("Cannot load stock data");
         });
+
 }
 
 function handleSearchKeyPress(event) {
