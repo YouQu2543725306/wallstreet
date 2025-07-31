@@ -242,10 +242,39 @@
 }
 
 .backtest-results h4 {
-    margin-top: 0;
+    margin: 0 0 16px 0;
     font-size: 17px;
     font-weight: 600;
     color: #2c3e50;
+    text-align: center;
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.summary-table th,
+.summary-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.summary-table th {
+    font-weight: 600;
+    color: #4a5568;
+    background-color: #f7fafc;
+    text-transform: capitalize;
+}
+
+.summary-table tr:last-child td {
+    border-bottom: none;
+}
+
+.summary-table tr:hover {
+    background-color: #f8fafd;
 }
 
 .modal-body .readonly-field {
