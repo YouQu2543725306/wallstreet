@@ -163,6 +163,49 @@ body {
     font-size: 28px;
 }
 
+.nav-menu {
+    display: flex;
+    gap: 24px;
+    margin: 0 20px;
+}
+
+.nav-menu a {
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #667eea;
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #667eea;
+    transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+    width: 100%;
+}
+
+.nav-menu a.active {
+    color: #667eea;
+}
+
+.nav-menu a.active::after {
+    width: 100%;
+}
+
 .nav-user {
     display: flex;
     align-items: center;
