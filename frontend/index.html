@@ -179,10 +179,10 @@
             <div class="section-container">
                 <div class="section-header">
                     <h2>Transaction History</h2>
-                    <button class="full-records-btn" onclick="viewFullRecords()">
+                    <!-- <button class="full-records-btn" onclick="viewFullRecords()">
                         <i class="fas fa-list"></i>
                         Full Records
-                    </button>
+                    </button> -->
                 </div>
                 <div class="transaction-list scrollable"></div>
             </div>
@@ -194,14 +194,14 @@
                 <div class="section-header">
                     <h2>My Holdings</h2>
                     <div class="header-buttons">
-                        <button class="add-holding-btn" onclick="openAddHoldingModal()">
-                            <i class="fas fa-plus"></i>
-                            Add
-                        </button>
                         <div class="search-container">
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" id="search-ticker" placeholder="Enter ticker name (e.g., AAPL)" onkeypress="handleSearchKeyPress(event)" />
                         </div>
+                        <button class="add-holding-btn" onclick="openAddHoldingModal()">
+                            <i class="fas fa-plus"></i>
+                            Add
+                        </button>
                         <button class="backtest-btn" onclick="openBacktestModal()">
                             <i class="fas fa-flask"></i> Backtest
                         </button>
