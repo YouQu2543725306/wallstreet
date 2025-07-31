@@ -180,7 +180,11 @@ export async function loadCards() {
   try {
     const res = await fetch('http://localhost:3000/api/cards');
     const data = await res.json();
-    renderCards(data);
+    // Sort cards by created_at in descending order (newest first)
+    const sortedCards = [...data].sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+    renderCards(sortedCards);
   } catch (err) {
     console.error('Failed to load cards', err);
   }
